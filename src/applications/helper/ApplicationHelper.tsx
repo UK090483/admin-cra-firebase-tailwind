@@ -5,26 +5,10 @@ import { get } from "lodash";
 import Application from "../../judges/views/Judge";
 import TextInput from "../../components/Form/FormInputs/TextInput";
 import ListInput from "../../components/Form/FormInputs/ListInput";
-import { IApplicationRecord } from "../ApplicationTypes";
 
 type Key = keyof ApplicationType;
 
 type AssessmentTypeKey = keyof IAssessmentRecord;
-
-type TopicKeys =
-  | "BasicInformation"
-  | "StartupOverview"
-  | "Product"
-  | "Market"
-  | "Competition"
-  | "Business"
-  | "Funding"
-  | "Impact"
-  | "Media";
-
-interface ApplicationType extends Record<TopicKeys, ApplicationTopic> {
-  [K: string]: ApplicationTopic;
-}
 
 interface ApplicationField {
   label: string;
@@ -32,8 +16,6 @@ interface ApplicationField {
 
   input?: JSX.Element;
 }
-
-type ApplicationRecordKey = keyof IApplicationRecord;
 
 interface ApplicationFields {
   [key: string]: ApplicationField;
@@ -45,6 +27,10 @@ interface ApplicationTopic {
   assessments?: AssessmentTypeKey[];
 }
 
+interface ApplicationType {
+  [propName: string]: ApplicationTopic;
+}
+
 interface GetAllFieldsResult {
   [propName: string]: ApplicationField;
 }
@@ -52,30 +38,30 @@ interface GetAllFieldsResult {
 export interface Application extends ApplicationType {}
 
 class ApplicationC {
-  application: ApplicationType;
+  applicaton: ApplicationType;
 
   constructor(a: ApplicationType) {
-    this.application = a;
+    this.applicaton = a;
   }
 
   getTopics(): string[] {
-    return Object.keys(this.application).map((key) => key);
+    return Object.keys(this.applicaton).map((key) => key);
   }
 
   getFields(
     topic: keyof ApplicationType
   ): { key: string; field: ApplicationField }[] {
-    return Object.keys(this.application[topic].fields).map((key) => {
-      return { key, field: this.application[topic].fields[key] };
+    return Object.keys(this.applicaton[topic].fields).map((key) => {
+      return { key, field: this.applicaton[topic].fields[key] };
     });
   }
 
   getAllFields(): GetAllFieldsResult {
     const res: any = {};
 
-    Object.keys(this.application).forEach((key) => {
-      Object.keys(this.application[key].fields).forEach((element) => {
-        res[element] = this.application[key].fields[element];
+    Object.keys(this.applicaton).forEach((key) => {
+      Object.keys(this.applicaton[key].fields).forEach((element) => {
+        res[element] = this.applicaton[key].fields[element];
       });
     });
 
@@ -85,13 +71,13 @@ class ApplicationC {
   getAssessments(
     topic: keyof ApplicationType
   ): AssessmentTypeKey[] | undefined {
-    return this.application[topic].assessments;
+    return this.applicaton[topic].assessments;
   }
 
   parseJotFormData(jotformData: IJotFormData) {
     const res: IJotFormData = {};
-    Object.keys(this.application).forEach((key) => {
-      Object.keys(this.application[key].fields).forEach((element) => {
+    Object.keys(this.applicaton).forEach((key) => {
+      Object.keys(this.applicaton[key].fields).forEach((element) => {
         if (jotFormDataMaper[element]) {
           res[element] = get(jotformData, jotFormDataMaper[element]);
         } else {
@@ -116,15 +102,6 @@ interface IJotFormData {
 }
 
 const ApplicationObject: ApplicationType = {
-  bla: {
-    fields: {
-      startupName: {
-        label: "Startup Name",
-        type: "text",
-        input: <TextInput label={"Startup Name"} name={"startupName"} />,
-      },
-    },
-  },
   BasicInformation: {
     fields: {
       startupName: {
