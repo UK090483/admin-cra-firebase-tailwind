@@ -8,7 +8,7 @@ export type RoutingParam = {
   id: Identifier;
 };
 
-export interface Record {
+export interface RecordBase {
   id: Identifier;
   created_at: Timestamp;
   created_by: Identifier;

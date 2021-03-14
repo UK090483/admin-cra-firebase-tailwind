@@ -12,6 +12,7 @@ import FakeAssessment from "./FakeAssessment";
 import getCreateData from "redux/api/helper/getCreateData";
 import { IJudgeRecord } from "judges/JudgeTypes";
 import { JUDGE_COLORS } from "misc/constants";
+import { AssessmentHelper } from "../assessments/helper/AssessmentHelper";
 
 class Seed {
   private makeJudges = (amount: number): IJudgeRecord[] => {
@@ -146,6 +147,42 @@ class Seed {
       });
     });
     await Batch.commit();
+  };
+
+  makeTableDoc = async () => {
+    const applications = await db.collection("applications").get();
+
+    const tableDoc: any = {};
+
+    const parseAssessment = (application: IApplicationRecord) => {
+      if (application.assessments) {
+        return Object.entries(application.assessments).reduce(
+          (acc, [key, value]) => ({
+            ...acc,
+            [key]: {
+              application_id: value.application_id,
+              judge_id: value.judge_id,
+              sum: AssessmentHelper.evaluateAssessment(value).sum,
+            },
+          }),
+          {}
+        );
+      }
+    };
+
+    applications.forEach((applicationDoc) => {
+      const application = applicationDoc.data() as IApplicationRecord;
+      tableDoc[applicationDoc.id] = {
+        startupName: application.startupName,
+        industry: application.industry,
+        foundingDate: application.foundingDate,
+        headquarters: application.headquarters,
+      };
+    });
+
+    // console.log(tableDoc);
+
+    await db.collection("tableDoc").doc("first").set(tableDoc);
   };
 
   addJudges = async () => {

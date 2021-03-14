@@ -12,7 +12,7 @@ function App() {
   const { authLoaded, isEmpty, isAdmin } = useSelector((state: RootState) => ({
     isEmpty: state.fb.auth.isEmpty,
     isAdmin: state.fb.profile.token?.claims.admin,
-    authLoaded: state.fb.auth.isLoaded,
+    authLoaded: state.fb.profile.isLoaded,
   }));
 
   return (

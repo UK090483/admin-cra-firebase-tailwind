@@ -8,8 +8,6 @@ import FourthRoundTable from "./fourthRound/FourthRoundTable";
 import useUi from "hooks/useUi";
 import StageButton from "./StageButton";
 
-import TableExport from "./tableExport";
-
 const Applications: React.FC = () => {
   const { ordered, loading, loadedAt } = useApplications();
 

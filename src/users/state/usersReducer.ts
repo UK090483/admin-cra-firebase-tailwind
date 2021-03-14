@@ -24,12 +24,11 @@ export interface IUserState {
 const fetchUserList = createAsyncThunk(
   "users/fetchList",
   async (props: undefined, thunkApi) => {
-    const state: RootState = thunkApi.getState() as RootState;
     const response = await getList({
       resource: "users",
       lastLoadedAt: null,
     });
-    return response as Returned;
+    return response;
   }
 );
 

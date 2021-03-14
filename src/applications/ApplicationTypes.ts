@@ -1,5 +1,5 @@
 import { IAssessmentRecord } from "assessments/types";
-import { FirebaseTimestamp, Record } from "../types";
+import { FirebaseTimestamp, RecordBase } from "../types";
 
 export type ApplicationStatePre =
   | "accepted"
@@ -11,7 +11,7 @@ export interface IApplicationAssessment {
   [id: string]: IAssessmentRecord;
 }
 
-export interface IApplicationRecord extends Record {
+export interface IApplicationRecord extends RecordBase {
   startupName: string;
   tagLine: string;
   website: string;

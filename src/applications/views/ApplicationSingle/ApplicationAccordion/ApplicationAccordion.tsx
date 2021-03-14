@@ -2,10 +2,8 @@ import React from "react";
 import { IApplicationRecord } from "applications/ApplicationTypes";
 import { ApplicationHelper } from "applications/helper/ApplicationHelper";
 import Accordion from "components/Accordion/Accordion";
-import TextField from "components/Fields/TextField";
 import useJudges from "judges/hooks/useJudges";
-import MediaArrayField from "components/Fields/MediaArrayField";
-import ListField from "components/Fields/ListField";
+import AccordionFields from "components/Accordion/AccordionFields";
 
 interface IApplicationAccordion {
   application: IApplicationRecord;
@@ -30,46 +28,14 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
         return (
           <Accordion key={index} label={topic}>
             <div key={index} className="flex">
-              <div
-                className={`${
+              <AccordionFields
+                application={application}
+                topic={topic}
+                extraClasses={
                   topicAssessments && hasAssessments ? "w-2/3 pr-1" : "w-full"
-                }`}
-              >
-                {ApplicationHelper.getFields(topic).map((field, index) => {
-                  if (field.field.type === "text") {
-                    return (
-                      <TextField
-                        key={index}
-                        label={field.field.label}
-                        // @ts-ignore
-                        text={application[field.key]}
-                      />
-                    );
-                  }
+                }
+              />
 
-                  if (field.field.type === "list") {
-                    return (
-                      <ListField
-                        key={index}
-                        label={field.field.label}
-                        // @ts-ignore
-                        list={application[field.key]}
-                      />
-                    );
-                  }
-
-                  if (field.field.type === "mediaArray") {
-                    return (
-                      <MediaArrayField
-                        key={index}
-                        label={field.field.label}
-                        // @ts-ignore
-                        mediaArray={application[field.key]}
-                      />
-                    );
-                  }
-                })}
-              </div>
               <div
                 className={`${
                   !!topicAssessments && hasAssessments && "w-1/3 pl-1"

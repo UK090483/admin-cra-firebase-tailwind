@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import ReduxProvider from "redux/Provider";
 import firebase from "../misc/firebase";
 import { store } from "redux/store";
+import { ApplicationHelper } from "applications/helper/ApplicationHelper";
 
 const TestWrap: React.FC = (props) => {
   return (

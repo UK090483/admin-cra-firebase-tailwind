@@ -1,4 +1,4 @@
-import { Record, Identifier } from "../types";
+import { RecordBase, Identifier } from "../types";
 export type AssessmentRating = 1 | 2 | 3 | 4;
 
 export type AssessmentStatus = "created" | "hidden";
@@ -17,7 +17,7 @@ export interface IAssessmentPoints {
   isPresentationGood?: AssessmentRating;
 }
 
-export interface IAssessmentRecord extends Record, IAssessmentPoints {
+export interface IAssessmentRecord extends RecordBase, IAssessmentPoints {
   application_id: Identifier;
   application_name: string;
   judge_id: Identifier;

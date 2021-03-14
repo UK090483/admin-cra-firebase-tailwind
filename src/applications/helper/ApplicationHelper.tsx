@@ -5,83 +5,26 @@ import { get } from "lodash";
 import Application from "../../judges/views/Judge";
 import TextInput from "../../components/Form/FormInputs/TextInput";
 import ListInput from "../../components/Form/FormInputs/ListInput";
+import { IApplicationRecord } from "../ApplicationTypes";
 
 type Key = keyof ApplicationType;
 
 type AssessmentTypeKey = keyof IAssessmentRecord;
 
-// interface BasicInformation {
-//   fields: {
-//     startupName: ApplicationField | string;
-//     tagLine: ApplicationField | string;
-//     website: ApplicationField | string;
-//     foundingDate: ApplicationField | string;
-//     stage: ApplicationField | string;
-//     industry: ApplicationField | string;
-//     segmentFocus: ApplicationField | string;
-//     headquarters: ApplicationField | string;
-//   };
-// }
-// interface StartupOverview {
-//   fields: {
-//     startupOverview: ApplicationField | string;
-//   };
-// }
-// interface Product {
-//   fields: {
-//     problemYouAreSolving: ApplicationField | string;
-//     whatMakesYourProductUnique: ApplicationField | string;
-//     productReadiness: ApplicationField | string;
-//     productRoadMap: ApplicationField | string;
-//   };
-// }
-// interface Market {
-//   fields: {
-//     targetMarket: ApplicationField | string;
-//     marketDrivers: ApplicationField | string;
-//     marketSize: ApplicationField | string;
-//   };
-// }
-// interface Competition {
-//   fields: {
-//     competition: ApplicationField | string;
-//     strengthAgainstCompetitors: ApplicationField | string;
-//     challengesAgainstCompetitors: ApplicationField | string;
-//   };
-// }
-// interface Business {
-//   fields: {
-//     revenueSources: ApplicationField | string;
-//     salesStrategy: ApplicationField | string;
-//     traction: ApplicationField | string;
-//     pilotsCustomers: ApplicationField | string;
-//     metrics: ApplicationField | string;
-//   };
-// }
-// interface Funding {
-//   fields: {
-//     howIsCompanyFunded: ApplicationField | string;
-//     amountRaisedToDate: ApplicationField | string;
-//     yourInvestors: ApplicationField | string;
-//     fundingObjective: ApplicationField | string;
-//   };
-// }
-// interface Team {
-//   fields: {
-//     numberOfFounders: ApplicationField | string;
-//     overallTeamSize: ApplicationField | string;
-//     foundersQualification: ApplicationField | string;
-//   };
-// }
-// interface Impact {
-//   fields: {
-//     howImpact: ApplicationField | string;
-//     whatDegreeSustainability: ApplicationField | string;
-//     connectionToHamburg: ApplicationField | string;
-//     collaborateWithEntityHamburg: ApplicationField | string;
-//     howDidYouHearAboutFHA: ApplicationField | string;
-//   };
-// }
+type TopicKeys =
+  | "BasicInformation"
+  | "StartupOverview"
+  | "Product"
+  | "Market"
+  | "Competition"
+  | "Business"
+  | "Funding"
+  | "Impact"
+  | "Media";
+
+interface ApplicationType extends Record<TopicKeys, ApplicationTopic> {
+  [K: string]: ApplicationTopic;
+}
 
 interface ApplicationField {
   label: string;
@@ -89,6 +32,8 @@ interface ApplicationField {
 
   input?: JSX.Element;
 }
+
+type ApplicationRecordKey = keyof IApplicationRecord;
 
 interface ApplicationFields {
   [key: string]: ApplicationField;
@@ -100,10 +45,6 @@ interface ApplicationTopic {
   assessments?: AssessmentTypeKey[];
 }
 
-interface ApplicationType {
-  [propName: string]: ApplicationTopic;
-}
-
 interface GetAllFieldsResult {
   [propName: string]: ApplicationField;
 }
@@ -111,30 +52,30 @@ interface GetAllFieldsResult {
 export interface Application extends ApplicationType {}
 
 class ApplicationC {
-  applicaton: ApplicationType;
+  application: ApplicationType;
 
   constructor(a: ApplicationType) {
-    this.applicaton = a;
+    this.application = a;
   }
 
   getTopics(): string[] {
-    return Object.keys(this.applicaton).map((key) => key);
+    return Object.keys(this.application).map((key) => key);
   }
 
   getFields(
     topic: keyof ApplicationType
   ): { key: string; field: ApplicationField }[] {
-    return Object.keys(this.applicaton[topic].fields).map((key) => {
-      return { key, field: this.applicaton[topic].fields[key] };
+    return Object.keys(this.application[topic].fields).map((key) => {
+      return { key, field: this.application[topic].fields[key] };
     });
   }
 
   getAllFields(): GetAllFieldsResult {
     const res: any = {};
 
-    Object.keys(this.applicaton).forEach((key) => {
-      Object.keys(this.applicaton[key].fields).forEach((element) => {
-        res[element] = this.applicaton[key].fields[element];
+    Object.keys(this.application).forEach((key) => {
+      Object.keys(this.application[key].fields).forEach((element) => {
+        res[element] = this.application[key].fields[element];
       });
     });
 
@@ -144,13 +85,13 @@ class ApplicationC {
   getAssessments(
     topic: keyof ApplicationType
   ): AssessmentTypeKey[] | undefined {
-    return this.applicaton[topic].assessments;
+    return this.application[topic].assessments;
   }
 
   parseJotFormData(jotformData: IJotFormData) {
     const res: IJotFormData = {};
-    Object.keys(this.applicaton).forEach((key) => {
-      Object.keys(this.applicaton[key].fields).forEach((element) => {
+    Object.keys(this.application).forEach((key) => {
+      Object.keys(this.application[key].fields).forEach((element) => {
         if (jotFormDataMaper[element]) {
           res[element] = get(jotformData, jotFormDataMaper[element]);
         } else {
@@ -175,6 +116,15 @@ interface IJotFormData {
 }
 
 const ApplicationObject: ApplicationType = {
+  bla: {
+    fields: {
+      startupName: {
+        label: "Startup Name",
+        type: "text",
+        input: <TextInput label={"Startup Name"} name={"startupName"} />,
+      },
+    },
+  },
   BasicInformation: {
     fields: {
       startupName: {
@@ -390,7 +340,7 @@ const ApplicationObject: ApplicationType = {
       },
       amountRaisedToDate: {
         label: "Amount raised to date",
-        type: "number",
+        type: "text",
       },
       yourInvestors: {
         label: "Your investors",
@@ -398,7 +348,7 @@ const ApplicationObject: ApplicationType = {
       },
       fundingObjective: {
         label: "Funding objective",
-        type: "number",
+        type: "text",
       },
     },
 
@@ -408,11 +358,11 @@ const ApplicationObject: ApplicationType = {
     fields: {
       numberOfFounders: {
         label: "Number of founders",
-        type: "number",
+        type: "text",
       },
       overallTeamSize: {
         label: "Overall team size (including founders)",
-        type: "number",
+        type: "text",
       },
       foundersQualification: {
         label: "Founder’s qualification/ background",
@@ -444,7 +394,7 @@ const ApplicationObject: ApplicationType = {
       },
       howDidYouHearAboutFHA: {
         label: "How did you hear about the Future Hamburg Award ?",
-        type: "select",
+        type: "text",
       },
     },
 

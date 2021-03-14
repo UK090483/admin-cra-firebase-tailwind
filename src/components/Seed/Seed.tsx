@@ -20,6 +20,11 @@ const Seed: React.FunctionComponent<ISeedProps> = (props) => {
         position="left top"
       >
         {/* <SeedButton label="clear" seedFunction={SeedFirebase.clear} /> */}
+
+        <SeedButton
+          label="make TableDoc"
+          seedFunction={SeedFirebase.makeTableDoc}
+        />
         <SeedButton label="start" seedFunction={SeedFirebase.start} />
 
         <SeedButton label="Accept 100" seedFunction={SeedFirebase.accept} />

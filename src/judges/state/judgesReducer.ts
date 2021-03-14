@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getList } from "redux/api/getList";
-import { FirebaseTimestamp, Record } from "types";
+import { FirebaseTimestamp } from "types";
 import { RootState } from "redux/Reducers/RootReducer";
 import firebase from "misc/firebase";
 import { IJudgeRecord } from "judges/JudgeTypes";

@@ -1,6 +1,6 @@
-import { Record } from "types";
+import { RecordBase } from "types";
 
-export interface IUserRecord extends Record {
+export interface IUserRecord extends RecordBase {
   isAdmin: boolean;
   email: string;
   name: string;

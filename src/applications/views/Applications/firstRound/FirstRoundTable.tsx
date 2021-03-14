@@ -20,7 +20,11 @@ const columnsFirstRound: IColumn[] = [
     use_in_search: true,
     width: "w-20",
     render: (row) => {
-      if (row.companyLogo[0] && row.companyLogo[0].type === "image") {
+      if (
+        row.companyLogo &&
+        row.companyLogo[0] &&
+        row.companyLogo[0].type === "image"
+      ) {
         return (
           <img
             className="w-20 h-10 object-contain"
@@ -92,7 +96,7 @@ const optionsFirstRound: ITableOptions = {
 };
 
 interface FirstRoundTableProps {
-  data: any;
+  data: any[];
 }
 
 const FirstRoundTable: React.FC<FirstRoundTableProps> = ({ data }) => {
