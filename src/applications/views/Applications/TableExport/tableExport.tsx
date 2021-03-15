@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as ExcelJS from "exceljs";
 import { ApplicationHelper } from "applications/helper/ApplicationHelper";
-import { AssessmentHelper } from "../../../assessments/helper/AssessmentHelper";
+import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
 import useJudges from "judges/hooks/useJudges";
+import { getCssfromColorClass } from "helper/getColorFromclass";
 
 interface ITableExportProps {
   data: any;
@@ -15,22 +16,22 @@ const TableExport: React.FunctionComponent<ITableExportProps> = ({ data }) => {
   const cleanData = AssessmentHelper.evaluateTableData(data, judges);
 
   React.useEffect(() => {
+    if (!judges) return;
+
     const workbook = new ExcelJS.Workbook();
     const worksheetApplications = workbook.addWorksheet("Applications");
-    const worksheetAssessments = workbook.addWorksheet("Assessments");
 
-    worksheetApplications.columns = buildColumns("applications");
-    worksheetAssessments.columns = buildColumns("assessments");
+    worksheetApplications.columns = buildColumns(judges);
 
     if (cleanData) {
       cleanData.forEach((element: any) => {
         worksheetApplications.addRow(element);
 
-        if (element.assessments) {
-          Object.values(element.assessments).forEach((e: any) => {
-            worksheetAssessments.addRow({ application: element.id, ...e });
-          });
-        }
+        // if (element.assessments) {
+        //   Object.values(element.assessments).forEach((e: any) => {
+        //     worksheetAssessments.addRow({ application: element.id, ...e });
+        //   });
+        // }
       });
     }
 
@@ -42,7 +43,7 @@ const TableExport: React.FunctionComponent<ITableExportProps> = ({ data }) => {
       const url = window.URL.createObjectURL(blob);
       setUrl(url);
     });
-  }, [data]);
+  }, [data, judges]);
 
   return (
     <a href={url} download>
@@ -53,38 +54,59 @@ const TableExport: React.FunctionComponent<ITableExportProps> = ({ data }) => {
 
 export default TableExport;
 
-const buildColumns = (type: "applications" | "assessments") => {
+const buildColumns = (judges: any) => {
   const fields = ApplicationHelper.getAllFields();
   const assessmentFields = AssessmentHelper.getQuestions();
   const res: any[] = [];
-  if (type === "applications") {
-    res.push({
-      header: "Sum",
-      key: "sum",
-      width: 20,
-    });
-    Object.entries(fields).forEach(([key, value]) => {
-      res.push({
-        header: value.label,
-        key,
-        width: value.label.length + 5,
-      });
-    });
-  }
-  if (type === "assessments") {
-    res.push({
-      header: "Application",
-      key: "application",
-      width: 20,
-    });
+
+  res.push({
+    header: "ID",
+    key: "id",
+    width: 20,
+  });
+  res.push({
+    header: "Name",
+    key: "startupName",
+    width: 20,
+  });
+  res.push({
+    header: "Industry",
+    key: "industry",
+    width: 20,
+  });
+  res.push({
+    header: "Headquarters",
+    key: "headquarters",
+    width: 20,
+  });
+  res.push({
+    header: "Sum",
+    key: "sum",
+    width: 20,
+  });
+
+  Object.values(judges).forEach((judge) => {
+    // @ts-ignore
+    const color = getCssfromColorClass(judge.color).replace("#", "");
 
     Object.entries(assessmentFields).forEach(([key, value]) => {
       res.push({
-        header: value.label,
+        header: value.shortLabel,
         key: value.source,
-        width: value.label.length,
+        width: 4,
+        style: {
+          fill: {
+            type: "pattern",
+            pattern: "darkVertical",
+            // @ts-ignore
+            fgColor: {
+              argb: color,
+            },
+          },
+        },
       });
     });
-  }
+  });
+
   return res;
 };

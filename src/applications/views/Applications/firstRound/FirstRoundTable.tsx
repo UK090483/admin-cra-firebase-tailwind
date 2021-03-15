@@ -103,7 +103,7 @@ const FirstRoundTable: React.FC<FirstRoundTableProps> = ({ data }) => {
   let history = useHistory();
 
   return (
-    <div className="animate-fadeIn">
+    <div className="animate-fadeIn" data-testid="FirstRoundTable">
       <Table
         searchFields={["startupName", "headquarters"]}
         name="first_stage_Table"

@@ -97,9 +97,6 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
-      "!src/**/types.ts",
-      "!src/seed/*",
-      "!src/misc/setupTests.ts",
       "!<rootDir>/src/index.tsx",
       "!<rootDir>/node_modules/",
       "!<rootDir>/path/to/dir/"

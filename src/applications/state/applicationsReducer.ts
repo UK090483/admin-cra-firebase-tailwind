@@ -52,6 +52,8 @@ const fetchApplicationList = createAsyncThunk(
       resource: "applications",
       lastLoadedAt: props && props.refresh ? null : state.applications.loadedAt,
     });
+
+    console.log(`fetched ${response.length} Applications`);
     return response as Returned;
   }
 );
@@ -65,6 +67,7 @@ const updateApplicationAction = createAsyncThunk(
   "applications/updateApplication",
   async (props: IUpdateApplicationParams) => {
     const response = await updateOne({ ...props, resource: "applications" });
+
     return response;
   }
 );

@@ -3,14 +3,14 @@ import { AssessmentType } from "./AssessmentHelper";
 const Fields: AssessmentType = {
   isInnovative: {
     label: "Is the product/service innovative",
-    shortLabel: "Ino",
+    shortLabel: "Inn",
     weight: 3,
     type: "number",
     source: "isInnovative",
     fields: {
       main: {
         label: "Is the product/service innovative",
-        shortLabel: "Ino",
+        shortLabel: "Inn",
         type: "number",
         source: "isInnovative",
       },
@@ -34,7 +34,7 @@ const Fields: AssessmentType = {
     fields: {
       main: {
         label: "isClearUSP",
-        shortLabel: "C",
+        shortLabel: "USP",
         type: "number",
         source: "isClearUSP",
       },
@@ -75,14 +75,14 @@ const Fields: AssessmentType = {
 
   doTheyKnowCompetitors: {
     label: "Do they know their competitors ?",
-    shortLabel: "Com",
+    shortLabel: "Cmp",
     type: "number",
     source: "doTheyKnowCompetitors",
     weight: 1,
     fields: {
       main: {
         label: "doTheyKnowCompetitors",
-        shortLabel: "C",
+        shortLabel: "Cmp",
         type: "number",
         source: "doTheyKnowCompetitors",
       },
@@ -99,14 +99,14 @@ const Fields: AssessmentType = {
 
   isBusinessModelSolid: {
     label: "Is their business model solid and in balance with their resources?",
-    shortLabel: "BM",
+    shortLabel: "BMo",
     type: "number",
     source: "isBusinessModelSolid",
     weight: 1,
     fields: {
       main: {
         label: "isBusinessModelSolid",
-        shortLabel: "B",
+        shortLabel: "BMo",
         type: "number",
         source: "isBusinessModelSolid",
       },
@@ -123,14 +123,14 @@ const Fields: AssessmentType = {
 
   areNumbersPromising: {
     label: "Are the numbers promising?",
-    shortLabel: "Pro",
+    shortLabel: "Num",
     type: "number",
     source: "areNumbersPromising",
     weight: 1,
     fields: {
       main: {
         label: "Are the numbers promising?",
-        shortLabel: "p",
+        shortLabel: "Num",
         type: "number",
         source: "areNumbersPromising",
       },
@@ -147,14 +147,14 @@ const Fields: AssessmentType = {
 
   isFundingSolid: {
     label: "Is the funding solid?",
-    shortLabel: "FS",
+    shortLabel: "Fun",
     type: "number",
     source: "isFundingSolid",
     weight: 1,
     fields: {
       main: {
         label: "Is the funding solid?",
-        shortLabel: "F",
+        shortLabel: "Fun",
         type: "number",
         source: "isFundingSolid",
       },
@@ -170,7 +170,7 @@ const Fields: AssessmentType = {
   },
 
   isTeamExperienced: {
-    label: "isTeamExperienced",
+    label: "is Team Experienced",
     shortLabel: "Exp",
     type: "number",
     source: "isTeamExperienced",
@@ -178,7 +178,7 @@ const Fields: AssessmentType = {
     fields: {
       main: {
         label: "isTeamExperienced",
-        shortLabel: "E",
+        shortLabel: "Exp",
         type: "number",
         source: "isTeamExperienced",
       },
@@ -195,14 +195,14 @@ const Fields: AssessmentType = {
 
   willFutureCitiesBenefit: {
     label: "Will our future cities benefit from their idea? ",
-    shortLabel: "FB",
+    shortLabel: "FCB",
     type: "number",
     source: "willFutureCitiesBenefit",
     weight: 3,
     fields: {
       main: {
         label: "willFutureCitiesBenefit",
-        shortLabel: "FB",
+        shortLabel: "FCB",
         type: "number",
         source: "willFutureCitiesBenefit",
       },
@@ -217,7 +217,7 @@ const Fields: AssessmentType = {
     },
   },
 
-  isComplianceWithSDGs: {
+  isComplianceWithSDG: {
     label: "Is the business in compliance with the SDGs?",
     shortLabel: "SDG",
     type: "number",
@@ -225,7 +225,7 @@ const Fields: AssessmentType = {
     fields: {
       main: {
         label: "isComplianceWithSDGs",
-        shortLabel: "FB",
+        shortLabel: "SDG",
         type: "number",
         source: "isComplianceWithSDGs",
       },
@@ -242,14 +242,14 @@ const Fields: AssessmentType = {
   isPresentationGood: {
     label:
       "Is the startup presentation based on elevator pitch, pitch deck and website good?",
-    shortLabel: "PRE",
+    shortLabel: "PDF",
     type: "number",
     source: "isPresentationGood",
     weight: 2,
     fields: {
       main: {
         label: "isPresentationGood",
-        shortLabel: "FB",
+        shortLabel: "PDF",
         type: "number",
         source: "isPresentationGood",
       },

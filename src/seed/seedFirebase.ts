@@ -173,14 +173,21 @@ class Seed {
     applications.forEach((applicationDoc) => {
       const application = applicationDoc.data() as IApplicationRecord;
       tableDoc[applicationDoc.id] = {
+        companyLogo: application.companyLogo,
         startupName: application.startupName,
         industry: application.industry,
+        stage: application.stage,
         foundingDate: application.foundingDate,
         headquarters: application.headquarters,
+        ...(application.assessments && {
+          assessments: Object.values(application.assessments).map(
+            (assessment) => assessment.judge_id
+          ),
+        }),
+        ...(application.statePre && { statePre: application.statePre }),
+        ...(application.stateTree && { statePre: application.stateTree }),
       };
     });
-
-    // console.log(tableDoc);
 
     await db.collection("tableDoc").doc("first").set(tableDoc);
   };

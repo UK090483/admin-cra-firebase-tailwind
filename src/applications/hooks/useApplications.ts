@@ -26,18 +26,27 @@ export default function useApplications() {
   //   shallowEqual
   // );
 
-  // useFirestoreConnect([
-  //   { collection: "applications", where: ["updated_at", ">", loadedAt] },
-  // ]);
+  useFirestoreConnect([{ collection: "tableDoc", doc: "first" }]);
+
+  const { ordered } = useSelector(
+    (state: RootState) => ({
+      ordered: state.firestore.data.tableDoc?.first
+        ? Object.entries(
+            state.firestore.data.tableDoc.first // @ts-ignore
+          ).map(([key, value]) => ({ ...value, id: key }))
+        : [],
+    }),
+    shallowEqual
+  );
 
   useEffect(() => {
     dispatch(fetchApplicationList());
   }, []);
 
-  const ordered = Object.entries(data).map((item) => ({
-    ...item[1],
-    id: item[0],
-  }));
+  // const ordered = Object.entries(data).map((item) => ({
+  //   ...item[1],
+  //   id: item[0],
+  // }));
 
   return { data: data, ordered, assessmentsByJudgeId, loading, loadedAt };
 }

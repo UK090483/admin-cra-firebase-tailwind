@@ -24,7 +24,7 @@ export function ManageJudges(props: IManageJudgesProps) {
   const [selected, setSelected] = React.useState<selectedState | null>(null);
   const { judgesOrdered } = useJudges();
 
-  const filtertJudges = judgesOrdered.filter(
+  const filteredJudges = judgesOrdered.filter(
     (judge) => judge.judgeType === type
   );
 
@@ -39,6 +39,8 @@ export function ManageJudges(props: IManageJudgesProps) {
     )
   );
 
+  console.log(assessmentCountByJudgeId);
+
   useEffect(() => {
     if (preselected) {
       setSelected(
@@ -51,7 +53,7 @@ export function ManageJudges(props: IManageJudgesProps) {
   }, [preselected]);
 
   const handleUpdate = () => {
-    const nextJudges = filtertJudges.reduce((acc, item) => {
+    const nextJudges = filteredJudges.reduce((acc, item) => {
       if (item.id && selected && selected[item.id]) {
         return { ...acc, [item.id]: item };
       }
@@ -61,43 +63,44 @@ export function ManageJudges(props: IManageJudgesProps) {
     handleClick(nextJudges);
   };
 
+  const getJudges = () => {
+    return filteredJudges.map((judge) => (
+      <div
+        data-testid={"manageJudges_select"}
+        key={judge.id}
+        className=" w-12 mr-3  py-2 flex-row justify-center items-center relative"
+        onClick={() => {
+          setSelected(
+            selected
+              ? {
+                  ...selected,
+                  [judge.id]: !!!selected[judge.id],
+                }
+              : { [judge.id]: true }
+          );
+        }}
+      >
+        <Chip color={judge.color} name={judge.name} />
+
+        {assessmentCountByJudgeId[judge.id]
+          ? assessmentCountByJudgeId[judge.id]
+          : 0}
+
+        {selected && !!selected[judge.id] && (
+          <CheckCircle
+            className={"absolute top-0 right-0 text-green-500 fadeIn"}
+          ></CheckCircle>
+        )}
+      </div>
+    ));
+  };
+
   return (
     <div className="flex justify-items-center items-center">
-      {filtertJudges.map((judge) => (
-        <div
-          data-testid={"manageJudges_select"}
-          key={judge.id}
-          className=" w-12 mr-3  py-2 flex-row justify-center items-center relative"
-          onClick={() => {
-            setSelected(
-              selected
-                ? {
-                    ...selected,
-                    [judge.id]: !!!selected[judge.id],
-                  }
-                : { [judge.id]: true }
-            );
-          }}
-        >
-          <Chip color={judge.color} name={judge.name} />
-
-          {assessmentCountByJudgeId[judge.id]
-            ? assessmentCountByJudgeId[judge.id]
-            : 0}
-
-          {selected && !!selected[judge.id] && (
-            <CheckCircle
-              className={"absolute top-0 right-0 text-green-500 fadeIn"}
-            ></CheckCircle>
-          )}
-        </div>
-      ))}
-
-      {
-        <Button data-testid="manageJudges_submit" onClick={handleUpdate}>
-          Zuweisen
-        </Button>
-      }
+      {getJudges()}
+      <Button data-testid="manageJudges_submit" onClick={handleUpdate}>
+        Zuweisen
+      </Button>
     </div>
   );
 }

@@ -10,6 +10,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { testColumns, testRows } from "./tests/testPrepare";
 import { ITableSortState, IColumn } from "./types";
 import Row from "./Row";
+import { Key } from "heroicons-react";
 
 interface ICustomRender {
   onRowClick?: () => {};

@@ -4,6 +4,7 @@ import { ApplicationHelper } from "applications/helper/ApplicationHelper";
 import Accordion from "components/Accordion/Accordion";
 import useJudges from "judges/hooks/useJudges";
 import AccordionFields from "components/Accordion/AccordionFields";
+import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
 
 interface IApplicationAccordion {
   application: IApplicationRecord;
@@ -16,7 +17,7 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
     ? Object.values(application.assessments)
     : [];
 
-  const hasAssessments = assessments.length > 1;
+  const hasAssessments = assessments.length > 0;
 
   const { judges } = useJudges();
 
@@ -27,7 +28,11 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
 
         return (
           <Accordion key={index} label={topic}>
-            <div key={index} className="flex">
+            <div
+              key={index}
+              className="flex"
+              data-testid={"test-" + topic + "-fields"}
+            >
               <AccordionFields
                 application={application}
                 topic={topic}
@@ -37,6 +42,7 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
               />
 
               <div
+                data-testid={"test-" + topic + "-assessments"}
                 className={`${
                   !!topicAssessments && hasAssessments && "w-1/3 pl-1"
                 }`}
@@ -49,18 +55,26 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
                         key={index}
                         className="bg-gray-300 p-3 rounded-md mb-2"
                       >
-                        <h3 className="font-bold pb-2">{topicAssessment}</h3>
+                        <h3 className="font-bold pb-2">
+                          {AssessmentHelper.getLabel(topicAssessment)}
+                        </h3>
                         {assessments &&
                           hasAssessments &&
                           assessments.map((assessment, index) => {
+                            const judge = judges && judges[assessment.judge_id];
+
+                            if (!judge) {
+                              return;
+                            }
+
                             return (
                               <Accordion
+                                bgColor={judge.color}
                                 key={index}
                                 label={
-                                  <div>
-                                    {`${judges[assessment.judge_id].name}  ${
-                                      assessment[topicAssessment]
-                                    }`}
+                                  <div className="flex justify-between font-extrabold">
+                                    <span>{judge.name}</span>
+                                    <span>{assessment[topicAssessment]}</span>
                                   </div>
                                 }
                               >

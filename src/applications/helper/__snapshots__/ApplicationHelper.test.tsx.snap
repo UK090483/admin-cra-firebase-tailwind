@@ -1,0 +1,955 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ApplicationHelper Match getAllFields 1`] = `
+Object {
+  "amountRaisedToDate": Object {
+    "input": <TextInput
+      label="Amount raised to date"
+      name="amountRaisedToDate"
+      textarea={true}
+    />,
+    "label": "Amount raised to date",
+    "type": "text",
+  },
+  "challengesAgainstCompetitors": Object {
+    "input": <TextInput
+      label="Challenges against competitors"
+      name="challengesAgainstCompetitors"
+      textarea={true}
+    />,
+    "label": "Challenges against competitors",
+    "type": "text",
+  },
+  "collaborateWithEntityHamburg": Object {
+    "input": <TextInput
+      label="Do you already collaborate with any entity from Hamburg ?"
+      name="collaborateWithEntityHamburg"
+      textarea={true}
+    />,
+    "label": "Do you already collaborate with any entity from Hamburg ?",
+    "type": "text",
+  },
+  "companyDeck": Object {
+    "label": "Company Deck",
+    "type": "mediaArray",
+  },
+  "companyLogo": Object {
+    "label": "Company Logo",
+    "type": "mediaArray",
+  },
+  "competition": Object {
+    "input": <TextInput
+      label="Competition"
+      name="competition"
+      textarea={true}
+    />,
+    "label": "Competition",
+    "type": "text",
+  },
+  "connectionToHamburg": Object {
+    "input": <TextInput
+      label="Do you have a connection to Hamburg ?"
+      name="connectionToHamburg"
+      textarea={true}
+    />,
+    "label": "Do you have a connection to Hamburg ?",
+    "type": "text",
+  },
+  "foundersQualification": Object {
+    "input": <TextInput
+      label="Founder’s qualification/ background"
+      name="foundersQualification"
+      textarea={true}
+    />,
+    "label": "Founder’s qualification/ background",
+    "type": "text",
+  },
+  "foundingDate": Object {
+    "input": <TextInput
+      label="Founding date"
+      name="foundingDate"
+    />,
+    "label": "Founding date",
+    "type": "text",
+  },
+  "fundingObjective": Object {
+    "input": <TextInput
+      label="Funding objective"
+      name="fundingObjective"
+      textarea={true}
+    />,
+    "label": "Funding objective",
+    "type": "text",
+  },
+  "headquarters": Object {
+    "input": <TextInput
+      label="Headquarters"
+      name="headquarters"
+    />,
+    "label": "Headquarters",
+    "type": "text",
+  },
+  "howDidYouHearAboutFHA": Object {
+    "input": <TextInput
+      label="How did you hear about the Future Hamburg Award ?"
+      name="howDidYouHearAboutFHA"
+      textarea={true}
+    />,
+    "label": "How did you hear about the Future Hamburg Award ?",
+    "type": "text",
+  },
+  "howImpact": Object {
+    "input": <TextInput
+      label="How can your startup help generate an impact for our future cities, especially Hamburg ?"
+      name="howImpact"
+      textarea={true}
+    />,
+    "label": "How can your startup help generate an impact for our future cities, especially Hamburg ?",
+    "type": "text",
+  },
+  "howIsCompanyFunded": Object {
+    "input": <TextInput
+      label="How is the company funded?"
+      name="howIsCompanyFunded"
+      textarea={true}
+    />,
+    "label": "How is the company funded?",
+    "type": "text",
+  },
+  "industry": Object {
+    "input": <TextInput
+      label="Industry"
+      name="industry"
+    />,
+    "label": "Industry",
+    "type": "text",
+  },
+  "marketDrivers": Object {
+    "input": <TextInput
+      label="Market Drivers & challenges"
+      name="marketDrivers"
+      textarea={true}
+    />,
+    "label": "Market Drivers & challenges",
+    "type": "text",
+  },
+  "marketSize": Object {
+    "input": <TextInput
+      label="Market Size"
+      name="marketSize"
+      textarea={true}
+    />,
+    "label": "Market Size",
+    "type": "text",
+  },
+  "metrics": Object {
+    "input": <TextInput
+      label="Metrics"
+      name="metrics"
+      textarea={true}
+    />,
+    "label": "Metrics",
+    "type": "text",
+  },
+  "numberOfFounders": Object {
+    "input": <TextInput
+      label="Number of founders"
+      name="numberOfFounders"
+    />,
+    "label": "Number of founders",
+    "type": "text",
+  },
+  "overallTeamSize": Object {
+    "input": <TextInput
+      label="Overall team size (including founders)"
+      name="overallTeamSize"
+    />,
+    "label": "Overall team size (including founders)",
+    "type": "text",
+  },
+  "pilotsCustomers": Object {
+    "input": <TextInput
+      label="Pilots & customers"
+      name="pilotsCustomers"
+      textarea={true}
+    />,
+    "label": "Pilots & customers",
+    "type": "text",
+  },
+  "problemYouAreSolving": Object {
+    "input": <TextInput
+      label="Problem you are solving & severity of the problem"
+      name="problemYouAreSolving"
+      textarea={true}
+    />,
+    "label": "Problem you are solving & severity of the problem",
+    "type": "text",
+  },
+  "productDescription": Object {
+    "input": <TextInput
+      label="Product description"
+      name="productDescription"
+      textarea={true}
+    />,
+    "label": "Product description",
+    "type": "text",
+  },
+  "productReadiness": Object {
+    "input": <TextInput
+      label="Product readiness & where are you now"
+      name="productReadiness"
+      textarea={true}
+    />,
+    "label": "Product readiness & where are you now",
+    "type": "text",
+  },
+  "productRoadMap": Object {
+    "input": <TextInput
+      label="Product Road Map"
+      name="productRoadMap"
+      textarea={true}
+    />,
+    "label": "Product Road Map",
+    "type": "text",
+  },
+  "revenueSources": Object {
+    "input": <TextInput
+      label="Revenue sources"
+      name="revenueSources"
+      textarea={true}
+    />,
+    "label": "Revenue sources",
+    "type": "text",
+  },
+  "salesStrategy": Object {
+    "input": <TextInput
+      label="Sales strategy & Pricing model"
+      name="salesStrategy"
+      textarea={true}
+    />,
+    "label": "Sales strategy & Pricing model",
+    "type": "text",
+  },
+  "segmentFocus": Object {
+    "input": <TextInput
+      label="Segment focus"
+      name="segmentFocus"
+    />,
+    "label": "Segment focus",
+    "type": "text",
+  },
+  "stage": Object {
+    "input": <TextInput
+      label="Stage"
+      name="stage"
+    />,
+    "label": "Stage",
+    "type": "text",
+  },
+  "startupName": Object {
+    "input": <TextInput
+      label="Startup Name"
+      name="startupName"
+    />,
+    "label": "Startup Name",
+    "type": "text",
+  },
+  "startupOverview": Object {
+    "input": <TextInput
+      label="startup Overview"
+      name="startupOverview"
+      textarea={true}
+    />,
+    "label": "startup Overview",
+    "type": "text",
+  },
+  "strengthAgainstCompetitors": Object {
+    "input": <TextInput
+      label="Strength against competitors"
+      name="strengthAgainstCompetitors"
+      textarea={true}
+    />,
+    "label": "Strength against competitors",
+    "type": "text",
+  },
+  "tagLine": Object {
+    "input": <TextInput
+      label="Tag Line"
+      name="tagLine"
+    />,
+    "label": "Tag Line",
+    "type": "text",
+  },
+  "targetMarket": Object {
+    "input": <ListInput
+      label="Target Market"
+      name="targetMarket"
+    />,
+    "label": "Target Market",
+    "type": "list",
+  },
+  "traction": Object {
+    "input": <TextInput
+      label="traction"
+      name="traction"
+      textarea={true}
+    />,
+    "label": "traction",
+    "type": "text",
+  },
+  "website": Object {
+    "label": "WebSite",
+    "type": "text",
+  },
+  "whatDegreeSustainability": Object {
+    "input": <TextInput
+      label="To what degree is sustainability integrated into the business model ?"
+      name="whatDegreeSustainability"
+      textarea={true}
+    />,
+    "label": "To what degree is sustainability integrated into the business model ?",
+    "type": "text",
+  },
+  "whatMakesYourProductUnique": Object {
+    "input": <TextInput
+      label="What makes your service/product special and unique?"
+      name="whatMakesYourProductUnique"
+      textarea={true}
+    />,
+    "label": "What makes your service/product special and unique?",
+    "type": "text",
+  },
+  "yourInvestors": Object {
+    "input": <TextInput
+      label="Your investors"
+      name="yourInvestors"
+      textarea={true}
+    />,
+    "label": "Your investors",
+    "type": "text",
+  },
+}
+`;
+
+exports[`ApplicationHelper Match getAssessments 1`] = `undefined`;
+
+exports[`ApplicationHelper Match getAssessments 2`] = `undefined`;
+
+exports[`ApplicationHelper Match getAssessments 3`] = `
+Array [
+  "isInnovative",
+  "isClearUSP",
+]
+`;
+
+exports[`ApplicationHelper Match getAssessments 4`] = `
+Array [
+  "isTherePotential",
+]
+`;
+
+exports[`ApplicationHelper Match getAssessments 5`] = `
+Array [
+  "doTheyKnowCompetitors",
+]
+`;
+
+exports[`ApplicationHelper Match getAssessments 6`] = `
+Array [
+  "isBusinessModelSolid",
+  "areNumbersPromising",
+]
+`;
+
+exports[`ApplicationHelper Match getAssessments 7`] = `
+Array [
+  "isFundingSolid",
+]
+`;
+
+exports[`ApplicationHelper Match getAssessments 8`] = `
+Array [
+  "isTeamExperienced",
+]
+`;
+
+exports[`ApplicationHelper Match getAssessments 9`] = `
+Array [
+  "willFutureCitiesBenefit",
+  "isComplianceWithSDG",
+]
+`;
+
+exports[`ApplicationHelper Match getAssessments 10`] = `
+Array [
+  "isPresentationGood",
+]
+`;
+
+exports[`ApplicationHelper Match getFields 1`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Startup Name"
+        name="startupName"
+      />,
+      "label": "Startup Name",
+      "type": "text",
+    },
+    "key": "startupName",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Tag Line"
+        name="tagLine"
+      />,
+      "label": "Tag Line",
+      "type": "text",
+    },
+    "key": "tagLine",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Website"
+        name="website"
+      />,
+      "label": "Website",
+      "type": "url",
+    },
+    "key": "website",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Founding date"
+        name="foundingDate"
+      />,
+      "label": "Founding date",
+      "type": "text",
+    },
+    "key": "foundingDate",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Stage"
+        name="stage"
+      />,
+      "label": "Stage",
+      "type": "text",
+    },
+    "key": "stage",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Segment focus"
+        name="segmentFocus"
+      />,
+      "label": "Segment focus",
+      "type": "text",
+    },
+    "key": "segmentFocus",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Industry"
+        name="industry"
+      />,
+      "label": "Industry",
+      "type": "text",
+    },
+    "key": "industry",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Headquarters"
+        name="headquarters"
+      />,
+      "label": "Headquarters",
+      "type": "text",
+    },
+    "key": "headquarters",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 2`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="startup Overview"
+        name="startupOverview"
+        textarea={true}
+      />,
+      "label": "startup Overview",
+      "type": "text",
+    },
+    "key": "startupOverview",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 3`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Problem you are solving & severity of the problem"
+        name="problemYouAreSolving"
+        textarea={true}
+      />,
+      "label": "Problem you are solving & severity of the problem",
+      "type": "text",
+    },
+    "key": "problemYouAreSolving",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Product description"
+        name="productDescription"
+        textarea={true}
+      />,
+      "label": "Product description",
+      "type": "text",
+    },
+    "key": "productDescription",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="What makes your service/product special and unique?"
+        name="whatMakesYourProductUnique"
+        textarea={true}
+      />,
+      "label": "What makes your service/product special and unique?",
+      "type": "text",
+    },
+    "key": "whatMakesYourProductUnique",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Product readiness & where are you now"
+        name="productReadiness"
+        textarea={true}
+      />,
+      "label": "Product readiness & where are you now",
+      "type": "text",
+    },
+    "key": "productReadiness",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Product Road Map"
+        name="productRoadMap"
+        textarea={true}
+      />,
+      "label": "Product Road Map",
+      "type": "text",
+    },
+    "key": "productRoadMap",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 4`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <ListInput
+        label="Target Market"
+        name="targetMarket"
+      />,
+      "label": "Target Market",
+      "type": "list",
+    },
+    "key": "targetMarket",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Market Drivers & challenges"
+        name="marketDrivers"
+        textarea={true}
+      />,
+      "label": "Market Drivers & challenges",
+      "type": "text",
+    },
+    "key": "marketDrivers",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Market Size"
+        name="marketSize"
+        textarea={true}
+      />,
+      "label": "Market Size",
+      "type": "text",
+    },
+    "key": "marketSize",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 5`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Competition"
+        name="competition"
+        textarea={true}
+      />,
+      "label": "Competition",
+      "type": "text",
+    },
+    "key": "competition",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Strength against competitors"
+        name="strengthAgainstCompetitors"
+        textarea={true}
+      />,
+      "label": "Strength against competitors",
+      "type": "text",
+    },
+    "key": "strengthAgainstCompetitors",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Challenges against competitors"
+        name="challengesAgainstCompetitors"
+        textarea={true}
+      />,
+      "label": "Challenges against competitors",
+      "type": "text",
+    },
+    "key": "challengesAgainstCompetitors",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 6`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Revenue sources"
+        name="revenueSources"
+        textarea={true}
+      />,
+      "label": "Revenue sources",
+      "type": "text",
+    },
+    "key": "revenueSources",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Sales strategy & Pricing model"
+        name="salesStrategy"
+        textarea={true}
+      />,
+      "label": "Sales strategy & Pricing model",
+      "type": "text",
+    },
+    "key": "salesStrategy",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="traction"
+        name="traction"
+        textarea={true}
+      />,
+      "label": "traction",
+      "type": "text",
+    },
+    "key": "traction",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Pilots & customers"
+        name="pilotsCustomers"
+        textarea={true}
+      />,
+      "label": "Pilots & customers",
+      "type": "text",
+    },
+    "key": "pilotsCustomers",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Metrics"
+        name="metrics"
+        textarea={true}
+      />,
+      "label": "Metrics",
+      "type": "text",
+    },
+    "key": "metrics",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 7`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="How is the company funded?"
+        name="howIsCompanyFunded"
+        textarea={true}
+      />,
+      "label": "How is the company funded?",
+      "type": "text",
+    },
+    "key": "howIsCompanyFunded",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Amount raised to date"
+        name="amountRaisedToDate"
+        textarea={true}
+      />,
+      "label": "Amount raised to date",
+      "type": "text",
+    },
+    "key": "amountRaisedToDate",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Your investors"
+        name="yourInvestors"
+        textarea={true}
+      />,
+      "label": "Your investors",
+      "type": "text",
+    },
+    "key": "yourInvestors",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Funding objective"
+        name="fundingObjective"
+        textarea={true}
+      />,
+      "label": "Funding objective",
+      "type": "text",
+    },
+    "key": "fundingObjective",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 8`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Number of founders"
+        name="numberOfFounders"
+      />,
+      "label": "Number of founders",
+      "type": "text",
+    },
+    "key": "numberOfFounders",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Overall team size (including founders)"
+        name="overallTeamSize"
+      />,
+      "label": "Overall team size (including founders)",
+      "type": "text",
+    },
+    "key": "overallTeamSize",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Founder’s qualification/ background"
+        name="foundersQualification"
+        textarea={true}
+      />,
+      "label": "Founder’s qualification/ background",
+      "type": "text",
+    },
+    "key": "foundersQualification",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 9`] = `
+Array [
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="How can your startup help generate an impact for our future cities, especially Hamburg ?"
+        name="howImpact"
+        textarea={true}
+      />,
+      "label": "How can your startup help generate an impact for our future cities, especially Hamburg ?",
+      "type": "text",
+    },
+    "key": "howImpact",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="To what degree is sustainability integrated into the business model ?"
+        name="whatDegreeSustainability"
+        textarea={true}
+      />,
+      "label": "To what degree is sustainability integrated into the business model ?",
+      "type": "text",
+    },
+    "key": "whatDegreeSustainability",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Do you have a connection to Hamburg ?"
+        name="connectionToHamburg"
+        textarea={true}
+      />,
+      "label": "Do you have a connection to Hamburg ?",
+      "type": "text",
+    },
+    "key": "connectionToHamburg",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="Do you already collaborate with any entity from Hamburg ?"
+        name="collaborateWithEntityHamburg"
+        textarea={true}
+      />,
+      "label": "Do you already collaborate with any entity from Hamburg ?",
+      "type": "text",
+    },
+    "key": "collaborateWithEntityHamburg",
+  },
+  Object {
+    "field": Object {
+      "input": <TextInput
+        label="How did you hear about the Future Hamburg Award ?"
+        name="howDidYouHearAboutFHA"
+        textarea={true}
+      />,
+      "label": "How did you hear about the Future Hamburg Award ?",
+      "type": "text",
+    },
+    "key": "howDidYouHearAboutFHA",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getFields 10`] = `
+Array [
+  Object {
+    "field": Object {
+      "label": "WebSite",
+      "type": "text",
+    },
+    "key": "website",
+  },
+  Object {
+    "field": Object {
+      "label": "Company Logo",
+      "type": "mediaArray",
+    },
+    "key": "companyLogo",
+  },
+  Object {
+    "field": Object {
+      "label": "Company Deck",
+      "type": "mediaArray",
+    },
+    "key": "companyDeck",
+  },
+]
+`;
+
+exports[`ApplicationHelper Match getTopics 1`] = `
+Array [
+  "BasicInformation",
+  "StartupOverview",
+  "Product",
+  "Market",
+  "Competition",
+  "Business",
+  "Funding",
+  "Team",
+  "Impact",
+  "Media",
+]
+`;
+
+exports[`ApplicationHelper Match parseJotFormData 1`] = `
+Object {
+  "amountRaisedToDate": undefined,
+  "challengesAgainstCompetitors": undefined,
+  "collaborateWithEntityHamburg": undefined,
+  "companyDeck": undefined,
+  "companyLogo": undefined,
+  "competition": undefined,
+  "connectionToHamburg": undefined,
+  "contactEmail": undefined,
+  "contactName": undefined,
+  "contactPhoneNumber": undefined,
+  "contactPosition": undefined,
+  "foundersQualification": undefined,
+  "foundingDate": undefined,
+  "fundingObjective": undefined,
+  "headquarters": undefined,
+  "howDidYouHearAboutFHA": undefined,
+  "howImpact": undefined,
+  "howIsCompanyFunded": undefined,
+  "id": undefined,
+  "industry": undefined,
+  "marketDrivers": undefined,
+  "marketSize": undefined,
+  "metrics": undefined,
+  "numberOfFounders": undefined,
+  "overallTeamSize": undefined,
+  "pilotsCustomers": undefined,
+  "problemYouAreSolving": undefined,
+  "productDescription": undefined,
+  "productReadiness": undefined,
+  "productRoadMap": undefined,
+  "revenueSources": undefined,
+  "salesStrategy": undefined,
+  "segmentFocus": undefined,
+  "stage": undefined,
+  "startupName": undefined,
+  "startupOverview": undefined,
+  "strengthAgainstCompetitors": undefined,
+  "tagLine": undefined,
+  "targetMarket": undefined,
+  "traction": undefined,
+  "website": undefined,
+  "whatDegreeSustainability": undefined,
+  "whatMakesYourProductUnique": undefined,
+  "yourInvestors": undefined,
+}
+`;

@@ -64,3 +64,5 @@ const useUi = () => {
 };
 
 export default useUi;
+
+export { useUi };

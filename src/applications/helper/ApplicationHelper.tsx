@@ -38,30 +38,30 @@ interface GetAllFieldsResult {
 export interface Application extends ApplicationType {}
 
 class ApplicationC {
-  applicaton: ApplicationType;
+  application: ApplicationType;
 
   constructor(a: ApplicationType) {
-    this.applicaton = a;
+    this.application = a;
   }
 
   getTopics(): string[] {
-    return Object.keys(this.applicaton).map((key) => key);
+    return Object.keys(this.application).map((key) => key);
   }
 
   getFields(
     topic: keyof ApplicationType
   ): { key: string; field: ApplicationField }[] {
-    return Object.keys(this.applicaton[topic].fields).map((key) => {
-      return { key, field: this.applicaton[topic].fields[key] };
+    return Object.keys(this.application[topic].fields).map((key) => {
+      return { key, field: this.application[topic].fields[key] };
     });
   }
 
   getAllFields(): GetAllFieldsResult {
     const res: any = {};
 
-    Object.keys(this.applicaton).forEach((key) => {
-      Object.keys(this.applicaton[key].fields).forEach((element) => {
-        res[element] = this.applicaton[key].fields[element];
+    Object.keys(this.application).forEach((key) => {
+      Object.keys(this.application[key].fields).forEach((element) => {
+        res[element] = this.application[key].fields[element];
       });
     });
 
@@ -71,18 +71,14 @@ class ApplicationC {
   getAssessments(
     topic: keyof ApplicationType
   ): AssessmentTypeKey[] | undefined {
-    return this.applicaton[topic].assessments;
+    return this.application[topic].assessments;
   }
 
   parseJotFormData(jotformData: IJotFormData) {
     const res: IJotFormData = {};
-    Object.keys(this.applicaton).forEach((key) => {
-      Object.keys(this.applicaton[key].fields).forEach((element) => {
-        if (jotFormDataMaper[element]) {
-          res[element] = get(jotformData, jotFormDataMaper[element]);
-        } else {
-          res[element] = "not found";
-        }
+    Object.keys(this.application).forEach((key) => {
+      Object.keys(this.application[key].fields).forEach((element) => {
+        res[element] = get(jotformData, jotFormDataMaper[element]);
       });
     });
 
@@ -94,9 +90,6 @@ class ApplicationC {
   }
 }
 
-interface IJotFormToApplication {
-  [key: string]: string;
-}
 interface IJotFormData {
   [key: string]: any;
 }
@@ -288,22 +281,45 @@ const ApplicationObject: ApplicationType = {
       revenueSources: {
         label: "Revenue sources",
         type: "text",
+        input: (
+          <TextInput
+            label={"Revenue sources"}
+            name={"revenueSources"}
+            textarea
+          />
+        ),
       },
       salesStrategy: {
         label: "Sales strategy & Pricing model",
         type: "text",
+        input: (
+          <TextInput
+            label={"Sales strategy & Pricing model"}
+            name={"salesStrategy"}
+            textarea
+          />
+        ),
       },
       traction: {
-        label: "Traction",
+        label: "traction",
         type: "text",
+        input: <TextInput label={"traction"} name={"traction"} textarea />,
       },
       pilotsCustomers: {
         label: "Pilots & customers",
         type: "text",
+        input: (
+          <TextInput
+            label={"Pilots & customers"}
+            name={"pilotsCustomers"}
+            textarea
+          />
+        ),
       },
       metrics: {
         label: "Metrics",
         type: "text",
+        input: <TextInput label={"Metrics"} name={"metrics"} textarea />,
       },
     },
 
@@ -314,18 +330,42 @@ const ApplicationObject: ApplicationType = {
       howIsCompanyFunded: {
         label: "How is the company funded?",
         type: "text",
+        input: (
+          <TextInput
+            label={"How is the company funded?"}
+            name={"howIsCompanyFunded"}
+            textarea
+          />
+        ),
       },
       amountRaisedToDate: {
         label: "Amount raised to date",
         type: "text",
+        input: (
+          <TextInput
+            label={"Amount raised to date"}
+            name={"amountRaisedToDate"}
+            textarea
+          />
+        ),
       },
       yourInvestors: {
         label: "Your investors",
         type: "text",
+        input: (
+          <TextInput label={"Your investors"} name={"yourInvestors"} textarea />
+        ),
       },
       fundingObjective: {
         label: "Funding objective",
         type: "text",
+        input: (
+          <TextInput
+            label={"Funding objective"}
+            name={"fundingObjective"}
+            textarea
+          />
+        ),
       },
     },
 
@@ -336,14 +376,30 @@ const ApplicationObject: ApplicationType = {
       numberOfFounders: {
         label: "Number of founders",
         type: "text",
+        input: (
+          <TextInput label={"Number of founders"} name={"numberOfFounders"} />
+        ),
       },
       overallTeamSize: {
         label: "Overall team size (including founders)",
         type: "text",
+        input: (
+          <TextInput
+            label={"Overall team size (including founders)"}
+            name={"overallTeamSize"}
+          />
+        ),
       },
       foundersQualification: {
         label: "Founder’s qualification/ background",
         type: "text",
+        input: (
+          <TextInput
+            label={"Founder’s qualification/ background"}
+            name={"foundersQualification"}
+            textarea
+          />
+        ),
       },
     },
 
@@ -355,23 +411,62 @@ const ApplicationObject: ApplicationType = {
         label:
           "How can your startup help generate an impact for our future cities, especially Hamburg ?",
         type: "text",
+        input: (
+          <TextInput
+            label={
+              "How can your startup help generate an impact for our future cities, especially Hamburg ?"
+            }
+            name={"howImpact"}
+            textarea
+          />
+        ),
       },
       whatDegreeSustainability: {
         label:
           "To what degree is sustainability integrated into the business model ?",
         type: "text",
+        input: (
+          <TextInput
+            label={
+              "To what degree is sustainability integrated into the business model ?"
+            }
+            name={"whatDegreeSustainability"}
+            textarea
+          />
+        ),
       },
       connectionToHamburg: {
         label: "Do you have a connection to Hamburg ?",
         type: "text",
+        input: (
+          <TextInput
+            label={"Do you have a connection to Hamburg ?"}
+            name={"connectionToHamburg"}
+            textarea
+          />
+        ),
       },
       collaborateWithEntityHamburg: {
         label: "Do you already collaborate with any entity from Hamburg ?",
         type: "text",
+        input: (
+          <TextInput
+            label={"Do you already collaborate with any entity from Hamburg ?"}
+            name={"collaborateWithEntityHamburg"}
+            textarea
+          />
+        ),
       },
       howDidYouHearAboutFHA: {
         label: "How did you hear about the Future Hamburg Award ?",
         type: "text",
+        input: (
+          <TextInput
+            label={"How did you hear about the Future Hamburg Award ?"}
+            name={"howDidYouHearAboutFHA"}
+            textarea
+          />
+        ),
       },
     },
 

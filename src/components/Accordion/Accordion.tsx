@@ -2,6 +2,7 @@ import * as React from "react";
 
 interface IAccordionProps {
   label: string | JSX.Element;
+  bgColor?: string;
 }
 
 const Accordion: React.FunctionComponent<IAccordionProps> = (props) => {
@@ -38,12 +39,14 @@ const Accordion: React.FunctionComponent<IAccordionProps> = (props) => {
     }
   };
 
-  const { label } = props;
+  const { label, bgColor } = props;
   return (
     <div className="group flex align-center flex-col ">
       <div
         onMouseDown={() => handleClick()}
-        className="w-full px-5 py-3 bg-indigo-300 text-white group-focus:text-yellow-300   inline-block hover:opacity-75 hover:shadow hover:-mb-3 rounded-t"
+        className={`w-full px-5 py-3 ${
+          bgColor ? bgColor : "bg-indigo-300"
+        } text-white group-focus:text-yellow-300   inline-block hover:opacity-75 hover:shadow hover:-mb-3 rounded-t`}
       >
         {label}
       </div>

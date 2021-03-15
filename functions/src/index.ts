@@ -13,19 +13,11 @@ import initUser from "./https/users/initUser";
 
 import imageTransform from "./https/imageCdn";
 
-import setSession from "./https/users/setSession";
-
-import getDataJotForm from "./https/getDataJotForm";
-import getJotFormImage from "./https/getJotFormImage";
-
 export {
-  getJotFormImage,
-  getDataJotForm,
   imageTransform,
   deleteUser,
   createUser,
   updateUser,
-  setSession,
   initUser,
   getJudgeApplications,
   judgeUpdateApplication,

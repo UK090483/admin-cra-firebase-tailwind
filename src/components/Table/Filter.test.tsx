@@ -13,6 +13,7 @@ describe("TableFilter", () => {
   it("should not render with no Option", async () => {
     const { queryByTestId } = render(
       <Filter
+        rows={[]}
         filter={{}}
         setFilter={() => {}}
         columns={testColumns}
@@ -24,6 +25,7 @@ describe("TableFilter", () => {
   it("should  render with no Option.showFilter true", async () => {
     const { queryByTestId } = render(
       <Filter
+        rows={[]}
         filter={{}}
         setFilter={() => {}}
         columns={testColumns}
@@ -36,6 +38,7 @@ describe("TableFilter", () => {
   it("should show filter", async () => {
     const { queryByTestId, getByText } = render(
       <Filter
+        rows={[]}
         filter={{ name: [["===", "b"]] }}
         setFilter={() => {}}
         columns={testColumns}
@@ -52,6 +55,7 @@ describe("TableFilter", () => {
   it("should  render fixed Filters", async () => {
     const { queryByTestId } = render(
       <Filter
+        rows={[]}
         filter={{}}
         setFilter={() => {}}
         columns={testColumns}

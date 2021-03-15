@@ -7,6 +7,7 @@ import FourthRoundTable from "./fourthRound/FourthRoundTable";
 
 import useUi from "hooks/useUi";
 import StageButton from "./StageButton";
+import TableExport from "./TableExport/tableExport";
 
 const Applications: React.FC = () => {
   const { ordered, loading, loadedAt } = useApplications();
@@ -25,12 +26,12 @@ const Applications: React.FC = () => {
       case "final_evaluation":
         return <FourthRoundTable data={ordered} />;
       default:
-        break;
+        return <FirstRoundTable data={ordered} />;
     }
   };
 
   if (loading && !loadedAt) {
-    return <div>loading....</div>;
+    return <div>loading...</div>;
   }
 
   return (
@@ -39,7 +40,7 @@ const Applications: React.FC = () => {
 
       {getTable()}
 
-      {/* <TableExport data={ordered} /> */}
+      <TableExport data={ordered} />
     </div>
   );
 };

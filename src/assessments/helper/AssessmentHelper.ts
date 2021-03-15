@@ -31,7 +31,7 @@ export interface AssessmentType {
   isFundingSolid: AssessmentField;
   isTeamExperienced: AssessmentField;
   willFutureCitiesBenefit: AssessmentField;
-  isComplianceWithSDGs: AssessmentField;
+  isComplianceWithSDG: AssessmentField;
   isPresentationGood: AssessmentField;
   // status: AssessmentField;
   // sum: AssessmentField;
@@ -73,6 +73,13 @@ export class AssessmentC {
       // }
     }
     return res;
+  }
+  getLabel(question: string): string {
+    if (this.fields[question as keyof AssessmentType]) {
+      return this.fields[question as keyof AssessmentType].label;
+    }
+
+    return question;
   }
 
   getQuestionsDetails() {
