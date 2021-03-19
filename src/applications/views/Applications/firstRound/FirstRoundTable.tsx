@@ -7,11 +7,44 @@ import React from "react";
 import Table from "components/Table/Table";
 import { useHistory } from "react-router-dom";
 
-const prevItemList = [
-  "howIsCompanyFunded",
-  "salesStrategy",
-  "productReadiness",
-];
+const optionsFirstRound: ITableOptions = {
+  showFilter: false,
+  fixedFilter: (filter, setFilter, columns, rows) => (
+    <FirstRoundFilter
+      setFilter={setFilter}
+      filter={filter}
+      columns={columns}
+      rows={rows}
+    />
+  ),
+};
+
+interface FirstRoundTableProps {
+  data: any[];
+}
+
+const FirstRoundTable: React.FC<FirstRoundTableProps> = ({ data }) => {
+  let history = useHistory();
+
+  return (
+    <div className="animate-fadeIn" data-testid="FirstRoundTable">
+      <Table
+        searchFields={["startupName", "headquarters"]}
+        name="first_stage_Table"
+        options={optionsFirstRound}
+        per_page={10}
+        onRowClick={(data) => {
+          history.push(`applications/${data.id}`);
+        }}
+        columns={columnsFirstRound}
+        rows={data}
+      />
+    </div>
+  );
+};
+
+export default FirstRoundTable;
+export { columnsFirstRound, optionsFirstRound };
 
 const columnsFirstRound: IColumn[] = [
   {
@@ -82,42 +115,3 @@ const columnsFirstRound: IColumn[] = [
     width: "w-24",
   },
 ];
-
-const optionsFirstRound: ITableOptions = {
-  showFilter: false,
-  fixedFilter: (filter, setFilter, columns, rows) => (
-    <FirstRoundFilter
-      setFilter={setFilter}
-      filter={filter}
-      columns={columns}
-      rows={rows}
-    />
-  ),
-};
-
-interface FirstRoundTableProps {
-  data: any[];
-}
-
-const FirstRoundTable: React.FC<FirstRoundTableProps> = ({ data }) => {
-  let history = useHistory();
-
-  return (
-    <div className="animate-fadeIn" data-testid="FirstRoundTable">
-      <Table
-        searchFields={["startupName", "headquarters"]}
-        name="first_stage_Table"
-        options={optionsFirstRound}
-        per_page={10}
-        onRowClick={(data) => {
-          history.push(`applications/${data.id}`);
-        }}
-        columns={columnsFirstRound}
-        rows={data}
-      />
-    </div>
-  );
-};
-
-export default FirstRoundTable;
-export { columnsFirstRound, optionsFirstRound };

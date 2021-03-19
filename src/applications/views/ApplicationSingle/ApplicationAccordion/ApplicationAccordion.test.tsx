@@ -12,7 +12,7 @@ import { TestWrap } from "tests/testPrepare";
 import { FakeApplication } from "seed/FakeApplication";
 
 import { ApplicationHelper } from "applications/helper/ApplicationHelper";
-import FakeAssessment from "../../../../seed/FakeAssessment";
+import FakeAssessment from "seed/FakeAssessment";
 
 import * as MockFirebase from "firebase-mock";
 
@@ -28,7 +28,7 @@ describe("ApplicationAccordion", () => {
 
     render(
       <TestWrap>
-        <ApplicationAccordion application={fakeApplication} />
+        <ApplicationAccordion assessments={[]} application={fakeApplication} />
       </TestWrap>
     );
   });
@@ -40,7 +40,7 @@ describe("ApplicationAccordion", () => {
 
     const { getAllByText } = render(
       <TestWrap>
-        <ApplicationAccordion application={fakeApplication} />
+        <ApplicationAccordion assessments={[]} application={fakeApplication} />
       </TestWrap>
     );
 
@@ -57,7 +57,7 @@ describe("ApplicationAccordion", () => {
 
     const { getAllByText } = render(
       <TestWrap>
-        <ApplicationAccordion application={fakeApplication} />
+        <ApplicationAccordion assessments={[]} application={fakeApplication} />
       </TestWrap>
     );
 
@@ -69,19 +69,17 @@ describe("ApplicationAccordion", () => {
 
   it("should render Assessments", async () => {
     const fakeApplication = FakeApplication();
+    const fakeAssessment = FakeAssessment("a", "b");
+
     // @ts-ignore
     fakeApplication.foundingDate = "dfsdf";
 
-    fakeApplication.assessments = {
-      B9LqKvEEgVJ1Go3yZDASFPVZE5cj: FakeAssessment(
-        "ab",
-        "B9LqKvEEgVJ1Go3yZDASFPVZE5cj"
-      ),
-    };
-
     const { getByTestId, debug, getByText } = render(
       <TestWrap>
-        <ApplicationAccordion application={fakeApplication} />
+        <ApplicationAccordion
+          assessments={[fakeAssessment]}
+          application={fakeApplication}
+        />
       </TestWrap>
     );
 

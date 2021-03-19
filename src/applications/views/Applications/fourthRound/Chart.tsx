@@ -19,14 +19,15 @@ export function Chart(props: IChartProps) {
     toggleIntegrateJudgeAverages,
   } = useUi();
 
-  const judgeAverages = useSelector(
-    (state: RootState) => state.applications.judgeAverages
-  );
+  // const judgeAverages = useSelector(
+  //   (state: RootState) => state.applications.judgeAverages
+  // );
 
+  const judgeAverages = {};
   return (
     <div className=" bg-white rounded-xl shadow-2xl my-6 p-4">
       <div className="flex flex-wrap mb-2">
-        {judgeAverages &&
+        {/* {judgeAverages &&
           judges &&
           Object.entries(judgeAverages).map(([judgeId, averages]) => {
             return (
@@ -40,7 +41,7 @@ export function Chart(props: IChartProps) {
                 {"∅" + Math.round(averages * 100) / 100}
               </div>
             );
-          })}
+          })} */}
       </div>
       <div className="flex w-1/4 justify-between mb-2">
         <span>Sum to 100</span>

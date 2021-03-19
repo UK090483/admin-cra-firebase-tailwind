@@ -40,24 +40,19 @@ describe("ManageJudges", () => {
     const handleClick = jest.fn();
     const { getAllByTestId, getByTestId, getByText } = render(
       <TestWrap>
-        <ManageJudges
-          handleClick={handleClick}
-          preselected={{ j1: { judge_id: "j1" } }}
-        />
+        <ManageJudges handleClick={handleClick} preselected={["j1"]} />
       </TestWrap>
     );
 
     fireEvent.click(getByTestId("manageJudges_submit"));
     expect(handleClick).toBeCalledTimes(1);
-    expect(handleClick).toBeCalledWith({
-      j1: { id: "j1", name: "J 1", judgeType: "pre" },
-    });
+    expect(handleClick).toBeCalledWith(["j1"]);
 
     handleClick.mockReset();
 
     fireEvent.click(getAllByTestId("manageJudges_select")[0]);
     fireEvent.click(getByTestId("manageJudges_submit"));
     expect(handleClick).toBeCalledTimes(1);
-    expect(handleClick).toBeCalledWith({});
+    expect(handleClick).toBeCalledWith([]);
   });
 });

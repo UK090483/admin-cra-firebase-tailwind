@@ -5,17 +5,16 @@ import Accordion from "components/Accordion/Accordion";
 import useJudges from "judges/hooks/useJudges";
 import AccordionFields from "components/Accordion/AccordionFields";
 import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
+import useAssessments from "assessments/hooks/useAssessments";
+import { IAssessmentRecord } from "assessments/types";
 
 interface IApplicationAccordion {
   application: IApplicationRecord;
+  assessments: IAssessmentRecord[];
 }
 
 const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
-  const { application } = props;
-
-  const assessments = application.assessments
-    ? Object.values(application.assessments)
-    : [];
+  const { application, assessments } = props;
 
   const hasAssessments = assessments.length > 0;
 

@@ -11,13 +11,11 @@ const testRows = [
 
 const testArray = new Array(88);
 
-const testRows88 = testArray
-  .fill(1)
-  .map((item, index) => ({
-    name: "testItem" + index,
-    age: index * 10,
-    id: index + 1,
-  }));
+const testRows88 = testArray.fill(1).map((item, index) => ({
+  name: "testItem" + index,
+  age: index * 10,
+  id: index + 1,
+}));
 
 const testColumns: ITableColumns = [
   { field: "name", use: "Name" },

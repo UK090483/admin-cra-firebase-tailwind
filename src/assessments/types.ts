@@ -35,4 +35,6 @@ export interface IAssessmentRecord extends RecordBase, IAssessmentPoints {
   isPresentationGoodReason?: string;
   status: AssessmentStatus;
   sum?: number;
+  preSum?: number;
+  mainSum?: number;
 }

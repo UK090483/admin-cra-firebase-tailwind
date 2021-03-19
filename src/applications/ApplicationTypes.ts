@@ -11,6 +11,19 @@ export interface IApplicationAssessment {
   [id: string]: IAssessmentRecord;
 }
 
+export interface IMediaItemImage {
+  type: "image";
+  src: string;
+  id: string;
+}
+
+export interface IMediaItemPdf {
+  type: "pdf";
+  pdfAsImages: string[];
+  src: string;
+  id: string;
+}
+
 export interface IApplicationRecord extends RecordBase {
   startupName: string;
   tagLine: string;

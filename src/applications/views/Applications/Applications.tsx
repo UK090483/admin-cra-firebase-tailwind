@@ -4,17 +4,18 @@ import FirstRoundTable from "./firstRound/FirstRoundTable";
 import SecondRoundTable from "./secondRound/SecondRoundTable";
 import ThirdRoundTable from "./thirdRound/ThirdRoundTable";
 import FourthRoundTable from "./fourthRound/FourthRoundTable";
-
 import useUi from "hooks/useUi";
 import StageButton from "./StageButton";
 import TableExport from "./TableExport/tableExport";
+import PageLoading from "components/Spinner/PageLoading";
 
 const Applications: React.FC = () => {
-  const { ordered, loading, loadedAt } = useApplications();
-
+  const { ordered, isLoaded } = useApplications();
   const { stage } = useUi();
 
   const getTable = () => {
+    if (!ordered) return;
+
     switch (stage) {
       case "first_filter":
         return <FirstRoundTable data={ordered} />;
@@ -22,7 +23,6 @@ const Applications: React.FC = () => {
         return <SecondRoundTable data={ordered} />;
       case "first_evaluation":
         return <ThirdRoundTable data={ordered} />;
-
       case "final_evaluation":
         return <FourthRoundTable data={ordered} />;
       default:
@@ -30,17 +30,21 @@ const Applications: React.FC = () => {
     }
   };
 
-  if (loading && !loadedAt) {
-    return <div>loading...</div>;
+  if (!isLoaded) {
+    return <PageLoading />;
+  }
+
+  if (!ordered) {
+    return <div>No Data yet</div>;
   }
 
   return (
     <div className="animate-fadeIn ">
-      <StageButton />
+      {<StageButton />}
 
       {getTable()}
 
-      <TableExport data={ordered} />
+      {/* <TableExport data={ordered} /> */}
     </div>
   );
 };

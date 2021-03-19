@@ -1,8 +1,14 @@
 import { IAssessmentRecord } from "assessments/types";
 import { IApplicationRecord } from "../../applications/ApplicationTypes";
-import { IJudgeData } from "judges/state/judgesReducer";
 import { Fields } from "./fields";
-import { IJudgeAverages } from "applications/state/applicationsReducer";
+// import { IJudgeAverages } from "applications/state/applicationsReducer";
+import { IJudgeRecord, judgeType } from "../../judges/JudgeTypes";
+import { JudgeData } from "redux/Reducers/RootReducer";
+import { shallowEqual } from "react-redux";
+
+export interface IJudgeAverages {
+  [name: string]: number;
+}
 
 interface AssessmentField {
   label: string;
@@ -57,20 +63,10 @@ export class AssessmentC {
     this.fields = fields;
   }
 
-  // getMainField(name: AssessmentKey) {
-  //   return this.fields[name].fields;
-  // }
-
-  // getLabel(name: AssessmentKey) {
-  //   return this.fields[name].label;
-  // }
-
   getQuestions() {
     const res = [];
     for (const [key, value] of entries(this.fields)) {
-      // if (key !== "status" && key !== "sum") {
       res.push(this.fields[key]);
-      // }
     }
     return res;
   }
@@ -100,6 +96,77 @@ export class AssessmentC {
     return res;
   }
 
+  sumMultipleOld = (): {
+    add: (id: string, num: number | undefined) => void;
+    getResult: () => { [K: string]: number };
+  } => {
+    const collectors: { [k: string]: number[] } = {};
+    return {
+      add: (id: string, num: number | undefined) => {
+        if (!collectors[id]) collectors[id] = [];
+        if (num) collectors[id].push(num);
+      },
+      getResult: () => {
+        return Object.entries(collectors).reduce(
+          (acc, [key, values]) => ({
+            ...acc,
+            [key]:
+              values.reduce((acc2, v) => (v ? v + acc2 : acc2)) / values.length,
+          }),
+          {}
+        );
+      },
+    };
+  };
+
+  sumMultiple = (): {
+    add: (id: string, num: number | undefined, judgeType: judgeType) => void;
+    getResult: () => {
+      [K: string]: { main: number; pre: number; all: number };
+    };
+  } => {
+    const collectors: {
+      [k: string]: { main: number[]; pre: number[]; all: number[] };
+    } = {};
+    return {
+      add: (id, num, judgeType) => {
+        if (!["pre", "main"].includes(judgeType))
+          return console.error("judgeType not Provided in sumMultible");
+
+        if (!collectors[id]) collectors[id] = { main: [], pre: [], all: [] };
+        if (num) {
+          collectors[id][judgeType].push(num);
+          collectors[id].all.push(num);
+        }
+      },
+      getResult: () => {
+        return Object.entries(collectors).reduce(
+          (acc, [key, values]) => ({
+            ...acc,
+            [key]: {
+              main:
+                values.main.length > 0
+                  ? values.main.reduce((acc2, v) => (v ? v + acc2 : acc2)) /
+                    values.main.length
+                  : -1,
+              pre:
+                values.pre.length > 0
+                  ? values.pre.reduce((acc2, v) => (v ? v + acc2 : acc2)) /
+                    values.pre.length
+                  : -1,
+              all:
+                values.all.length > 0
+                  ? values.all.reduce((acc2, v) => (v ? v + acc2 : acc2)) /
+                    values.all.length
+                  : -1,
+            },
+          }),
+          {}
+        );
+      },
+    };
+  };
+
   sumAssessmentPoints(assessment: IAssessmentRecord) {
     let res = 0;
     let isOk = true;
@@ -114,31 +181,40 @@ export class AssessmentC {
     }
     return isOk ? res : undefined;
   }
+  sumAssessmentPointsB(assessment: IAssessmentRecord) {
+    let res = 0;
+    let isOk = true;
+    for (let p of this.getQuestions()) {
+      const value = assessment[p.source as keyof IAssessmentRecord];
+      if (value && typeof value === "number") {
+        res = res + value * (p.weight || 1);
+      } else {
+        isOk = false;
+        break;
+      }
+    }
+    return isOk ? res : 0;
+  }
 
   sumAssessmentPointsForJudgeApp(assessment: IAssessmentRecord) {
     let res = 0;
-    for (let p of this.getQuestions()) {
-      const value = assessment[p.source as keyof IAssessmentRecord];
-      if (value && typeof value === "number") {
-        res += value;
-      }
-    }
+
     return res;
   }
 
-  getAvarage(assessment: IAssessmentRecord) {
-    let res = 0;
-    let count = 0;
-    for (let p of this.getQuestions()) {
-      const value = assessment[p.source as keyof IAssessmentRecord];
-      if (value && typeof value === "number") {
-        res = res + value;
-        count++;
-      }
-    }
+  // getAvarage(assessment: IAssessmentRecord) {
+  //   let res = 0;
+  //   let count = 0;
+  //   for (let p of this.getQuestions()) {
+  //     const value = assessment[p.source as keyof IAssessmentRecord];
+  //     if (value && typeof value === "number") {
+  //       res = res + value;
+  //       count++;
+  //     }
+  //   }
 
-    return count === 11 ? res / count : undefined;
-  }
+  //   return count === 11 ? res / count : undefined;
+  // }
 
   getAssessmentState(assessment: IAssessmentRecord) {
     let hasValues = false;
@@ -187,31 +263,19 @@ export class AssessmentC {
     return assessment;
   }
 
-  evaluateTableData(
-    applications: IApplicationRecord[],
-    judges: IJudgeData,
-    sumIn100?: boolean,
-    integrateJudgeAverages?: boolean,
-    judgeAverages?: IJudgeAverages
-  ) {
-    return applications.map((application) => {
-      const { sum, main, pre } = this.getSumApplication(
-        application,
-        judges,
-        (sumIn100 = sumIn100 ? true : false),
-        (integrateJudgeAverages = integrateJudgeAverages ? true : false),
-        (judgeAverages = judgeAverages ? judgeAverages : {})
-      );
-      return {
-        ...application,
-        sum,
-        mainSum: main,
-        preSum: pre,
-      } as IApplicationRecord;
-    });
-  }
+  isEqual = (first: any, second: any): boolean => {
+    if (typeof first !== "object" || typeof first !== "object") {
+      console.error("equal Function needs objects ");
+      return false;
+    }
 
-  private getAverage = () => {
+    for (let q of this.getQuestions()) {
+      if (first[q.source] !== second[q.source]) return false;
+    }
+
+    return true;
+  };
+  getAverage = () => {
     let count = 0;
     let sum = 0;
 
@@ -231,7 +295,7 @@ export class AssessmentC {
 
   getSumApplication = (
     application: IApplicationRecord,
-    judges: IJudgeData,
+    judges: JudgeData,
     sumIn100: boolean,
     integrateJudgeAverages: boolean,
     judgeAverages: IJudgeAverages

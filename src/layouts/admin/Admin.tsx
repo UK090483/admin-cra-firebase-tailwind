@@ -1,34 +1,28 @@
-import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-
-// components
-
-import AdminNavbar from "./AdminNavbar";
-import Sidebar from "components/Sidebar/Sidebar";
-
-// views
-
-// import Dashboard from "views/admin/Dashboard";
-// import Settings from "views/admin/Settings";
 import Applications from "applications/views/Applications/Applications";
 import ApplicationSingle from "applications/views/ApplicationSingle/ApplicationSingle";
 import ApplicationUpdate from "applications/views/ApplicationSingle/ApplicationUpdate";
-
-import Users from "users/views/Users";
-import UserCreate from "users/views/UserCreate";
-import UserUpdate from "users/views/UserUpdate";
-
+import Sidebar from "components/Sidebar/Sidebar";
 import useUi from "hooks/useUi";
-
-import Judges from "judges/views/Judges";
 import Judge from "judges/views/Judge";
-import JudgeCreate from "../../judges/views/JudgeCreate";
+import Judges from "judges/views/Judges";
 import JudgeUpdate from "judges/views/JudgeUpdate";
+import React from "react";
+import { useFirestoreConnect } from "react-redux-firebase";
+import { Route, Switch } from "react-router-dom";
+import UserCreate from "users/views/UserCreate";
+import Users from "users/views/Users";
+import UserUpdate from "users/views/UserUpdate";
+import Dashboard from "../../dashbord/view/Dashbord";
+import JudgeCreate from "../../judges/views/JudgeCreate";
 
-import Dashboard from "../../dashbord/view/dashbord";
+import AdminNavbar from "./AdminNavbar";
 
 const Admin: React.FC = () => {
   const { sidebarOpen } = useUi();
+
+  useFirestoreConnect([{ collection: "judges" }]);
+  useFirestoreConnect({ collection: "tableDoc", doc: "first" });
+
   return (
     <>
       <AdminNavbar />

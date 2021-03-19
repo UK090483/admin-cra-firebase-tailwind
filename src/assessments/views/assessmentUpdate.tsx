@@ -16,8 +16,6 @@ const AssessmentUpdate: React.FunctionComponent<IAssessmentUpdateProps> = () => 
   let { id } = useParams<ParamTypes>();
   const { judges } = useJudges();
 
-  const { assessmentsByJudgeId } = useApplications();
-
   return (
     <div>AssessmentUpdate</div>
     // <Form

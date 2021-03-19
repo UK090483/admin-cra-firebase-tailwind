@@ -14,16 +14,18 @@ jest.mock("judges/hooks/useJudges", () => () => ({
   judges: {
     judge1: { name: "J 1", judgeType: "pre" },
     judge2: { name: "J 2", judgeType: "pre" },
-    judge3: { name: "J 3", judgeType: "main" },
+    judge3: {
+      id: "judge3",
+      name: "J 3",
+      judgeType: "main",
+      assessments: { ["testRowId"]: "" },
+    },
   },
 }));
 
 const testRow = {
-  assessments: {
-    judge1: { judge_id: "judge1" },
-    judge2: { judge_id: "judge2" },
-    judge3: { judge_id: "judge3" },
-  },
+  id: "testRowId",
+  assessments: ["judge1", "judge2", "judge3"],
 };
 
 describe("JudgeChips", () => {

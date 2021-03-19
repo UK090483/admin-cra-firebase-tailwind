@@ -1,11 +1,12 @@
-import Table from "components/Table/Table";
-import { useHistory } from "react-router-dom";
-import useJudges from "judges/hooks/useJudges";
-import { IRow } from "components/Table/types";
 import ActionButton from "components/Buttons/ActionButton";
-import { useFirebaseConnect } from "react-redux-firebase";
-import { RootState } from "redux/Reducers/RootReducer";
+import PageLoading from "components/Spinner/PageLoading";
+import Table from "components/Table/Table";
+import { IRow } from "components/Table/types";
+import useJudges from "judges/hooks/useJudges";
 import { useSelector } from "react-redux";
+import { useFirebaseConnect } from "react-redux-firebase";
+import { useHistory } from "react-router-dom";
+import { RootState } from "redux/Reducers/RootReducer";
 
 function Judges() {
   const { judgesOrdered } = useJudges();
@@ -16,44 +17,18 @@ function Judges() {
     (state: RootState) => state.fb.data.presence || {}
   );
 
-  const judgesWithPresence = judgesOrdered.map((judge) => ({
-    ...judge,
-    online: presence[judge.id],
-  }));
+  const judgesWithPresence =
+    judgesOrdered &&
+    judgesOrdered.map((judge) => ({
+      ...judge,
+      online: presence[judge.id],
+    }));
 
   let history = useHistory();
 
-  const columns = [
-    {
-      field: "name",
-      use: "Name",
-      use_in_search: true,
-      render: (row: IRow) => (
-        <div
-          className={`${row.color}  p-2 pl-4 rounded-full text-white font-extrabold max-w-xs `}
-        >
-          {row.name}
-        </div>
-      ),
-      width: "w-1/3",
-    },
-    {
-      field: "email",
-      use: "Email",
-      use_in_search: true,
-    },
-    {
-      field: "judgeType",
-      use: "Type",
-      use_in_search: true,
-    },
-    {
-      field: "active",
-      use: "Active",
-      use_in_search: true,
-      render: (row: IRow) => <div>{row.active ? "ja" : "nein"}</div>,
-    },
-  ];
+  if (!judgesWithPresence) {
+    return <PageLoading />;
+  }
 
   return (
     <>
@@ -74,3 +49,35 @@ function Judges() {
 }
 
 export default Judges;
+
+const columns = [
+  {
+    field: "name",
+    use: "Name",
+    use_in_search: true,
+    render: (row: IRow) => (
+      <div
+        className={`${row.color}  p-2 pl-4 rounded-full text-white font-extrabold max-w-xs `}
+      >
+        {row.name}
+      </div>
+    ),
+    width: "w-1/3",
+  },
+  {
+    field: "email",
+    use: "Email",
+    use_in_search: true,
+  },
+  {
+    field: "judgeType",
+    use: "Type",
+    use_in_search: true,
+  },
+  {
+    field: "active",
+    use: "Active",
+    use_in_search: true,
+    render: (row: IRow) => <div>{row.active ? "ja" : "nein"}</div>,
+  },
+];

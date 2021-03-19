@@ -1,31 +1,49 @@
 import { combineReducers } from "redux";
 import { firebaseReducer, FirebaseReducer } from "react-redux-firebase";
+
 import uiReducer from "./UIReducer";
 
 import { IUiState } from "./UIReducer";
-
-// import judgeReducer, { IJudgeState } from "judges/state/judgesReducer";
-
-import applicationsReducer, {
-  IApplicationState,
-} from "applications/state/applicationsReducer";
-import usersReducer, { IUserState } from "users/state/usersReducer";
 
 import JudgeAppReducer, {
   IJudgeAppState,
 } from "JudgeApp/state/JudgeAppReducer";
 
 import { firestoreReducer } from "redux-firestore";
+import { IJudgeRecord } from "../../judges/JudgeTypes";
+import assessmentReducer, {
+  IAssessmentState,
+} from "assessments/state/assessmentReducer";
 
 interface FirebaseState {
   auth: any;
 }
-interface FireStoreState {
-  [k: string]: any;
+
+export interface JudgeData {
+  [K: string]: IJudgeRecord;
+}
+
+interface FireStoreData {
+  judges?: JudgeData;
+  applications?: any;
+  tableDoc?: any;
+  users?: any;
+}
+interface FireStoreOrdered {
+  judges?: IJudgeRecord[];
+  applications?: any;
+  tableDoc?: any;
+  users?: any;
+}
+
+interface FireStoreReducer {
+  data: FireStoreData;
+  ordered: FireStoreOrdered;
 }
 
 interface UserProfile {
   email: string;
+  assessments?: any;
 }
 interface DBSchema {
   [name: string]: any;
@@ -34,11 +52,12 @@ interface DBSchema {
 export interface RootState {
   ui: IUiState;
   fb: FirebaseReducer.Reducer<UserProfile, DBSchema>;
-  firestore: FireStoreState;
+  firestore: FireStoreReducer;
   judgeApp: IJudgeAppState;
-  applications: IApplicationState;
+  assessments: IAssessmentState;
+  // applications: IApplicationState;
   // judges: IJudgeState;
-  users: IUserState;
+  // users: IUserState;
 }
 
 const rootReducer = combineReducers({
@@ -46,9 +65,10 @@ const rootReducer = combineReducers({
   fb: firebaseReducer,
   firestore: firestoreReducer,
   judgeApp: JudgeAppReducer,
-  applications: applicationsReducer,
+  assessments: assessmentReducer,
+  // applications: applicationsReducer,
   // judges: judgeReducer,
-  users: usersReducer,
+  // users: usersReducer,
 });
 
 export default rootReducer;

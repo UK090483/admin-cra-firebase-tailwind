@@ -1,14 +1,61 @@
+import { IApplicationRecord } from "applications/ApplicationTypes";
+import useAssessments from "assessments/hooks/useAssessments";
+import Table from "components/Table/Table";
 import { IColumn, ITableOptions } from "components/Table/types";
 import React from "react";
+import { useHistory } from "react-router-dom";
+import ApplicationSelectAction from "../ApplicationSelectAction";
 import JudgeChips from "../JudgeChips";
 import Sum from "../Sum";
-import { IApplicationRecord } from "applications/ApplicationTypes";
-import Table from "components/Table/Table";
-import ApplicationSelectAction from "../ApplicationSelectAction";
-import { useHistory } from "react-router-dom";
-import { AssessmentHelper } from "../../../../assessments/helper/AssessmentHelper";
-import useJudges from "judges/hooks/useJudges";
 import ThirdRoundFilter from "./ThirdRoundFilter";
+
+interface ThirdRoundTableProps {
+  data: IApplicationRecord[];
+}
+
+const ThirdRoundTable: React.FC<ThirdRoundTableProps> = ({ data }) => {
+  const cleanData = data.filter((data) => data.statePre === "accepted");
+  const history = useHistory();
+
+  const { sumByApplicationId } = useAssessments();
+
+  const withSum = cleanData.map((item) => {
+    return {
+      ...item,
+      preSum: sumByApplicationId[item.id] && sumByApplicationId[item.id].pre,
+    };
+  });
+
+  return (
+    <div className="animate-fadeIn">
+      <Table
+        searchFields={["startupName", "headquarters"]}
+        name="third_stage_Table"
+        options={optionsThirdRound}
+        per_page={10}
+        onRowClick={(data) => {
+          history.push(`applications/${data.id}`);
+        }}
+        columns={thirdRoundColumns}
+        rows={withSum}
+      />
+    </div>
+  );
+};
+
+export default ThirdRoundTable;
+
+const optionsThirdRound: ITableOptions = {
+  showFilter: false,
+  fixedFilter: (filter, setFilter, columns, rows) => (
+    <ThirdRoundFilter
+      setFilter={setFilter}
+      filter={filter}
+      columns={columns}
+      rows={rows}
+    />
+  ),
+};
 
 const thirdRoundColumns: IColumn[] = [
   {
@@ -39,43 +86,3 @@ const thirdRoundColumns: IColumn[] = [
     width: "w-60",
   },
 ];
-
-interface ThirdRoundTableProps {
-  data: IApplicationRecord[];
-}
-
-const optionsThirdRound: ITableOptions = {
-  showFilter: false,
-  fixedFilter: (filter, setFilter, columns, rows) => (
-    <ThirdRoundFilter
-      setFilter={setFilter}
-      filter={filter}
-      columns={columns}
-      rows={rows}
-    />
-  ),
-};
-
-const ThirdRoundTable: React.FC<ThirdRoundTableProps> = ({ data }) => {
-  const cleanData = data.filter((data) => data.statePre === "accepted");
-  const history = useHistory();
-  const { judges } = useJudges();
-
-  return (
-    <div className="animate-fadeIn">
-      <Table
-        searchFields={["startupName", "headquarters"]}
-        name="third_stage_Table"
-        options={optionsThirdRound}
-        per_page={10}
-        onRowClick={(data) => {
-          history.push(`applications/${data.id}`);
-        }}
-        columns={thirdRoundColumns}
-        rows={AssessmentHelper.evaluateTableData(cleanData, judges)}
-      />
-    </div>
-  );
-};
-
-export default ThirdRoundTable;

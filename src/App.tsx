@@ -1,19 +1,14 @@
 import React from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Admin from "./layouts/admin/Admin";
 import Auth from "./layouts/Auth";
 import Judge from "./layouts/judge/Judge";
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/Reducers/RootReducer";
 import { Spinner } from "./components/Spinner/Spinner";
 import "styles.css";
+import { useAuth } from "hooks/useAuth";
 
 function App() {
-  const { authLoaded, isEmpty, isAdmin } = useSelector((state: RootState) => ({
-    isEmpty: state.fb.auth.isEmpty,
-    isAdmin: state.fb.profile.token?.claims.admin,
-    authLoaded: state.fb.profile.isLoaded,
-  }));
+  const { authLoaded, isEmpty, isAdmin } = useAuth();
 
   return (
     <Switch>

@@ -1,8 +1,7 @@
+import { Heart, ThumbUp, XCircle } from "heroicons-react";
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/Reducers/RootReducer";
-
-import { XCircle, ThumbUp, Heart } from "heroicons-react";
 import { toggleInfoAction } from "./state/JudgeAppReducer";
 
 interface IntroProps {

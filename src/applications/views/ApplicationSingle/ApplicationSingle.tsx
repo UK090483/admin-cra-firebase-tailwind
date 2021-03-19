@@ -2,37 +2,65 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { RoutingParam } from "types";
 import ApplicationAccordion from "./ApplicationAccordion/ApplicationAccordion";
-import useApplicationById from "../../hooks/useApplicationById";
 import ApplicationSingleTable from "./ApplicationSingleTable";
 import ActionButton from "components/Buttons/ActionButton";
+import { useFirestoreConnect } from "react-redux-firebase";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/Reducers/RootReducer";
+import { isLoaded } from "react-redux-firebase";
+import useAssessments from "assessments/hooks/useAssessments";
+import useJudges from "judges/hooks/useJudges";
+import { Spinner } from "components/Spinner/Spinner";
 
 const ApplicationSingle: React.FC = () => {
   let { id } = useParams<RoutingParam>();
-  const application = useApplicationById(id);
+
+  useFirestoreConnect({ collection: "applications", doc: id });
+
+  const applications = useSelector(
+    (state: RootState) => state.firestore.data.applications
+  );
+
+  const { AssessmentsByApplicationId } = useAssessments();
+
+  const assessments =
+    AssessmentsByApplicationId && AssessmentsByApplicationId[id]
+      ? Object.values(AssessmentsByApplicationId[id])
+      : [];
+
+  const application =
+    applications && applications[id]
+      ? { ...applications[id], id, foundingDate: "bla" }
+      : null;
+
+  if (!application) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        <Spinner size="1/3"></Spinner>
+      </div>
+    );
+  }
 
   return (
-    <>
-      {application && (
-        <h2 className="mt-0 text-4xl">{application.startupName}</h2>
-      )}
+    <div className="animate-fadeIn ">
+      <h2 className="-mt-3 mb-6 text-4xl">{application.startupName}</h2>
 
-      {application?.assessments && (
-        <ApplicationSingleTable application={application} />
-      )}
+      <ApplicationSingleTable />
 
-      <h2 className="py-10 text-4xl">Antworten</h2>
+      <h2 className="pt-10  text-4xl">Antworten</h2>
 
-      {application && (
-        <div className="mb-8 -mt-8">
-          <ActionButton
-            path={`/applications/${application.id}/update`}
-            type="update"
-          />
-        </div>
-      )}
+      <div className="mb-8 -mt-8">
+        <ActionButton
+          path={`/applications/${application.id}/update`}
+          type="update"
+        />
+      </div>
 
-      {application && <ApplicationAccordion application={application} />}
-    </>
+      <ApplicationAccordion
+        assessments={assessments}
+        application={application}
+      />
+    </div>
   );
 };
 

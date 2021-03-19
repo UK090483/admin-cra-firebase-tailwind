@@ -56,10 +56,10 @@ const TableFilter: React.FC<TableFilterProps> = ({
         items={[
           { label: `All ${count.all}`, id: "all" },
           {
-            label: `Zu Bearbeiten ${count.open}`,
+            label: `Pending ${count.open}`,
             id: "open",
           },
-          { label: `Abgeschlossen ${count.completed}`, id: "completed" },
+          { label: `Completed ${count.completed}`, id: "completed" },
         ]}
         onClick={(i, id) => handleUpdate(id)}
       />

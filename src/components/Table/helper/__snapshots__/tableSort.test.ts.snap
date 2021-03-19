@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tableSort should return filtered if filter is present 1`] = `
+Array [
+  Object {
+    "age": 40,
+    "id": 4,
+    "name": "d",
+  },
+  Object {
+    "age": 30,
+    "id": 3,
+    "name": "c",
+  },
+  Object {
+    "age": 20,
+    "id": 2,
+    "name": "b",
+  },
+  Object {
+    "age": 10,
+    "id": 1,
+    "name": "a",
+  },
+]
+`;

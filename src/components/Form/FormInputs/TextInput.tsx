@@ -1,6 +1,5 @@
+import { Field, useField } from "formik";
 import * as React from "react";
-import { Field, FormikErrors, useField } from "formik";
-import { FormValues } from "../Form";
 
 export interface ITextInputProps {
   label: string;
@@ -29,10 +28,10 @@ const TextInput: React.FunctionComponent<ITextInputProps> = ({
       </span>
 
       <Field
+        placeholder
         as={textarea ? "textarea" : ""}
         className="mt-1 p-3 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
         name={name}
-        // {...rest}
       />
     </label>
   );

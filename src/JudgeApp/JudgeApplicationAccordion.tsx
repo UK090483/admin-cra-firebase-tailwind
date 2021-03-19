@@ -6,7 +6,6 @@ import TextField from "components/Fields/TextField";
 import Form, { FormValues } from "components/Form/Form";
 import { AssessmentHelper } from "../assessments/helper/AssessmentHelper";
 import { IAssessmentRecord } from "../assessments/types";
-import { useUpdateApplicationAssessment } from "./state/hooks/useUpdateApplicationAssessment";
 import { Field, FormikProps } from "formik";
 import PointsField from "./PointsField";
 import { getAssessmentStateColor } from "./helper/getAssessmentStateColor";
@@ -14,6 +13,9 @@ import { CheckCircle, Pencil, Check } from "heroicons-react";
 import { debounce } from "./helper/debounce";
 import ListField from "components/Fields/ListField";
 import MediaArrayField from "components/Fields/MediaArrayField";
+import { useFirestore } from "react-redux-firebase";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
 
 interface IApplicationAccordion {
   application: IApplicationRecord;
@@ -21,16 +23,20 @@ interface IApplicationAccordion {
 
 const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
   const { application } = props;
+  const firestore = useFirestore();
 
-  const { updateAssessment } = useUpdateApplicationAssessment(application);
+  const { judge_id, assessment } = useSelector((state: RootState) => ({
+    judge_id: state.fb.auth.uid,
+    assessment:
+      state.fb.profile.assessments &&
+      state.fb.profile.assessments[application.id]
+        ? state.fb.profile.assessments[application.id]
+        : {},
+  }));
 
   let state = null;
 
   const assessmentDetails = AssessmentHelper.getQuestionsDetails();
-
-  const assessment: IAssessmentRecord | undefined = application.assessments
-    ? Object.values(application.assessments)[0]
-    : undefined;
 
   if (assessment) {
     state = AssessmentHelper.getAssessmentState(assessment);
@@ -39,7 +45,18 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
   return (
     <Form
       onSubmit={(res) => {
-        updateAssessment(res);
+        firestore
+          .update(
+            { collection: "judges", doc: judge_id },
+            {
+              [`assessments.${application.id}`]: {
+                ...res,
+                judge_id,
+                application_id: application.id,
+              },
+            }
+          )
+          .then(() => {});
       }}
       formFields={[]}
       initialValues={assessment}
@@ -174,7 +191,7 @@ const SubmitButton: React.FC<FormikProps<FormValues>> = (props) => {
   return (
     <div
       onClick={props.submitForm}
-      className={`fixed top-20 right-10   font-extrabold px-6 py-4 shadow-2xl rounded-xl ${getAssessmentStateColor(
+      className={`fixed top-20 right-10 font-extrabold px-6 py-4 shadow-2xl rounded-xl ${getAssessmentStateColor(
         assessment as IAssessmentRecord
       )}`}
     >

@@ -2,24 +2,24 @@
  * @jest-environment jsdom
  */
 
-import React from "react";
-
-import { render, fireEvent, getByText } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-
-import ApplicationSelectAction from "./ApplicationSelectAction";
+import { fireEvent, render } from "@testing-library/react";
+import React from "react";
+import { act } from "react-dom/test-utils";
 import { TestWrap } from "tests/testPrepare";
 import useApplicationActions from "../../hooks/useApplicationActions";
+import ApplicationSelectAction from "./ApplicationSelectAction";
+
 jest.mock("../../hooks/useApplicationActions");
 
 const mockedUseApplicationActions = useApplicationActions as jest.Mock;
 
 describe("ApplicationSelectAction", () => {
-  const updateApplication = jest.fn();
+  const updateApplicationAssessments = jest.fn();
 
   beforeEach(() => {
     mockedUseApplicationActions.mockImplementation(() => ({
-      updateApplication,
+      updateApplicationAssessments,
     }));
   });
 
@@ -32,6 +32,8 @@ describe("ApplicationSelectAction", () => {
   });
 
   it("should call updateApplication function", async () => {
+    updateApplicationAssessments.mockImplementation(() => Promise.resolve());
+
     const { getByText } = render(
       <TestWrap>
         <ApplicationSelectAction
@@ -46,16 +48,21 @@ describe("ApplicationSelectAction", () => {
       { label: "Nein", id: "declined" },
       { label: "Vielleicht", id: "postponed" },
     ].forEach((state, index) => {
-      fireEvent.click(getByText(state.label));
-      expect(updateApplication).toHaveBeenCalledTimes(index + 1);
-      expect(updateApplication).toHaveBeenCalledWith({
-        data: { test: state.id },
+      act(() => {
+        fireEvent.click(getByText(state.label));
+      });
+
+      expect(updateApplicationAssessments).toHaveBeenCalledTimes(index + 1);
+      expect(updateApplicationAssessments).toHaveBeenCalledWith({
+        state: "accepted",
         id: "testid",
+        name: "test",
       });
     });
   });
 
   it("should not call updateApplication function if value is set", async () => {
+    updateApplicationAssessments.mockImplementation(() => Promise.resolve());
     const { getByText } = render(
       <TestWrap>
         <ApplicationSelectAction
@@ -65,7 +72,10 @@ describe("ApplicationSelectAction", () => {
       </TestWrap>
     );
 
-    fireEvent.click(getByText("Ja"));
-    expect(updateApplication).toHaveBeenCalledTimes(0);
+    act(() => {
+      fireEvent.click(getByText("Ja"));
+    });
+
+    expect(updateApplicationAssessments).toHaveBeenCalledTimes(0);
   });
 });

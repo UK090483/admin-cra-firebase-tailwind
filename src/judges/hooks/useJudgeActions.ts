@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import firebase from "misc/firebase";
 import { judgeType } from "judges/JudgeTypes";
 
@@ -20,8 +19,6 @@ interface IUpdateJudgeProps {
 }
 
 export default function useJudgeActions() {
-  const dispatch = useDispatch();
-
   const addJudge = async (props: IAddJudgeProps) => {
     const _createUser = firebase.functions().httpsCallable("createUser");
     try {

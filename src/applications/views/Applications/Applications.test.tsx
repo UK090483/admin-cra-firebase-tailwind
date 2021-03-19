@@ -2,9 +2,7 @@
  * @jest-environment jsdom
  */
 
-import React from "react";
-
-import { render } from "@testing-library/react";
+import { getByTestId, render } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 
 import Applications from "./Applications";
@@ -21,18 +19,17 @@ const mockedUseApplications = useApplications as jest.Mock;
 describe("Applications", () => {
   it("should render Loading", async () => {
     mockedUseApplications.mockImplementation(() => ({
-      ordered: [],
+      ordered: undefined,
       loading: true,
-      loadedAt: null,
     }));
     mockedUseUi.mockImplementation(() => ({ stage: "first_filter" }));
 
-    const { getByText } = render(
+    const { getByTestId } = render(
       <TestWrap>
         <Applications></Applications>
       </TestWrap>
     );
-    getByText("loading...");
+    getByTestId("pageLoading");
   });
 
   it("should default render FirstRoundTable", async () => {

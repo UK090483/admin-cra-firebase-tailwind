@@ -8,21 +8,22 @@ import { IColumn } from "components/Table/types";
 import { IAssessmentRecord } from "assessments/types";
 import { IApplicationRecord } from "applications/ApplicationTypes";
 import ManageAssessmentStatus from "assessments/views/ManageAssessmentStatus";
+import useAssessments from "assessments/hooks/useAssessments";
+import { useParams } from "react-router-dom";
+import { RoutingParam } from "types";
 
-interface IApplicationSingleTableProps {
-  application: IApplicationRecord;
-}
+interface IApplicationSingleTableProps {}
 
-const ApplicationSingleTable: React.FC<IApplicationSingleTableProps> = ({
-  application,
-}) => {
+const ApplicationSingleTable: React.FC<IApplicationSingleTableProps> = () => {
+  let { id } = useParams<RoutingParam>();
+  const { AssessmentsByApplicationId } = useAssessments();
   const { judges } = useJudges();
-  const assessments: IAssessmentRecord[] = application?.assessments
-    ? Object.entries(application.assessments).map((item) => ({
-        ...item[1],
-        id: item[0],
-      }))
-    : [];
+  const assessments =
+    AssessmentsByApplicationId && AssessmentsByApplicationId[id]
+      ? Object.values(AssessmentsByApplicationId[id])
+      : [];
+
+  if (!judges) return <div>Loading</div>;
 
   const pointFields = AssessmentHelper.getTableFields().map((question) => ({
     field: question.source,
@@ -33,7 +34,6 @@ const ApplicationSingleTable: React.FC<IApplicationSingleTableProps> = ({
     {
       field: "judge_id",
       use: "Name",
-      use_in_search: true,
 
       render: (row) => (
         <div
@@ -69,15 +69,13 @@ const ApplicationSingleTable: React.FC<IApplicationSingleTableProps> = ({
   ];
   return (
     <>
-      {
-        <Table
-          rowStyle={(row) => {
-            return row.status === "hidden" ? "bg-red-400" : "";
-          }}
-          columns={columns}
-          rows={assessments}
-        ></Table>
-      }
+      <Table
+        rowStyle={(row) => {
+          return row.status === "hidden" ? "bg-red-400" : "";
+        }}
+        columns={columns}
+        rows={assessments.map((a) => ({ ...a, id: a.judge_id }))}
+      ></Table>
     </>
   );
 };

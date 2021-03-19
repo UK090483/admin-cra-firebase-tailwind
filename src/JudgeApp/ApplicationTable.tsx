@@ -1,19 +1,15 @@
-import TextPreview from "applications/views/Applications/TextPreview";
-import { IColumn, ITableOptions } from "components/Table/types";
-
 import React from "react";
+import { IColumn, ITableOptions } from "components/Table/types";
 import Table from "components/Table/Table";
 import { useHistory } from "react-router-dom";
-
-import { useJudgeAppApplications } from "./state/hooks/useJudgeAppApplications";
 import { IApplicationRecord } from "../applications/ApplicationTypes";
-import {
-  getApplicationStateColor,
-  getApplicationState,
-} from "./helper/getAssessmentStateColor";
+import { getApplicationStateColor } from "./helper/getAssessmentStateColor";
 import { AssessmentHelper } from "../assessments/helper/AssessmentHelper";
 import Intro from "./Intro";
 import TableFilter from "./TableFilter";
+import useApplications from "applications/hooks/useApplications";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/Reducers/RootReducer";
 
 const columnsFirstRound: IColumn[] = [
   {
@@ -25,6 +21,7 @@ const columnsFirstRound: IColumn[] = [
       if (row.companyLogo[0] && row.companyLogo[0].type === "image") {
         return (
           <img
+            alt="Logo"
             className="w-20 h-10 object-contain"
             src={`${row.companyLogo[0].src}`}
           />
@@ -44,67 +41,54 @@ const columnsFirstRound: IColumn[] = [
     field: "industry",
     use: "Industry",
   },
-  // {
-  //   field: "stage",
-  //   use: "Stage",
-  // },
-
-  // {
-  //   field: "headquarters",
-  //   use: "Headquaters",
-  // },
   {
     field: "sum",
     use: "Sum",
     width: "w-20",
   },
-
-  // {
-  //   field: "prev",
-  //   use: "Prev",
-  //   render: (row) => (
-  //     <TextPreview
-  //       row={row}
-  //       prevItemList={[
-  //         "howIsCompanyFunded",
-  //         "salesStrategy",
-  //         "productReadiness",
-  //       ]}
-  //     />
-  //   ),
-  //   width: "w-24",
-  // },
 ];
 
 interface FirstRoundTableProps {}
 
 const FirstRoundTable: React.FC<FirstRoundTableProps> = () => {
-  const { applicationsData } = useJudgeAppApplications();
+  const { ordered } = useApplications();
 
-  const withSum = applicationsData.map((application) => ({
-    ...application,
-    applicationState: getApplicationState(application),
-    sum:
-      application.assessments && Object.values(application.assessments)[0]
-        ? AssessmentHelper.sumAssessmentPoints(
-            Object.values(application.assessments)[0]
-          )
-        : "---",
+  const { id, assessments } = useSelector((state: RootState) => ({
+    id: state.fb.auth.uid,
+    assessments: state.fb.profile.assessments,
   }));
 
-  const options: ITableOptions = {
-    showFilter: false,
-    fixedFilter: (filter, setFilter, columns, rows) => (
-      <TableFilter
-        setFilter={setFilter}
-        filter={filter}
-        columns={columns}
-        rows={rows}
-      />
-    ),
-  };
+  const filtered =
+    ordered &&
+    ordered.filter((element) => {
+      return (
+        element.assessments && (element.assessments as string[]).includes(id)
+      );
+    });
+
+  const withSum =
+    filtered &&
+    filtered.map((application) => ({
+      ...application,
+      applicationState:
+        assessments && assessments[application.id]
+          ? AssessmentHelper.getAssessmentState(assessments[application.id])
+          : "assigned",
+
+      sum:
+        assessments && assessments[application.id]
+          ? AssessmentHelper.sumAssessmentPointsForJudgeApp(
+              assessments[application.id]
+            )
+          : "---",
+    }));
 
   let history = useHistory();
+
+  if (!withSum) {
+    return <div>loading...</div>;
+  }
+
   return (
     <div className="animate-fadeIn ">
       <Intro applications={withSum} />
@@ -125,6 +109,18 @@ const FirstRoundTable: React.FC<FirstRoundTableProps> = () => {
       />
     </div>
   );
+};
+
+const options: ITableOptions = {
+  showFilter: false,
+  fixedFilter: (filter, setFilter, columns, rows) => (
+    <TableFilter
+      setFilter={setFilter}
+      filter={filter}
+      columns={columns}
+      rows={rows}
+    />
+  ),
 };
 
 export default FirstRoundTable;

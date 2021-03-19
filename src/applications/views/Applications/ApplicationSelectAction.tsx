@@ -1,11 +1,9 @@
-import React from "react";
 import { ApplicationStatePre } from "applications/ApplicationTypes";
+import useApplicationActions from "applications/hooks/useApplicationActions";
 import ButtonGroupe from "components/Buttons/ButtonGroupe";
-import { IRow } from "components/Table/types";
-import useApplicationActions from "../../hooks/useApplicationActions";
-import { useFirestore } from "react-redux-firebase";
-import Loading from "../../../components/Spinner/Loading";
 import { Spinner } from "components/Spinner/Spinner";
+import { IRow } from "components/Table/types";
+import React from "react";
 
 interface IActionProps {
   row: IRow;
@@ -13,24 +11,16 @@ interface IActionProps {
 }
 
 const ApplicationSelectAction: React.FC<IActionProps> = ({ row, name }) => {
-  const { updateApplication } = useApplicationActions();
-  const firestore = useFirestore();
-
   const [updating, setUpdating] = React.useState(false);
+
+  const { updateApplicationAssessments } = useApplicationActions();
 
   const handleUpdate = (state: ApplicationStatePre) => {
     if (state === row[name]) return;
-    // updateApplication({ data: { [name]: state }, id: row.id });
-
     setUpdating(true);
-    firestore
-      .update(
-        { collection: "tableDoc", doc: "first" },
-        { [`${row.id}.${name}`]: state }
-      )
-      .then(() => {
-        setUpdating(false);
-      });
+    updateApplicationAssessments({ state, id: row.id, name }).then(() => {
+      setUpdating(false);
+    });
   };
 
   return (

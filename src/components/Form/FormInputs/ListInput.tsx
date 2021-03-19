@@ -32,7 +32,10 @@ const ListInput: React.FunctionComponent<IListInputProps> = ({
       <span className="text-xs text-red-500 pl-9">{"not changeable yet"}</span>
       <div className="py-6 flex flex-wrap">
         {value.map((item) => (
-          <span className="text-white  mr-1 px-3 py-2 bg-actionColor-500">
+          <span
+            key={item}
+            className="text-white  mr-1 px-3 py-2 bg-actionColor-500"
+          >
             {item}
           </span>
         ))}

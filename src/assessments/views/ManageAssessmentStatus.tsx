@@ -1,7 +1,8 @@
 import * as React from "react";
 import Switch from "../../components/Buttons/Switch/Switch";
-import { useSetApplicationStatus } from "../../applications/state/applicationActions";
 import { AssessmentStatus } from "assessments/types";
+import { useFirestore } from "react-redux-firebase";
+import { Spinner } from "components/Spinner/Spinner";
 
 interface IManageAssessmentStatusProps {
   active: boolean;
@@ -13,19 +14,32 @@ const ManageAssessmentStatus: React.FunctionComponent<IManageAssessmentStatusPro
   props
 ) => {
   const { active, judge_id, application_id } = props;
+  const [updating, setUpdating] = React.useState(false);
 
-  const setApplicationStatus = useSetApplicationStatus();
+  const firestore = useFirestore();
+
+  const handleClick = () => {
+    setUpdating(true);
+    firestore
+      .update(
+        { collection: "judges", doc: judge_id },
+        { [`assessments.${application_id}.${"status"}`]: nextStatus }
+      )
+      .then(() => {
+        setUpdating(false);
+      });
+  };
 
   const nextStatus: AssessmentStatus = active ? "hidden" : "created";
 
   return (
-    <div>
-      <Switch
-        active={active}
-        onClick={() => {
-          setApplicationStatus(application_id, judge_id, nextStatus);
-        }}
-      />
+    <div className="relative">
+      {updating && (
+        <div className="absolute  -top-6 -left-6 -right-6 -bottom-6 flex justify-center items-center ">
+          <Spinner size="2/3"></Spinner>
+        </div>
+      )}
+      <Switch active={active} onClick={handleClick} />
     </div>
   );
 };

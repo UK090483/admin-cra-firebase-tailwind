@@ -6,17 +6,23 @@ import { render } from "@testing-library/react";
 import App from "../App";
 import { TestWrap } from "./testPrepare";
 
-import * as reactRedux from "react-redux";
+import * as useAuthP from "hooks/useAuth";
 
 describe("App", () => {
-  const useSelectorMock = jest.spyOn(reactRedux, "useSelector");
+  const useAuthMock = jest.spyOn(useAuthP, "useAuth");
   beforeEach(() => {
-    useSelectorMock.mockClear();
+    useAuthMock.mockClear();
   });
 
   test("shows splash sreen on Load ", () => {
-    useSelectorMock.mockReturnValue({
+    useAuthMock.mockReturnValue({
       authLoaded: false,
+      isAdmin: false,
+      isEmpty: true,
+      email: null,
+      displayName: null,
+      signIn: () => {},
+      logOut: () => {},
     });
     const { getByTestId } = render(
       <TestWrap>
@@ -28,9 +34,14 @@ describe("App", () => {
   });
 
   test("renders not logged in goes to login ", () => {
-    useSelectorMock.mockReturnValue({
+    useAuthMock.mockReturnValue({
       authLoaded: true,
+      isAdmin: false,
       isEmpty: true,
+      email: null,
+      displayName: null,
+      signIn: () => {},
+      logOut: () => {},
     });
 
     const { getByTestId } = render(
@@ -42,10 +53,14 @@ describe("App", () => {
   });
 
   test("renders  Judge Layout ", () => {
-    useSelectorMock.mockReturnValue({
+    useAuthMock.mockReturnValue({
       authLoaded: true,
+      isAdmin: false,
       isEmpty: false,
-      applicationsData: [],
+      email: null,
+      displayName: null,
+      signIn: () => {},
+      logOut: () => {},
     });
 
     const { getByTestId } = render(
@@ -57,11 +72,14 @@ describe("App", () => {
   });
 
   test("renders  Admin Layout ", () => {
-    useSelectorMock.mockReturnValue({
+    useAuthMock.mockReturnValue({
       authLoaded: true,
-      isEmpty: false,
       isAdmin: true,
-      data: [],
+      isEmpty: false,
+      email: null,
+      displayName: null,
+      signIn: () => {},
+      logOut: () => {},
     });
 
     const { getByTestId } = render(

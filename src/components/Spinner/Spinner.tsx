@@ -1,15 +1,16 @@
 export interface ISpinnerProps {
   size: "1/4" | "1/2" | "1/3" | "2/3";
+  color?: "white" | "blue";
 }
 
 export function Spinner(props: ISpinnerProps) {
-  const { size } = props;
+  const { size, color = "blue" } = props;
   return (
     <svg
       className={`w-${size} `}
       viewBox="0 0 44 44"
       xmlns="http://www.w3.org/2000/svg"
-      stroke="#2a6dfd"
+      stroke={color === "blue" ? "#2a6dfd" : "white"}
     >
       <g fill="none" fillRule="evenodd" strokeWidth="2">
         <circle cx="22" cy="22" r="1">

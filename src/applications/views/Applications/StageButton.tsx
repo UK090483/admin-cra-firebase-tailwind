@@ -1,10 +1,8 @@
 /*eslint-disable*/
-import React from "react";
-
-import { Users, AcademicCap, Hashtag } from "heroicons-react";
-
-import useUi from "hooks/useUi";
 import Button from "components/Buttons/Button";
+import { Hashtag } from "heroicons-react";
+import useUi from "hooks/useUi";
+import React from "react";
 import Popup from "reactjs-popup";
 
 const stages = {

@@ -2,9 +2,13 @@ import * as React from "react";
 import Popup from "reactjs-popup";
 import { ManageJudges } from "../ManageJudges";
 import Chip from "components/Avatars/Chip";
-import { IApplicationAssessment } from "applications/ApplicationTypes";
-import useApplicationActions from "applications/hooks/useApplicationActions";
+
 import { IRow } from "components/Table/types";
+import useAssessments from "assessments/hooks/useAssessments";
+import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
+import { useFirestore } from "react-redux-firebase";
+import { Spinner } from "components/Spinner/Spinner";
+
 interface IManageJudgesChipProps {
   row: IRow;
 }
@@ -12,22 +16,31 @@ interface IManageJudgesChipProps {
 const ManageJudgesChip: React.FunctionComponent<IManageJudgesChipProps> = ({
   row,
 }) => {
-  const { updateApplicationAssessments } = useApplicationActions();
-
-  const handleJudges = (judges: IApplicationAssessment) => {
-    const assessments: IApplicationAssessment = Object.keys(judges).reduce(
-      (acc, item) => ({
-        ...acc,
-        [item]: { judge_id: item, application_id: row.id },
-      }),
-      {}
-    );
-
-    updateApplicationAssessments({
-      oldAssessments: row.assessments ? row.assessments : {},
-      assessments,
-      id: row.id,
+  const firestore = useFirestore();
+  const [updating, setUpdating] = React.useState(false);
+  const { AssessmentsByApplicationId } = useAssessments();
+  const assessments =
+    AssessmentsByApplicationId && AssessmentsByApplicationId[row.id];
+  const getBlockedAssessments = () => {
+    if (!assessments) return [];
+    const res: string[] = [];
+    Object.values(assessments).forEach((ass) => {
+      AssessmentHelper.getAssessmentState(ass) !== "assigned" &&
+        res.push(ass.judge_id);
     });
+
+    return res;
+  };
+  const handleJudges = (nextAssessments: string[]) => {
+    setUpdating(true);
+    firestore
+      .update(
+        { collection: "tableDoc", doc: "first" },
+        { [`${row.id}.assessments`]: nextAssessments }
+      )
+      .then(() => {
+        setUpdating(false);
+      });
   };
   return (
     <Popup
@@ -39,7 +52,12 @@ const ManageJudgesChip: React.FunctionComponent<IManageJudgesChipProps> = ({
         padding: "1rem",
       }}
       trigger={
-        <div>
+        <div className="relative">
+          {updating && (
+            <div className="absolute  -top-10 -left-12 -right-10 -bottom-10 flex justify-center items-center ">
+              <Spinner size="2/3"></Spinner>
+            </div>
+          )}
           <Chip
             name={"+"}
             color={"bg"}
@@ -51,6 +69,7 @@ const ManageJudgesChip: React.FunctionComponent<IManageJudgesChipProps> = ({
     >
       {(close: () => void) => (
         <ManageJudges
+          blockedAssessments={getBlockedAssessments()}
           preselected={row.assessments}
           handleClick={(res) => {
             handleJudges(res);

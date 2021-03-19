@@ -12,13 +12,15 @@ const CustomRender = (props: ITableProps) => {
 };
 
 describe("useTable", () => {
+  const testRows88Sorted = testRows88.sort((a, b) => b.id - a.id);
+
   test("should have correct initial state ", () => {
     const { result } = CustomRender({ columns: testColumns, rows: testRows });
 
     expect(result.current.page).toBe(0);
     expect(result.current.setPage).toBeTruthy();
     expect(result.current.maxPage).toBe(1);
-    expect(result.current.data).toMatchObject(testRows);
+    expect(result.current.data).toMatchSnapshot();
     expect(result.current.filter).toBeNull;
     expect(result.current.setFilter).toBeTruthy();
     expect(result.current.columns).toMatchObject(testColumns);
@@ -35,7 +37,7 @@ describe("useTable", () => {
     expect(result.current.page).toBe(0);
     expect(result.current.setPage).toBeTruthy();
     expect(result.current.maxPage).toBe(9);
-    expect(result.current.data).toMatchObject(testRows88.slice(0, 10));
+    expect(result.current.data).toMatchObject(testRows88Sorted.slice(0, 10));
     expect(result.current.filter).toBeNull;
     expect(result.current.setFilter).toBeTruthy();
     expect(result.current.columns).toMatchObject(testColumns);

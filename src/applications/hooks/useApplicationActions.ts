@@ -1,49 +1,37 @@
-import { useDispatch } from "react-redux";
-
-import getCreateData from "../../redux/api/helper/getCreateData";
-import { uuid } from "uuidv4";
-import { updateApplicationAction } from "applications/state/applicationsReducer";
 import {
+  ApplicationStatePre,
   IApplicationAssessment,
   IApplicationUpdateAbles,
 } from "applications/ApplicationTypes";
 import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
+import { useFirestore } from "react-redux-firebase";
 
 interface IUpdateApplicationProps {
   data: IApplicationUpdateAbles;
   id: string;
 }
 
-interface IUpdateApplicationAssessmentsProps {
-  oldAssessments: IApplicationAssessment;
-  assessments: IApplicationAssessment;
-  id: string;
-}
-
 export default function useApplicationActions() {
-  const dispatch = useDispatch();
+  const firestore = useFirestore();
 
-  const updateApplication = (props: IUpdateApplicationProps) => {
-    dispatch(updateApplicationAction({ ...props }));
+  const updateApplication = async (props: IUpdateApplicationProps) => {
+    const { id, data } = props;
+    await firestore.update({ collection: "applications", doc: id }, data);
+    return data;
   };
 
-  const updateApplicationAssessments = (
+  interface IUpdateApplicationAssessmentsProps {
+    state: ApplicationStatePre;
+    name: string;
+    id: string;
+  }
+  const updateApplicationAssessments = async (
     props: IUpdateApplicationAssessmentsProps
   ) => {
-    const { oldAssessments, assessments, id } = props;
-
-    const notEraseAbleAssessments = Object.entries(oldAssessments).reduce(
-      (acc, [key, value]) => ({
-        ...acc,
-        ...(AssessmentHelper.getAssessmentState(value) !== "assigned" && {
-          [key]: value,
-        }),
-      }),
-      {}
-    );
-    const nextAssessments = { ...assessments, ...notEraseAbleAssessments };
-    dispatch(
-      updateApplicationAction({ data: { assessments: nextAssessments }, id })
+    const { state, id, name } = props;
+    await firestore.update(
+      { collection: "tableDoc", doc: "first" },
+      { [`${id}.${name}`]: state }
     );
   };
 

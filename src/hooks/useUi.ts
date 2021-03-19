@@ -1,19 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import {
-  openSideBar,
-  closeSideBar,
-  toggleSideBar,
-  setStage,
-  setState,
-} from "redux/Reducers/UIReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { setStage, setState, toggleSideBar } from "redux/Reducers/UIReducer";
 import { stage } from "types";
 import { RootState } from "../redux/Reducers/RootReducer";
 
 const useUi = () => {
   const dispatch = useDispatch();
-  //@ts-ignore
   const state = useSelector((state: RootState) => state.ui);
   const stage = useSelector((state: RootState) => state.ui.stage);
   const sumIn100 = useSelector((state: RootState) => state.ui.sumIn100);

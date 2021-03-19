@@ -5,10 +5,13 @@ import JudgeNavBar from "./JudgeNavbar";
 
 import ApplicationTable from "JudgeApp/ApplicationTable";
 import JudgeAppApplicationSingle from "JudgeApp/AssessmentView";
+import { useFirestoreConnect } from "react-redux-firebase";
 
 interface IJudgeProps {}
 
 const Judge: React.FunctionComponent<IJudgeProps> = (props) => {
+  useFirestoreConnect({ collection: "tableDoc", doc: "first" });
+
   return (
     <div>
       <JudgeNavBar></JudgeNavBar>

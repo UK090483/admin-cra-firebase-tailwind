@@ -1,18 +1,20 @@
-import { db, firebase } from "misc/firebase";
-import { FakeApplication } from "./FakeApplication";
-import { FakeJudgeRecord } from "./FakeJudgeRecord";
+import { IApplicationRecord } from "applications/ApplicationTypes";
 import * as faker from "faker";
-import {
-  IApplicationAssessment,
-  IApplicationRecord,
-} from "applications/ApplicationTypes";
-import { AssessmentGenerator, getArray, chunk } from "./helper";
-
-import FakeAssessment from "./FakeAssessment";
-import getCreateData from "redux/api/helper/getCreateData";
 import { IJudgeRecord } from "judges/JudgeTypes";
 import { JUDGE_COLORS } from "misc/constants";
-import { AssessmentHelper } from "../assessments/helper/AssessmentHelper";
+import { db, firebase } from "misc/firebase";
+import { IAssessmentRecord } from "../assessments/types";
+import { FakeApplication } from "./FakeApplication";
+import FakeAssessment from "./FakeAssessment";
+import { FakeJudgeRecord } from "./FakeJudgeRecord";
+import { chunk, getArray } from "./helper";
+
+const getCreateData = () => {
+  return {
+    updated_at: firebase.firestore.Timestamp.now(),
+    updated_by: "blaaaaaaaaaaaaaaaaa",
+  };
+};
 
 class Seed {
   private makeJudges = (amount: number): IJudgeRecord[] => {
@@ -39,12 +41,14 @@ class Seed {
     indexPrefix: string
   ) => {
     const chunks = chunk(resource, 300);
-    chunks.forEach(async (item, index) => {
+
+    chunks.forEach(async (item, chunkIndex) => {
       const Batch = db.batch();
-      item.forEach((element, eIndex) => {
+      item.forEach((element, itemIndex) => {
         const ref = db
           .collection(resourceName)
-          .doc(indexPrefix + (index + 1) * eIndex);
+          .doc(indexPrefix + (itemIndex + 1 + chunkIndex * 300));
+
         Batch.set(ref, element);
       });
 
@@ -133,42 +137,34 @@ class Seed {
       "applications",
       "FakeApplication"
     );
+
+    await this.makeTableDoc();
     await this.createFakeJudges();
   };
 
   accept = async () => {
-    const applications = await db.collection("applications").limit(100).get();
+    const applications = await db.collection("tableDoc").doc("first").get();
 
-    const Batch = db.batch();
-    applications.forEach((application) => {
-      const ref = db.collection("applications").doc(application.id);
-      Batch.update(ref, {
-        statePre: "accepted",
-      });
-    });
-    await Batch.commit();
+    const a = applications.data();
+
+    if (!a) return;
+
+    const nextDoc = Object.entries(a).reduce(
+      (acc, [key, value], index) => ({
+        ...acc,
+        [key]: {
+          ...(index < 200 ? { ...value, statePre: "accepted" } : { ...value }),
+        },
+      }),
+      {}
+    );
+    await db.collection("tableDoc").doc("first").set(nextDoc);
   };
 
   makeTableDoc = async () => {
     const applications = await db.collection("applications").get();
 
     const tableDoc: any = {};
-
-    const parseAssessment = (application: IApplicationRecord) => {
-      if (application.assessments) {
-        return Object.entries(application.assessments).reduce(
-          (acc, [key, value]) => ({
-            ...acc,
-            [key]: {
-              application_id: value.application_id,
-              judge_id: value.judge_id,
-              sum: AssessmentHelper.evaluateAssessment(value).sum,
-            },
-          }),
-          {}
-        );
-      }
-    };
 
     applications.forEach((applicationDoc) => {
       const application = applicationDoc.data() as IApplicationRecord;
@@ -193,10 +189,12 @@ class Seed {
   };
 
   addJudges = async () => {
-    const applications = await db
-      .collection("applications")
-      .where("statePre", "==", "accepted")
-      .get();
+    const applications = await db.collection("tableDoc").doc("first").get();
+
+    const a = applications.data();
+
+    if (!a) return;
+
     const judges = await db
       .collection("judges")
       .where("judgeType", "==", "pre")
@@ -204,79 +202,87 @@ class Seed {
 
     const judgeIds = judges.docs.map((judge) => judge.id);
 
-    const getAss = (application_id: string) => {
-      return judgeIds.reduce(
-        (acc, judge_id) => ({
-          ...acc,
-          [judge_id]: { application_id, judge_id },
-        }),
-        {}
-      );
-    };
-
-    const Batch = db.batch();
-    applications.forEach((application) => {
-      const ref = db.collection("applications").doc(application.id);
-
-      Batch.update(ref, {
-        assessments: getAss(application.id),
-      });
-    });
-    await Batch.commit();
+    const nextDoc = Object.entries(a).reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        [key]: {
+          ...(value.statePre === "accepted"
+            ? { ...value, assessments: judgeIds }
+            : { ...value }),
+        },
+      }),
+      {}
+    );
+    await db.collection("tableDoc").doc("first").set(nextDoc);
   };
 
   preJudgesJudge = async (mock_in_process?: boolean) => {
-    const judgeAbles = await db
-      .collection("applications")
-      .where("assessments", "!=", "0")
-      .get();
-
-    const judges = await db.collection("judges").get();
-
-    const judgesArray: IJudgeRecord[] = judges.docs.map(
-      (doc) => doc.data() as IJudgeRecord
-    );
-
-    const prejudges = judgesArray
-      .filter((judge) => judge.judgeType === "pre")
-      .map((item) => item.id);
-
+    const applications = await db.collection("tableDoc").doc("first").get();
+    const applicationsData = applications.data();
+    if (!applicationsData) return;
     const mockInProcess = mock_in_process ? true : false;
+    const applicationIdsByJudgeID = Object.entries(applicationsData).reduce(
+      (acc, [application_id, application]) => {
+        if (application.assessments) {
+          const applicationAssessments = application.assessments as string[];
+          applicationAssessments.forEach((judge_id) => {
+            if (!acc[judge_id]) acc[judge_id] = {};
 
-    judgeAbles.forEach((doc) => {
-      const data = doc.data();
-      this.judgeAssessment(
-        { ...data, id: doc.id } as IApplicationRecord,
-        mockInProcess
-      );
-    });
+            acc[judge_id][application_id] = FakeAssessment(
+              application_id,
+              judge_id,
+              mockInProcess
+            );
+
+            return { ...acc };
+          });
+        }
+        return { ...acc };
+      },
+      {} as {
+        [K: string]: any;
+      }
+    );
+    await Object.entries(applicationIdsByJudgeID).forEach(
+      async ([judge_id, assessments]) => {
+        await db.collection("judges").doc(judge_id).update({ assessments });
+      }
+    );
   };
 
   mainJudgesJudge = async () => {
-    const mainJudgeAbles = await db
-      .collection("applications")
-      .where("stateTree", "==", "accepted")
-      .get();
+    const applications = await db.collection("tableDoc").doc("first").get();
+    const applicationsData = applications.data();
+    if (!applicationsData) return;
+
+    const mainJudgeAbles = Object.entries(applicationsData)
+      .filter(
+        ([id, item]) => item["stateTree"] && item["stateTree"] === "accepted"
+      )
+      .map((item) => item[0]);
+
+    // const mainJudgeAbles = await db
+    //   .collection("applications")
+    //   .where("stateTree", "==", "accepted")
+    //   .get();
     const mainJudges = await db
       .collection("judges")
       .where("judgeType", "==", "main")
       .get();
 
-    mainJudgeAbles.forEach(async (doc) => {
-      const application = doc.data();
+    mainJudges.forEach(async (judge) => {
+      const nextData = mainJudgeAbles.reduce(
+        (acc, application_id) => ({
+          ...acc,
+          [`assessments.${application_id}`]: FakeAssessment(
+            application_id,
+            judge.id
+          ),
+        }),
+        {}
+      );
 
-      const nextAssessments = {
-        ...(application.assessments && application.assessments),
-      };
-
-      mainJudges.forEach((judgeDoc) => {
-        nextAssessments[judgeDoc.id] = FakeAssessment(doc.id, judgeDoc.id);
-      });
-
-      await db
-        .collection("applications")
-        .doc(doc.id)
-        .update({ assessments: nextAssessments });
+      await db.collection("judges").doc(judge.id).update(nextData);
     });
   };
 }

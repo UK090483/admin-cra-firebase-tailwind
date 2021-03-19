@@ -1,11 +1,9 @@
+import LoadingSection from "components/Spinner/LoadingSection";
 import { JudgeHelper } from "judges/helper/JudgeHelper";
 import * as React from "react";
 import { useHistory } from "react-router";
 import Form from "../../components/Form/Form";
 import useJudgeActions from "../hooks/useJudgeActions";
-import { Field } from "formik";
-import LoadingSection from "components/Spinner/LoadingSection";
-import FormBuilder from "../../components/Form/FormBuilder";
 
 interface IJudgeCreateProps {}
 

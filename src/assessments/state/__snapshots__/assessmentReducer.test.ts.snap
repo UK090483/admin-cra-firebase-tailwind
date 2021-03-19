@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AssessmentReducer should return Initial State 1`] = `
+Object {
+  "assessmentCount": 0,
+  "data": Object {},
+  "judgeAverages": Object {},
+  "judgeTypes": Object {},
+  "ordered": Array [],
+  "sumByApplicationId": Object {},
+}
+`;
+
+exports[`AssessmentReducer should return Initial State 2 1`] = `
+Object {
+  "assessmentCount": 0,
+  "data": Object {},
+  "judgeAverages": Object {},
+  "judgeTypes": Object {},
+  "ordered": Array [],
+  "sumByApplicationId": Object {},
+}
+`;

@@ -1,16 +1,12 @@
 import * as React from "react";
 import { IRow } from "components/Table/types";
 import Popup from "reactjs-popup";
+
 interface ITextPreviewProps {
   row: IRow;
   prevItemList: string[];
 }
 
-// const prevItemList = [
-//   "howIsCompanyFunded",
-//   "salesStrategy",
-//   "productReadiness",
-// ];
 const TextPreview: React.FC<ITextPreviewProps> = ({ row, prevItemList }) => {
   const prevItems = Object.keys(row).filter((key) =>
     prevItemList.includes(key)

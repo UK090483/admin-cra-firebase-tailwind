@@ -1,7 +1,6 @@
-import * as React from "react";
-import { Field, FormikErrors, FormikHelpers, useField } from "formik";
-
+import { useField } from "formik";
 import { Star } from "heroicons-react";
+import React from "react";
 
 interface IPointsProps {
   name: string;

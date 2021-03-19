@@ -1,10 +1,10 @@
 import { IAssessmentRecord } from "assessments/types";
 import { jotFormDataMaper } from "exampleJotform";
 import { get } from "lodash";
-// import { AssessmentTypeKey } from "./assessmentType";
-import Application from "../../judges/views/Judge";
-import TextInput from "../../components/Form/FormInputs/TextInput";
-import ListInput from "../../components/Form/FormInputs/ListInput";
+import Application from "judges/views/Judge";
+import TextInput from "components/Form/FormInputs/TextInput";
+import ListInput from "components/Form/FormInputs/ListInput";
+import MediaUpload from "components/Form/FormInputs/MediaArrayInput";
 
 type Key = keyof ApplicationType;
 
@@ -477,14 +477,17 @@ const ApplicationObject: ApplicationType = {
       website: {
         label: "WebSite",
         type: "text",
+        input: <TextInput label={"Website"} name={"website"} />,
       },
       companyLogo: {
         label: "Company Logo",
         type: "mediaArray",
+        input: <MediaUpload label={"Company Logo"} name={"companyLogo"} />,
       },
       companyDeck: {
         label: "Company Deck",
         type: "mediaArray",
+        input: <MediaUpload label={"Company Deck"} name={"companyDeck"} />,
       },
     },
 

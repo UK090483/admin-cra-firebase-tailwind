@@ -4,7 +4,7 @@ import Popup from "reactjs-popup";
 import { LightningBolt, Wifi } from "heroicons-react";
 import { SeedFirebase } from "seed/seedFirebase";
 import { useDispatch } from "react-redux";
-import { fetchApplicationList } from "../../applications/state/applicationsReducer";
+// import { fetchApplicationList } from "../../applications/state/applicationsReducer";
 
 interface ISeedProps {}
 
@@ -21,10 +21,14 @@ const Seed: React.FunctionComponent<ISeedProps> = (props) => {
       >
         {/* <SeedButton label="clear" seedFunction={SeedFirebase.clear} /> */}
 
-        <SeedButton
+        {/* <SeedButton
           label="make TableDoc"
           seedFunction={SeedFirebase.makeTableDoc}
-        />
+        /> */}
+        {/* <SeedButton
+          label="assessments to judges"
+          seedFunction={SeedFirebase.assessmentsToJudges}
+        /> */}
         <SeedButton label="start" seedFunction={SeedFirebase.start} />
 
         <SeedButton label="Accept 100" seedFunction={SeedFirebase.accept} />
@@ -62,7 +66,7 @@ const SeedButton: React.FC<ISeedButtonProps> = ({ label, seedFunction }) => {
   const handleClick = async () => {
     SetIsActive(true);
     await seedFunction();
-    dispatch(fetchApplicationList({ refresh: true }));
+    // dispatch(fetchApplicationList({ refresh: true }));
     SetIsActive(false);
   };
 

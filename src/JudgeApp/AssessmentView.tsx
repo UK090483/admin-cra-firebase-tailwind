@@ -1,21 +1,37 @@
-import ApplicationAccordion from "./JudgeApplicationAccordion";
-import React from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { RoutingParam } from "types";
-import { useJudgeAppApplications } from "./state/hooks/useJudgeAppApplications";
 import { ArrowLeftOutline } from "heroicons-react";
+import React from "react";
+import { useSelector } from "react-redux";
+import { isLoaded, useFirestoreConnect } from "react-redux-firebase";
+import { useHistory, useParams } from "react-router-dom";
+import { RootState } from "redux/store";
+import { RoutingParam } from "types";
 import { AssessmentHelper } from "../assessments/helper/AssessmentHelper";
-import { getAssessment } from "./helper/getAssessment";
+import ApplicationAccordion from "./JudgeApplicationAccordion";
 
 const AssessmentView: React.FC = () => {
   let { id } = useParams<RoutingParam>();
-  const { applications } = useJudgeAppApplications();
+
+  useFirestoreConnect({ collection: "applications", doc: id });
 
   const history = useHistory();
+  const applications = useSelector(
+    (state: RootState) => state.firestore.data.applications
+  );
 
-  const application = applications[id];
+  // const assessment = getAssessment(application);
 
-  const assessment = getAssessment(application);
+  const { assessment } = useSelector((state: RootState) => ({
+    assessment:
+      state.fb.profile.assessments && state.fb.profile.assessments[id],
+  }));
+
+  if (!isLoaded(applications)) {
+    return <div>Loading...</div>;
+  }
+
+  const application = applications[id]
+    ? { ...applications[id], id, foundingDate: "bla" }
+    : null;
 
   return (
     <>

@@ -12,11 +12,12 @@ const getAssessmentStateColor = (assessment: IAssessmentRecord) => {
     : "bg-yellow-300 text-white";
 };
 
-const getApplicationStateColor = (application: IApplicationRecord) => {
-  if (application.assessments) {
-    return getAssessmentStateColor(Object.values(application.assessments)[0]);
-  }
-  return "";
+const getApplicationStateColor = (application: any) => {
+  return application.applicationState === "assigned"
+    ? ""
+    : application.applicationState === "completed"
+    ? "bg-green-300 text-white"
+    : "bg-yellow-300 text-white";
 };
 
 const getApplicationState = (application: IApplicationRecord) => {

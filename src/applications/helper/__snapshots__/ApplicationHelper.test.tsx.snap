@@ -30,10 +30,18 @@ Object {
     "type": "text",
   },
   "companyDeck": Object {
+    "input": <MediaUpload
+      label="Company Deck"
+      name="companyDeck"
+    />,
     "label": "Company Deck",
     "type": "mediaArray",
   },
   "companyLogo": Object {
+    "input": <MediaUpload
+      label="Company Logo"
+      name="companyLogo"
+    />,
     "label": "Company Logo",
     "type": "mediaArray",
   },
@@ -298,6 +306,10 @@ Object {
     "type": "text",
   },
   "website": Object {
+    "input": <TextInput
+      label="Website"
+      name="website"
+    />,
     "label": "WebSite",
     "type": "text",
   },
@@ -868,6 +880,10 @@ exports[`ApplicationHelper Match getFields 10`] = `
 Array [
   Object {
     "field": Object {
+      "input": <TextInput
+        label="Website"
+        name="website"
+      />,
       "label": "WebSite",
       "type": "text",
     },
@@ -875,6 +891,10 @@ Array [
   },
   Object {
     "field": Object {
+      "input": <MediaUpload
+        label="Company Logo"
+        name="companyLogo"
+      />,
       "label": "Company Logo",
       "type": "mediaArray",
     },
@@ -882,6 +902,10 @@ Array [
   },
   Object {
     "field": Object {
+      "input": <MediaUpload
+        label="Company Deck"
+        name="companyDeck"
+      />,
       "label": "Company Deck",
       "type": "mediaArray",
     },

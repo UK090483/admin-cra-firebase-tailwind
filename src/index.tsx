@@ -1,17 +1,14 @@
-import React from "react";
+import "misc/assets/styles/tailwind.css";
+import { firebase } from "misc/firebase";
 import { render } from "react-dom";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
-import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
-import ReduxProvider from "redux/Provider";
-
-// import "@fortawesome/fontawesome-free/css/all.min.css";
-import "./assets/styles/tailwind.css";
-import "./styles/index.css";
-import { store } from "redux/store";
-import { firebase } from "misc/firebase";
 import { createFirestoreInstance } from "redux-firestore";
+import ReduxProvider from "redux/Provider";
+import { store } from "redux/store";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
+import "./styles/index.css";
 
 const rrfConfig = {
   userProfile: "judges",

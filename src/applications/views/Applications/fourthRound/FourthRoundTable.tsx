@@ -12,6 +12,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "redux/Reducers/RootReducer";
 import { Chart } from "./Chart";
 import useUi from "../../../../hooks/useUi";
+import useAssessments from "assessments/hooks/useAssessments";
+import TableExport from "../TableExport/tableExport";
 
 const fourthRoundColumns: IColumn[] = [
   {
@@ -34,7 +36,11 @@ const fourthRoundColumns: IColumn[] = [
     field: "preSum",
     use: "Pre Sum",
     use_in_search: false,
-    render: (row) => <div>{row.preSum}</div>,
+    render: (row) => (
+      <>
+        <Sum sum={row.preSum} />
+      </>
+    ),
   },
 
   {
@@ -48,7 +54,11 @@ const fourthRoundColumns: IColumn[] = [
     field: "mainSum",
     use: "Main Sum",
     use_in_search: false,
-    render: (row) => <div>{row.mainSum}</div>,
+    render: (row) => (
+      <>
+        <Sum sum={row.mainSum} />
+      </>
+    ),
   },
   {
     field: "mainjudges",
@@ -65,10 +75,17 @@ interface FourthRoundTableProps {
 const FourthRoundTable: React.FC<FourthRoundTableProps> = ({ data }) => {
   const cleanData = data.filter((data) => data.stateTree === "accepted");
   const { integrateJudgeAverages, sumIn100 } = useUi();
-  const judgeAverages = useSelector(
-    (state: RootState) => state.applications.judgeAverages
-  );
-  const { judges } = useJudges();
+
+  const { sumByApplicationId } = useAssessments();
+
+  const withSum = cleanData.map((item) => {
+    return {
+      ...item,
+      preSum: sumByApplicationId[item.id] && sumByApplicationId[item.id].pre,
+      mainSum: sumByApplicationId[item.id] && sumByApplicationId[item.id].main,
+      sum: sumByApplicationId[item.id] && sumByApplicationId[item.id].all,
+    };
+  });
 
   return (
     <div className="animate-fadeIn">
@@ -81,14 +98,9 @@ const FourthRoundTable: React.FC<FourthRoundTableProps> = ({ data }) => {
         //   redirect(`applications/${data.id}`);
         // }}
         columns={fourthRoundColumns}
-        rows={AssessmentHelper.evaluateTableData(
-          cleanData,
-          judges,
-          sumIn100,
-          integrateJudgeAverages,
-          judgeAverages
-        )}
+        rows={withSum}
       />
+      <TableExport />
     </div>
   );
 };

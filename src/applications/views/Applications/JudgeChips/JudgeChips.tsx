@@ -5,7 +5,7 @@ import Popup from "reactjs-popup";
 import useJudges from "judges/hooks/useJudges";
 import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
 import ManageJudgesChip from "./ManageJudgesChip";
-import { IAssessmentRecord } from "../../../../assessments/types";
+import { IAssessmentRecord } from "assessments/types";
 
 export interface IJudgeChipsProps {
   row: IRow;
@@ -13,46 +13,44 @@ export interface IJudgeChipsProps {
   type?: "pre" | "main";
 }
 
-const JudgeChips: React.FC<IJudgeChipsProps> = (props) => {
-  const { row, withManage = false, type = "pre" } = props;
-
-  const rawAssessments = row.assessments
-    ? (row.assessments as IAssessmentRecord[])
-    : null;
-
+const JudgeChips: React.FC<IJudgeChipsProps> = ({
+  row,
+  withManage = false,
+  type = "pre",
+}) => {
   const { judges } = useJudges();
 
-  const assessments =
-    judges && rawAssessments
-      ? Object.values(rawAssessments).reduce((acc: any[], item) => {
-          if (
-            !item.judge_id ||
-            !judges[item.judge_id] ||
-            judges[item.judge_id].judgeType !== type
-          ) {
-            return [...acc];
-          }
+  let assessments = row.assessments ? (row.assessments as string[]) : [];
+  if (type === "main" && judges) {
+    const res: string[] = [];
+    Object.values(judges).forEach((judge) => {
+      if (judge.judgeType === "pre") return;
+      if (!judge.assessments) return;
+      console.log("has assessments");
+      if (Object.keys(judge.assessments).includes(row.id)) {
+        res.push(judge.id);
+      }
+    });
+    assessments = res;
+  }
 
-          return [
-            ...acc,
-            {
-              judge: judges[item.judge_id],
-              sum: item.sum,
-              status: item.status,
-              state: AssessmentHelper.getAssessmentState(item),
-            },
-          ];
-        }, [])
-      : [];
+  if (!judges) return <div>Load...</div>;
 
-  return (
-    <div
-      className="flex flex-wrap"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-    >
-      {assessments.map((assessment, index) => (
+  const getChip = () => {
+    return assessments.map((assessment, index) => {
+      const judge = judges[assessment];
+      if (!judge) {
+        console.error("can not find judge in JudgeChip Component");
+        return null;
+      }
+
+      const judgeAssessment = judge.assessments
+        ? (judge.assessments[row.id] as IAssessmentRecord)
+        : undefined;
+
+      if (judge.judgeType !== type) return null;
+
+      return (
         <Popup
           key={index}
           contentStyle={{
@@ -66,11 +64,13 @@ const JudgeChips: React.FC<IJudgeChipsProps> = (props) => {
           trigger={
             <div>
               <Chip
-                status={assessment.status}
-                state={assessment.state}
-                key={assessment.judge.name}
-                name={assessment.judge.name}
-                color={assessment.judge.color}
+                status={judgeAssessment && judgeAssessment.status}
+                state={
+                  judgeAssessment &&
+                  AssessmentHelper.getAssessmentState(judgeAssessment)
+                }
+                name={judge.name}
+                color={judge.color}
                 className="-ml-2 "
               />
             </div>
@@ -78,9 +78,21 @@ const JudgeChips: React.FC<IJudgeChipsProps> = (props) => {
           on="hover"
           position="top center"
         >
-          {assessment.sum}
+          {judgeAssessment &&
+            AssessmentHelper.evaluateAssessment(judgeAssessment).sum}
         </Popup>
-      ))}
+      );
+    });
+  };
+
+  return (
+    <div
+      className="flex flex-wrap"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      {getChip()}
       {withManage && <ManageJudgesChip row={row} />}
     </div>
   );

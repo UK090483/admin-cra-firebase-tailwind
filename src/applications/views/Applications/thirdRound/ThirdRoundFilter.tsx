@@ -1,6 +1,6 @@
-import { IColumn, ITableFilterState, IRow } from "components/Table/types";
-import React from "react";
 import ButtonGroupe from "components/Buttons/ButtonGroupe";
+import { IColumn, IRow, ITableFilterState } from "components/Table/types";
+import React from "react";
 
 interface ThirdRoundFilterProps {
   setFilter: (filter: ITableFilterState | null) => void;

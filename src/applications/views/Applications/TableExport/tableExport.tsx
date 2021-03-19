@@ -4,46 +4,53 @@ import { ApplicationHelper } from "applications/helper/ApplicationHelper";
 import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
 import useJudges from "judges/hooks/useJudges";
 import { getCssfromColorClass } from "helper/getColorFromclass";
+import useAssessments from "../../../../assessments/hooks/useAssessments";
+import { JudgeData, RootState } from "../../../../redux/Reducers/RootReducer";
+import { useSelector } from "react-redux";
+import { Key } from "heroicons-react";
 
-interface ITableExportProps {
-  data: any;
-}
+interface ITableExportProps {}
 
-const TableExport: React.FunctionComponent<ITableExportProps> = ({ data }) => {
+const TableExport: React.FunctionComponent<ITableExportProps> = () => {
   const [url, setUrl] = React.useState("");
 
   const { judges } = useJudges();
-  const cleanData = AssessmentHelper.evaluateTableData(data, judges);
+  const { AssessmentsByApplicationId } = useAssessments();
+
+  const applications = useSelector(
+    (state: RootState) => state.firestore.data.tableDoc?.first
+  );
 
   React.useEffect(() => {
     if (!judges) return;
-
     const workbook = new ExcelJS.Workbook();
     const worksheetApplications = workbook.addWorksheet("Applications");
 
     worksheetApplications.columns = buildColumns(judges);
 
-    if (cleanData) {
-      cleanData.forEach((element: any) => {
-        worksheetApplications.addRow(element);
+    if (applications) {
+      Object.entries(applications).forEach((element: any) => {
+        const [id, application] = element;
+        if (application.stateTree !== "accepted") return;
 
-        // if (element.assessments) {
-        //   Object.values(element.assessments).forEach((e: any) => {
-        //     worksheetAssessments.addRow({ application: element.id, ...e });
-        //   });
-        // }
+        worksheetApplications.addRow({
+          ...application,
+          id,
+          ...judgeToTableData(judges, id),
+        });
+      });
+      getJudgeNames(judges, worksheetApplications);
+      workbook.xlsx.writeBuffer().then((data) => {
+        console.log("doc ready");
+        const blob = new Blob([data], {
+          type:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        const url = window.URL.createObjectURL(blob);
+        setUrl(url);
       });
     }
-
-    workbook.xlsx.writeBuffer().then((data) => {
-      const blob = new Blob([data], {
-        type:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      const url = window.URL.createObjectURL(blob);
-      setUrl(url);
-    });
-  }, [data, judges]);
+  }, [AssessmentsByApplicationId, judges]);
 
   return (
     <a href={url} download>
@@ -52,10 +59,35 @@ const TableExport: React.FunctionComponent<ITableExportProps> = ({ data }) => {
   );
 };
 
-export default TableExport;
+const getJudgeNames = (judges: JudgeData, ws: ExcelJS.Worksheet) => {
+  ws.insertRow(0, {});
+  Object.values(judges).forEach((judge, index) => {
+    ws.getCell(1, 6 + index * 11).value = judge.name;
+  });
+};
 
-const buildColumns = (judges: any) => {
-  const fields = ApplicationHelper.getAllFields();
+const judgeToTableData = (judges: JudgeData, applicationId: string) => {
+  const assessmentFields = AssessmentHelper.getQuestions();
+  return Object.entries(judges).reduce((acc, [judgeId, value]) => {
+    if (!(value.assessments && value.assessments[applicationId]))
+      return { ...acc };
+    const res = assessmentFields.reduce((acc2, field) => {
+      // @ts-ignore
+      if (!value.assessments[applicationId][field.source]) return { ...acc2 };
+
+      return {
+        ...acc2, // @ts-ignore
+        [field.source + judgeId]: value.assessments[applicationId][
+          field.source
+        ],
+      };
+    }, {});
+
+    return { ...acc, ...res };
+  }, {});
+};
+
+const buildColumns = (judges: JudgeData) => {
   const assessmentFields = AssessmentHelper.getQuestions();
   const res: any[] = [];
 
@@ -86,21 +118,18 @@ const buildColumns = (judges: any) => {
   });
 
   Object.values(judges).forEach((judge) => {
-    // @ts-ignore
-    const color = getCssfromColorClass(judge.color).replace("#", "");
-
     Object.entries(assessmentFields).forEach(([key, value]) => {
       res.push({
         header: value.shortLabel,
-        key: value.source,
+        key: value.source + judge.id,
         width: 4,
         style: {
           fill: {
             type: "pattern",
             pattern: "darkVertical",
-            // @ts-ignore
+
             fgColor: {
-              argb: color,
+              argb: getCssfromColorClass(judge.color).replace("#", ""),
             },
           },
         },
@@ -110,3 +139,5 @@ const buildColumns = (judges: any) => {
 
   return res;
 };
+
+export default TableExport;

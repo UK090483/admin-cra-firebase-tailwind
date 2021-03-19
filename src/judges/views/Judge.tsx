@@ -1,13 +1,15 @@
-import { useHistory, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "redux/Reducers/RootReducer";
-// import { selectJudgeById } from "judges/state/judgesSelectors";
 import useApplications from "applications/hooks/useApplications";
-import Table from "components/Table/Table";
-import ActionButton from "components/Buttons/ActionButton";
-import { AssessmentHelper } from "../../assessments/helper/AssessmentHelper";
 import ManageAssessmentStatus from "assessments/views/ManageAssessmentStatus";
+import ActionButton from "components/Buttons/ActionButton";
+import PageLoading from "components/Spinner/PageLoading";
+import Table from "components/Table/Table";
+import { IRow } from "components/Table/types";
 import { useFirestoreConnect } from "react-redux-firebase";
+import { useHistory, useParams } from "react-router-dom";
+import { AssessmentHelper } from "../../assessments/helper/AssessmentHelper";
+import useAssessments from "../../assessments/hooks/useAssessments";
+import { IAssessmentRecord } from "../../assessments/types";
+import useJudges from "../hooks/useJudges";
 
 interface ParamTypes {
   id: string;
@@ -16,23 +18,32 @@ export default function Application() {
   let { id } = useParams<ParamTypes>();
 
   const history = useHistory();
-  const { assessmentsByJudgeId } = useApplications();
-
-  const assessments = assessmentsByJudgeId[id]
-    ? Object.values(assessmentsByJudgeId[id])
-    : [];
-
-  const judge = useSelector((state: RootState) =>
-    state.fb.data.judges ? state.fb.data.judges[id] || {} : {}
-  );
 
   useFirestoreConnect([{ collection: "judges", doc: id }]);
+
+  const { judges } = useJudges();
+  const { data } = useApplications();
+  const { judgeAverages } = useAssessments();
+
+  const judge = judges && judges[id];
+
+  const assessments =
+    judge && judge.assessments
+      ? (Object.values(judge.assessments) as IAssessmentRecord[])
+      : [];
 
   const columns = [
     {
       field: "application_name",
       use: "Name",
       use_in_search: true,
+      render: (row: IRow) => (
+        <div>
+          {data &&
+            data[row.application_id] &&
+            data[row.application_id].startupName}
+        </div>
+      ),
     },
 
     ...AssessmentHelper.getQuestions().map((field) => ({
@@ -59,29 +70,44 @@ export default function Application() {
     },
   ];
 
+  if (!judge && !assessments) {
+    return <PageLoading />;
+  }
+
   return (
     <>
       <ActionButton path={`/judges/${id}/update`} type="update" />
 
       {judge && (
-        <h5
-          className={`flex justify-center items-center text-xl w-44 rounded-full p-3 mb-5 ${judge.color} `}
-        >
-          {judge.name}
-        </h5>
+        <div className="flex">
+          <h5
+            className={`flex justify-center items-center text-xl w-44 rounded-full p-3 mb-5 ${judge.color} `}
+          >
+            {judge.name}
+          </h5>
+          {judgeAverages[id] && (
+            <h5
+              className={`flex justify-center items-center text-xl w-20 rounded-full p-3 mb-5 ml-4 ${judge.color} `}
+            >
+              {judgeAverages[id]}
+            </h5>
+          )}
+        </div>
       )}
-      {assessments && (
-        <Table
-          rowStyle={(row) => {
-            return row.status === "hidden" ? "bg-red-400" : "";
-          }}
-          onRowClick={(row) =>
-            history.push(`/applications/${row.application_id}`)
-          }
-          columns={columns}
-          rows={assessments}
-        ></Table>
-      )}
+
+      <Table
+        rowStyle={(row) => {
+          return row.status === "hidden" ? "bg-red-400" : "";
+        }}
+        onRowClick={(row) =>
+          history.push(`/applications/${row.application_id}`)
+        }
+        columns={columns}
+        rows={assessments.map((item) => ({
+          ...item,
+          id: item.application_id,
+        }))}
+      ></Table>
     </>
   );
 }
