@@ -14,8 +14,6 @@ const Applications: React.FC = () => {
   const { stage } = useUi();
 
   const getTable = () => {
-    if (!ordered) return;
-
     switch (stage) {
       case "first_filter":
         return <FirstRoundTable data={ordered} />;
@@ -32,10 +30,6 @@ const Applications: React.FC = () => {
 
   if (!isLoaded) {
     return <PageLoading />;
-  }
-
-  if (!ordered) {
-    return <div>No Data yet</div>;
   }
 
   return (

@@ -1,5 +1,6 @@
 import { IApplicationRecord } from "applications/ApplicationTypes";
 import useAssessments from "assessments/hooks/useAssessments";
+import PageLoading from "components/Spinner/PageLoading";
 import Table from "components/Table/Table";
 import { IColumn, ITableOptions } from "components/Table/types";
 import React from "react";
@@ -10,10 +11,14 @@ import Sum from "../Sum";
 import ThirdRoundFilter from "./ThirdRoundFilter";
 
 interface ThirdRoundTableProps {
-  data: IApplicationRecord[];
+  data: IApplicationRecord[] | undefined;
 }
 
 const ThirdRoundTable: React.FC<ThirdRoundTableProps> = ({ data }) => {
+  if (!data) {
+    return <PageLoading></PageLoading>;
+  }
+
   const cleanData = data.filter((data) => data.statePre === "accepted");
   const history = useHistory();
 

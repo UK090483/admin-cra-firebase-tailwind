@@ -1,4 +1,5 @@
 import { IApplicationRecord } from "applications/ApplicationTypes";
+import PageLoading from "components/Spinner/PageLoading";
 import Table from "components/Table/Table";
 import { IColumn, ITableOptions } from "components/Table/types";
 import React from "react";
@@ -8,10 +9,14 @@ import TextPreview from "../TextPreview";
 import SecondRoundBulk from "./secondRoundBulk";
 
 interface SecondRoundTableProps {
-  data: IApplicationRecord[];
+  data: IApplicationRecord[] | undefined;
 }
 
 const SecondRoundTable: React.FC<SecondRoundTableProps> = ({ data }) => {
+  if (!data) {
+    return <PageLoading></PageLoading>;
+  }
+
   const cleanData = data
     .filter((data) => data.statePre === "accepted")
     .map((item) => ({

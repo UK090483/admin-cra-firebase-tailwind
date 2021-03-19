@@ -72,7 +72,7 @@ describe("AssessmentReducer should return judge Averages", () => {
     expect(getReducer().judgeAverages).toStrictEqual({});
   });
 
-  it("but nothing with no data", () => {
+  it("1 judge 1 assessment", () => {
     expect(
       getReducer({
         ordered: [
@@ -90,7 +90,7 @@ describe("AssessmentReducer should return judge Averages", () => {
     });
   });
 
-  it("but nothing with no data", () => {
+  it("one Judge 2 assessments", () => {
     expect(
       getReducer({
         ordered: [
@@ -109,7 +109,7 @@ describe("AssessmentReducer should return judge Averages", () => {
     });
   });
 
-  it("but nothing with no data", () => {
+  it("1 judge 2 assessments (one assessment not ready)", () => {
     expect(
       getReducer({
         ordered: [

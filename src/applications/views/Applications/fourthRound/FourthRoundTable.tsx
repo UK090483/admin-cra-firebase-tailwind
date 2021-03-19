@@ -14,6 +14,7 @@ import { Chart } from "./Chart";
 import useUi from "../../../../hooks/useUi";
 import useAssessments from "assessments/hooks/useAssessments";
 import TableExport from "../TableExport/tableExport";
+import PageLoading from "components/Spinner/PageLoading";
 
 const fourthRoundColumns: IColumn[] = [
   {
@@ -69,14 +70,18 @@ const fourthRoundColumns: IColumn[] = [
 ];
 
 interface FourthRoundTableProps {
-  data: IApplicationRecord[];
+  data: IApplicationRecord[] | undefined;
 }
 
 const FourthRoundTable: React.FC<FourthRoundTableProps> = ({ data }) => {
-  const cleanData = data.filter((data) => data.stateTree === "accepted");
   const { integrateJudgeAverages, sumIn100 } = useUi();
-
   const { sumByApplicationId } = useAssessments();
+
+  if (!data) {
+    return <PageLoading></PageLoading>;
+  }
+
+  const cleanData = data.filter((data) => data.stateTree === "accepted");
 
   const withSum = cleanData.map((item) => {
     return {

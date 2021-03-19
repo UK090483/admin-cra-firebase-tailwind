@@ -6,6 +6,7 @@ import FirstRoundFilter from "./FirstRoundFilter";
 import React from "react";
 import Table from "components/Table/Table";
 import { useHistory } from "react-router-dom";
+import PageLoading from "components/Spinner/PageLoading";
 
 const optionsFirstRound: ITableOptions = {
   showFilter: false,
@@ -20,11 +21,15 @@ const optionsFirstRound: ITableOptions = {
 };
 
 interface FirstRoundTableProps {
-  data: any[];
+  data: any[] | undefined;
 }
 
 const FirstRoundTable: React.FC<FirstRoundTableProps> = ({ data }) => {
   let history = useHistory();
+
+  if (!data) {
+    return <PageLoading></PageLoading>;
+  }
 
   return (
     <div className="animate-fadeIn" data-testid="FirstRoundTable">

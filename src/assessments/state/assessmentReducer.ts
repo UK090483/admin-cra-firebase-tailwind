@@ -61,7 +61,7 @@ const AssessmentSlice = createSlice({
 
                 if (sum) judgeAvr.add(sum);
 
-                // state.ordered.push({ ...assessment, sum: sum });
+                //state.ordered.push({ ...assessment, sum: sum });
 
                 state.assessmentCount++;
 

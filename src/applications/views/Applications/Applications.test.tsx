@@ -35,8 +35,7 @@ describe("Applications", () => {
   it("should default render FirstRoundTable", async () => {
     mockedUseApplications.mockImplementation(() => ({
       ordered: [],
-      loading: null,
-      loadedAt: "someTime",
+      isLoaded: true,
     }));
     mockedUseUi.mockImplementation(() => ({ stage: "" }));
     const { getByTestId } = render(
@@ -50,8 +49,7 @@ describe("Applications", () => {
   it("should render FirstRoundTable", async () => {
     mockedUseApplications.mockImplementation(() => ({
       ordered: [],
-      loading: null,
-      loadedAt: "someTime",
+      isLoaded: true,
     }));
     mockedUseUi.mockImplementation(() => ({ stage: "first_filter" }));
     const { debug, getByTestId } = render(
