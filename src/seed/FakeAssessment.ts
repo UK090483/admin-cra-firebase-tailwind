@@ -24,7 +24,7 @@ const FakeAssessment: (
   judge_id,
   mock_in_process = false
 ) => {
-  const { point, sum } = pointGenerator();
+  const { point } = pointGenerator();
 
   return {
     ...base,
