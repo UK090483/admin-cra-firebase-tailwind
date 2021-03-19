@@ -5,8 +5,6 @@
 import FakeAssessment from "seed/FakeAssessment";
 import assessmentReducer from "../assessmentReducer";
 import { AssessmentHelper } from "../../helper/AssessmentHelper";
-import { IAssessmentRecord } from "../../types";
-import { result } from "underscore";
 
 const initialState = {
   data: {},
@@ -78,7 +76,9 @@ describe("AssessmentReducer should return Data", () => {
         testJudge1: tAss1.result,
       },
     });
+  });
 
+  it("should return assessment Data2", () => {
     expect(
       getReducer({
         ordered: [
@@ -106,7 +106,9 @@ describe("AssessmentReducer should return Data", () => {
         },
       },
     });
+  });
 
+  it("should return assessment Data3", () => {
     expect(
       getReducer({
         ordered: [
@@ -141,7 +143,9 @@ describe("AssessmentReducer should return Data", () => {
         },
       },
     });
+  });
 
+  it("should return assessment Data4", () => {
     expect(
       getReducer({
         ordered: [
