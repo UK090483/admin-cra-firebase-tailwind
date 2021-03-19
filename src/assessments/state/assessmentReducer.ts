@@ -50,6 +50,8 @@ const AssessmentSlice = createSlice({
 
         if (Array.isArray(action.payload.ordered)) {
           action.payload.ordered.forEach((judge: IJudgeRecord) => {
+            state.judgeTypes[judge.id] = judge.judgeType;
+
             if (!judge.assessments) return;
             const judgeAvr = AssessmentHelper.getAverage();
 
@@ -77,7 +79,10 @@ const AssessmentSlice = createSlice({
         }
       })
       .addMatcher(isModifiedJudge, (state, action) => {
-        const currentState = current(state).data;
+        const currentData = current(state).data;
+        const currentJudeTypes = current(state).judgeTypes;
+
+        if (!action.payload.data) return;
         const _judge = action.payload.data as IJudgeRecord;
         if (_judge.assessments) {
           const judgeAvr = AssessmentHelper.getAverage();
@@ -88,13 +93,16 @@ const AssessmentSlice = createSlice({
 
             AddingAssessmentsByApplicationId(state, assessment, sum);
 
-            // const newSum = updateSumNeeded(currentState, assessment);
+            const newSum = updateSumNeeded(
+              currentData,
+              currentJudeTypes,
+              assessment
+            );
 
-            // if (newSum) {
-            //   state.sumByApplicationId[assessment.application_id][
-            //     _judge.judgeType
-            //   ] = newSum;
-            // }
+            if (newSum) {
+              state.sumByApplicationId[assessment.application_id] =
+                newSum[assessment.application_id];
+            }
           });
           state.judgeAverages[action.payload.id] = judgeAvr.getResult();
         }
@@ -118,24 +126,31 @@ const AddingAssessmentsByApplicationId = (
   };
 };
 
-// const updateSumNeeded = (
-//   current: any,
-//   next: IAssessmentRecord
-// ): number | null => {
-//   const _currentAssessment =
-//     current[next.application_id] && current[next.application_id][next.judge_id];
-//   if (!_currentAssessment) return null;
+const updateSumNeeded = (
+  currentData: any,
+  currentJudeTypes: any,
+  next: IAssessmentRecord
+) => {
+  const _currentAssessment =
+    currentData[next.application_id] &&
+    currentData[next.application_id][next.judge_id];
+  if (!_currentAssessment) return null;
 
-//   if (AssessmentHelper.isEqual(_currentAssessment, next)) return null;
+  if (AssessmentHelper.isEqual(_currentAssessment, next)) return null;
 
-//   const avr = AssessmentHelper.getAverage();
+  const collectSum = AssessmentHelper.sumMultiple();
 
-//   Object.values(current[next.application_id]).forEach((assessment) => {
-//     if (assessment && typeof assessment === "object") {
-//       const _a = assessment as IAssessmentRecord;
-//       _a.sum && avr.add(_a.sum);
-//     }
-//   });
-//   return avr.getResult() || null;
-//   console.log(next.application_id + " needs update");
-// };
+  for (let assessment of Object.values(currentData[next.application_id])) {
+    if (assessment && typeof assessment === "object") {
+      let _a = assessment as IAssessmentRecord;
+      if (_currentAssessment.judge_id === _a.judge_id) {
+        _a = next;
+      }
+
+      const sum = AssessmentHelper.sumAssessmentPoints(_a);
+      collectSum.add(_a.application_id, sum, currentJudeTypes[_a.judge_id]);
+    }
+  }
+
+  return collectSum.getResult();
+};
