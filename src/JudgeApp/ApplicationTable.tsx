@@ -10,6 +10,7 @@ import TableFilter from "./TableFilter";
 import useApplications from "applications/hooks/useApplications";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/Reducers/RootReducer";
+import PageLoading from "components/Spinner/PageLoading";
 
 const columnsFirstRound: IColumn[] = [
   {
@@ -51,19 +52,24 @@ const columnsFirstRound: IColumn[] = [
 interface FirstRoundTableProps {}
 
 const FirstRoundTable: React.FC<FirstRoundTableProps> = () => {
+  const history = useHistory();
   const { ordered } = useApplications();
-
-  const { id, assessments } = useSelector((state: RootState) => ({
+  const { id, assessments, judgeType } = useSelector((state: RootState) => ({
     id: state.fb.auth.uid,
     assessments: state.fb.profile.assessments,
+    judgeType: state.fb.profile.judgeType,
   }));
+
+  if (!judgeType) {
+    return <PageLoading />;
+  }
 
   const filtered =
     ordered &&
     ordered.filter((element) => {
-      return (
-        element.assessments && (element.assessments as string[]).includes(id)
-      );
+      return judgeType === "pre"
+        ? element.assessments && element.assessments.includes(id)
+        : (element.stateTree = "accepted");
     });
 
   const withSum =
@@ -83,10 +89,8 @@ const FirstRoundTable: React.FC<FirstRoundTableProps> = () => {
           : "---",
     }));
 
-  let history = useHistory();
-
   if (!withSum) {
-    return <div>loading...</div>;
+    return <PageLoading />;
   }
 
   return (

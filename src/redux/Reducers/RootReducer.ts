@@ -10,10 +10,11 @@ import JudgeAppReducer, {
 } from "JudgeApp/state/JudgeAppReducer";
 
 import { firestoreReducer } from "redux-firestore";
-import { IJudgeRecord } from "../../judges/JudgeTypes";
+import { IJudgeRecord, judgeType } from "../../judges/JudgeTypes";
 import assessmentReducer, {
   IAssessmentState,
 } from "assessments/state/assessmentReducer";
+import { IApplicationTableItem } from "applications/ApplicationTypes";
 
 interface FirebaseState {
   auth: any;
@@ -26,12 +27,14 @@ export interface JudgeData {
 interface FireStoreData {
   judges?: JudgeData;
   applications?: any;
-  tableDoc?: any;
+  tableDoc?: {
+    [k: string]: { [k: string]: Omit<IApplicationTableItem, "id"> };
+  };
   users?: any;
 }
 interface FireStoreOrdered {
   judges?: IJudgeRecord[];
-  applications?: any;
+  applications?: [{ [k: string]: Omit<IApplicationTableItem, "id"> }];
   tableDoc?: any;
   users?: any;
 }
@@ -44,6 +47,7 @@ interface FireStoreReducer {
 interface UserProfile {
   email: string;
   assessments?: any;
+  judgeType?: judgeType;
 }
 interface DBSchema {
   [name: string]: any;

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useFirebaseConnect } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import { RootState } from "redux/Reducers/RootReducer";
+import NoDataPanel from "../../components/NoDataPanel";
 
 function Judges() {
   const { judgesOrdered } = useJudges();
@@ -27,7 +28,7 @@ function Judges() {
   let history = useHistory();
 
   if (!judgesWithPresence) {
-    return <PageLoading />;
+    return <NoDataPanel text={"No Judges yet"} createPath="/judges/create" />;
   }
 
   return (

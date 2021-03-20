@@ -2,9 +2,9 @@ import * as fs from "fs";
 import { config } from "dotenv";
 config();
 
-import { getDataFromJotform } from "./helper/getDataFromJotForm";
-import { handleMedia } from "./helper/handleMedia";
-import { parseJotFormData } from "./helper/jotFormDataMaper";
+import { getDataFromJotform } from "./lib/getDataFromJotForm";
+import { handleMedia } from "./lib/handleMedia";
+import { parseJotFormData } from "./lib/jotFormDataMaper";
 
 const run = async () => {
   const res: any = await getDataFromJotform();

@@ -34,7 +34,7 @@ const AssessmentView: React.FC = () => {
     : null;
 
   return (
-    <>
+    <div className="animate-fadeIn ">
       <ArrowLeftOutline
         className="-mt-6"
         size={40}
@@ -55,7 +55,7 @@ const AssessmentView: React.FC = () => {
           <ApplicationAccordion application={application} />
         </>
       )}
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,9 @@
 import * as faker from "faker";
-import { IApplicationRecord } from "applications/ApplicationTypes";
+import {
+  IApplicationRecord,
+  IMediaItemImage,
+  IMediaItemPdf,
+} from "applications/ApplicationTypes";
 import { base } from "./helper";
 import { firebase } from "misc/firebase";
 
@@ -54,12 +58,10 @@ export const FakeApplication: () => IApplicationRecord = () => {
     collaborateWithEntityHamburg: faker.lorem.text(300),
     howDidYouHearAboutFHA: faker.lorem.word(),
 
-    companyLogo: [...new Array(faker.random.number(3))]
+    companyLogo: [...new Array(faker.random.number(1 + 3))]
       .fill("a")
       .map(() => getMediaElement("image")),
-    // companyDeck: [...new Array(faker.random.number(2))]
-    //   .fill("a")
-    //   .map(() => getMediaElement("pdf")),
+
     companyDeck: [getMediaElement("pdf")],
 
     state: "created",
@@ -68,13 +70,13 @@ export const FakeApplication: () => IApplicationRecord = () => {
   return application;
 };
 
-const getMediaElement = (type: string) => {
+const getMediaElement = (type: string): IMediaItemImage | IMediaItemPdf => {
   if (type === "image") {
-    return { type, src: faker.random.image() };
+    return { type: "image", src: faker.random.image() };
   }
 
   return {
-    type,
+    type: "pdf",
     src: faker.image.imageUrl(),
     pdfAsImages: [...new Array(1 + faker.random.number(22))]
       .fill("a")

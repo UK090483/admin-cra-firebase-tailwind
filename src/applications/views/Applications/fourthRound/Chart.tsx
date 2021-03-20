@@ -4,13 +4,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "redux/Reducers/RootReducer";
 import useUi from "hooks/useUi";
 import Switch from "components/Buttons/Switch/Switch";
+import { round, getSumIn100 } from "../../../../helper/round";
 
 export interface IChartProps {
   rows: IApplicationRecord[];
 }
 export function Chart(props: IChartProps) {
   const { rows } = props;
-  const { judges } = useJudges();
+  const { judges, judgeAverages } = useJudges();
 
   const {
     sumIn100,
@@ -19,18 +20,13 @@ export function Chart(props: IChartProps) {
     toggleIntegrateJudgeAverages,
   } = useUi();
 
-  // const judgeAverages = useSelector(
-  //   (state: RootState) => state.applications.judgeAverages
-  // );
-
-  const judgeAverages = {};
   return (
     <div className=" bg-white rounded-xl shadow-2xl my-6 p-4">
       <div className="flex flex-wrap mb-2">
-        {/* {judgeAverages &&
+        {judgeAverages &&
           judges &&
-          Object.entries(judgeAverages).map(([judgeId, averages]) => {
-            return (
+          Object.entries(judgeAverages).map(([judgeId, average]) => {
+            return judges[judgeId] ? (
               <div
                 key={judgeId}
                 className={`${
@@ -38,10 +34,13 @@ export function Chart(props: IChartProps) {
                 } w-50 p-3`}
               >
                 <h5>{judges[judgeId].name}</h5>
-                {"∅" + Math.round(averages * 100) / 100}
+                {average &&
+                  (sumIn100
+                    ? "∅" + getSumIn100(average)
+                    : "∅" + round(average))}
               </div>
-            );
-          })} */}
+            ) : null;
+          })}
       </div>
       <div className="flex w-1/4 justify-between mb-2">
         <span>Sum to 100</span>

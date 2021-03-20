@@ -6,6 +6,8 @@ import useJudges from "judges/hooks/useJudges";
 import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
 import ManageJudgesChip from "./ManageJudgesChip";
 import { IAssessmentRecord } from "assessments/types";
+import useUi from "../../../../hooks/useUi";
+import { getSumIn100 } from "../../../../helper/round";
 
 export interface IJudgeChipsProps {
   row: IRow;
@@ -20,13 +22,15 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
 }) => {
   const { judges } = useJudges();
 
+  const { sumIn100 } = useUi();
+
   let assessments = row.assessments ? (row.assessments as string[]) : [];
   if (type === "main" && judges) {
     const res: string[] = [];
     Object.values(judges).forEach((judge) => {
       if (judge.judgeType === "pre") return;
       if (!judge.assessments) return;
-      console.log("has assessments");
+
       if (Object.keys(judge.assessments).includes(row.id)) {
         res.push(judge.id);
       }
@@ -50,38 +54,51 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
 
       if (judge.judgeType !== type) return null;
 
-      return (
-        <Popup
-          key={index}
-          contentStyle={{
-            width: "fit-content",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "black",
-            color: "white",
-          }}
-          trigger={
-            <div>
-              <Chip
-                status={judgeAssessment && judgeAssessment.status}
-                state={
-                  judgeAssessment &&
-                  AssessmentHelper.getAssessmentState(judgeAssessment)
-                }
-                name={judge.name}
-                color={judge.color}
-                className="-ml-2 "
-              />
-            </div>
-          }
-          on="hover"
-          position="top center"
-        >
-          {judgeAssessment &&
-            AssessmentHelper.evaluateAssessment(judgeAssessment).sum}
-        </Popup>
-      );
+      const sum =
+        judgeAssessment &&
+        AssessmentHelper.sumAssessmentPoints(judgeAssessment);
+
+      const sumPrepared = sum && (sumIn100 ? getSumIn100(sum) : sum);
+
+      const ChipInner = () => {
+        return (
+          <div>
+            <Chip
+              status={judgeAssessment && judgeAssessment.status}
+              state={
+                judgeAssessment &&
+                AssessmentHelper.getAssessmentState(judgeAssessment)
+              }
+              name={judge.name}
+              color={judge.color}
+              className="-ml-2 "
+            />
+          </div>
+        );
+      };
+
+      if (sumPrepared) {
+        return (
+          <Popup
+            key={index}
+            contentStyle={{
+              width: "fit-content",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "black",
+              color: "white",
+            }}
+            trigger={ChipInner()}
+            on="hover"
+            position="top center"
+          >
+            {sumPrepared && sumPrepared}
+          </Popup>
+        );
+      }
+
+      return ChipInner();
     });
   };
 

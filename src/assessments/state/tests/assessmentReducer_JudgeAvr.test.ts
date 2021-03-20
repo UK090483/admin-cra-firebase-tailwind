@@ -29,11 +29,16 @@ const getReducer = (
 };
 
 const testAssessment = (applicationId = 1, judgeId = 1, done = false) => {
-  return FakeAssessment(
+  const assessment = FakeAssessment(
     `testApplication${applicationId}`,
     `testJudge${judgeId}`,
     done
   );
+
+  if (done) {
+    delete assessment.isClearUSP;
+  }
+  return assessment;
 };
 
 const testAssessmentWithRes = (

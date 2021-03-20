@@ -96,34 +96,34 @@ class Seed {
     }
   };
 
-  private judgeAssessment = async (
-    application: IApplicationRecord,
-    mock_in_process: boolean
-  ) => {
-    if (!application.assessments) {
-      console.log("got application with no assessments");
-      return null;
-    }
+  // private judgeAssessment = async (
+  //   application: IApplicationRecord,
+  //   mock_in_process: boolean
+  // ) => {
+  //   if (!application.assessments) {
+  //     console.log("got application with no assessments");
+  //     return null;
+  //   }
 
-    const nextAssessments = Object.entries(application.assessments).reduce(
-      (acc, [key, value]) => {
-        return {
-          ...acc,
-          [key]: FakeAssessment(
-            value.application_id,
-            value.judge_id,
-            mock_in_process
-          ),
-        };
-      },
-      {}
-    );
+  //   const nextAssessments = Object.entries(application.assessments).reduce(
+  //     (acc, [key, value]) => {
+  //       return {
+  //         ...acc,
+  //         [key]: FakeAssessment(
+  //           value.application_id,
+  //           value.judge_id,
+  //           mock_in_process
+  //         ),
+  //       };
+  //     },
+  //     {}
+  //   );
 
-    await db
-      .collection("applications")
-      .doc(application.id)
-      .update({ assessments: nextAssessments, ...getCreateData() });
-  };
+  //   await db
+  //     .collection("applications")
+  //     .doc(application.id)
+  //     .update({ assessments: nextAssessments, ...getCreateData() });
+  // };
 
   clear = async () => {
     await this.batchErase("applications");
@@ -175,13 +175,6 @@ class Seed {
         stage: application.stage,
         foundingDate: application.foundingDate,
         headquarters: application.headquarters,
-        ...(application.assessments && {
-          assessments: Object.values(application.assessments).map(
-            (assessment) => assessment.judge_id
-          ),
-        }),
-        ...(application.statePre && { statePre: application.statePre }),
-        ...(application.stateTree && { statePre: application.stateTree }),
       };
     });
 

@@ -11,16 +11,27 @@ export interface IApplicationAssessment {
   [id: string]: IAssessmentRecord;
 }
 
-export interface IMediaItemImage {
-  type: "image";
-  src: string;
-  id: string;
-}
+// export interface IMediaItemImage {
+//   type: "image";
+//   src: string;
+//   // id: string;
+// }
 
-export interface IMediaItemPdf {
-  type: "pdf";
-  pdfAsImages: string[];
-  src: string;
+export type IMediaItemImage = { type: "image"; src: string };
+
+export type IMediaItemPdf = { type: "pdf"; pdfAsImages: string[]; src: string };
+
+// export interface IMediaItemPdf {
+//   type: "pdf";
+//   pdfAsImages: string[];
+//   src: string;
+//   // id: string;
+// }
+
+export interface IApplicationTableItem {
+  assessments: string[];
+  statePre?: ApplicationStatePre;
+  stateTree?: ApplicationStatePre;
   id: string;
 }
 
@@ -63,16 +74,15 @@ export interface IApplicationRecord extends RecordBase {
   collaborateWithEntityHamburg: string;
   howDidYouHearAboutFHA: string;
 
-  companyLogo: any;
-  companyDeck: any;
+  companyLogo: (IMediaItemImage | IMediaItemPdf)[];
+  companyDeck: (IMediaItemImage | IMediaItemPdf)[];
 
   state: string;
-  statePre?: ApplicationStatePre;
-  stateTree?: ApplicationStatePre;
-  sum?: number | undefined;
-  mainSum?: number | undefined;
-  preSum?: number | undefined;
-  assessments?: IApplicationAssessment;
+  // statePre?: ApplicationStatePre;
+  // stateTree?: ApplicationStatePre;
+  // sum?: number | undefined;
+  // mainSum?: number | undefined;
+  // preSum?: number | undefined;
 }
 
 export interface IApplicationUpdateAbles {

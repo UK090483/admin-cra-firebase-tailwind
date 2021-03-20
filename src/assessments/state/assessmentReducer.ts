@@ -14,6 +14,11 @@ export interface IAssessmentState {
     [A: string]: { main: number; pre: number; all: number };
   };
   judgeTypes: { [k: string]: judgeType };
+  withJudgeAvr?: {
+    [applicationId: string]: {
+      [judgeId: string]: number;
+    };
+  };
 }
 
 function isJudgeResponse(action: AnyAction): action is AnyAction {

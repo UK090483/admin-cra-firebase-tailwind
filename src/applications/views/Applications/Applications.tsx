@@ -8,6 +8,7 @@ import useUi from "hooks/useUi";
 import StageButton from "./StageButton";
 import TableExport from "./TableExport/tableExport";
 import PageLoading from "components/Spinner/PageLoading";
+import NoDataPanel from "../../../components/NoDataPanel";
 
 const Applications: React.FC = () => {
   const { ordered, isLoaded } = useApplications();
@@ -30,6 +31,10 @@ const Applications: React.FC = () => {
 
   if (!isLoaded) {
     return <PageLoading />;
+  }
+
+  if (!ordered) {
+    return <NoDataPanel text={"No Applications yet"} />;
   }
 
   return (

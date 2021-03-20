@@ -1,10 +1,11 @@
+import { IApplicationTableItem } from "applications/ApplicationTypes";
 import { shallowEqual, useSelector } from "react-redux";
 import { isLoaded } from "react-redux-firebase";
 import { RootState } from "redux/Reducers/RootReducer";
 
 interface IUseApplicationReturn {
   data: { [k: string]: any } | undefined;
-  ordered: any[] | undefined;
+  ordered: IApplicationTableItem[] | undefined;
   isLoaded: boolean;
 }
 
@@ -18,7 +19,7 @@ export default function useApplications(): IUseApplicationReturn {
       ordered:
         state.firestore.data.tableDoc?.first &&
         Object.entries(
-          state.firestore.data.tableDoc.first // @ts-ignore
+          state.firestore.data.tableDoc.first
         ).map(([key, value]) => ({ ...value, id: key })),
     }),
     shallowEqual

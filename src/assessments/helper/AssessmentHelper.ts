@@ -293,52 +293,52 @@ export class AssessmentC {
     };
   };
 
-  getSumApplication = (
-    application: IApplicationRecord,
-    judges: JudgeData,
-    sumIn100: boolean,
-    integrateJudgeAverages: boolean,
-    judgeAverages: IJudgeAverages
-  ) => {
-    const main = this.getAverage();
-    const pre = this.getAverage();
-    const acc = this.getAverage();
+  // getSumApplication = (
+  //   application: IApplicationRecord,
+  //   judges: JudgeData,
+  //   sumIn100: boolean,
+  //   integrateJudgeAverages: boolean,
+  //   judgeAverages: IJudgeAverages
+  // ) => {
+  //   const main = this.getAverage();
+  //   const pre = this.getAverage();
+  //   const acc = this.getAverage();
 
-    if (!judges) {
-      return {
-        sum: undefined,
-        pre: undefined,
-        main: undefined,
-      };
-    }
+  //   if (!judges) {
+  //     return {
+  //       sum: undefined,
+  //       pre: undefined,
+  //       main: undefined,
+  //     };
+  //   }
 
-    if (application.assessments) {
-      Object.values(application.assessments).forEach((_assessment) => {
-        if (_assessment.status === "hidden") {
-          return;
-        }
+  //   if (application.assessments) {
+  //     Object.values(application.assessments).forEach((_assessment) => {
+  //       if (_assessment.status === "hidden") {
+  //         return;
+  //       }
 
-        const assessment = this.evaluateAssessment(
-          _assessment,
-          sumIn100,
-          integrateJudgeAverages,
-          judgeAverages
-        );
-        assessment.sum && acc.add(assessment.sum);
-        if (judges[assessment.judge_id].judgeType === "main") {
-          assessment.sum && main.add(assessment.sum);
-        } else {
-          assessment.sum && pre.add(assessment.sum);
-        }
-      });
-    }
+  //       const assessment = this.evaluateAssessment(
+  //         _assessment,
+  //         sumIn100,
+  //         integrateJudgeAverages,
+  //         judgeAverages
+  //       );
+  //       assessment.sum && acc.add(assessment.sum);
+  //       if (judges[assessment.judge_id].judgeType === "main") {
+  //         assessment.sum && main.add(assessment.sum);
+  //       } else {
+  //         assessment.sum && pre.add(assessment.sum);
+  //       }
+  //     });
+  //   }
 
-    return {
-      sum: acc.getResult(),
-      pre: pre.getResult(),
-      main: main.getResult(),
-    };
-  };
+  //   return {
+  //     sum: acc.getResult(),
+  //     pre: pre.getResult(),
+  //     main: main.getResult(),
+  //   };
+  // };
 }
 
 const AssessmentHelper = new AssessmentC(Fields);

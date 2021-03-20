@@ -3,5 +3,12 @@ WARNING: Illegal reflective access by io.netty.util.internal.ReflectionUtil (fil
 WARNING: Please consider reporting this to the maintainers of io.netty.util.internal.ReflectionUtil
 WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
 WARNING: All illegal access operations will be denied in a future release
-20:06:14.303 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-20:06:14.483 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+11:48:20.062 [NamespaceSystem-akka.actor.default-dispatcher-4] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+11:48:20.280 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+13:18:09.215 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+13:18:09.239 [NamespaceSystem-akka.actor.default-dispatcher-33] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: schwan-bewerbung-default-rtdb, schwan-bewerbung
+13:18:09.247 [NamespaceSystem-akka.actor.default-dispatcher-41] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for schwan-bewerbung-default-rtdb
+13:18:09.249 [NamespaceSystem-akka.actor.default-dispatcher-41] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for schwan-bewerbung-default-rtdb
+13:18:09.258 [NamespaceSystem-akka.actor.default-dispatcher-39] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for schwan-bewerbung
+13:18:09.259 [NamespaceSystem-akka.actor.default-dispatcher-39] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for schwan-bewerbung
+13:18:09.263 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

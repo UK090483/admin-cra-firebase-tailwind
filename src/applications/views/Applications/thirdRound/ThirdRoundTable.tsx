@@ -1,4 +1,4 @@
-import { IApplicationRecord } from "applications/ApplicationTypes";
+import { IApplicationTableItem } from "applications/ApplicationTypes";
 import useAssessments from "assessments/hooks/useAssessments";
 import PageLoading from "components/Spinner/PageLoading";
 import Table from "components/Table/Table";
@@ -11,18 +11,18 @@ import Sum from "../Sum";
 import ThirdRoundFilter from "./ThirdRoundFilter";
 
 interface ThirdRoundTableProps {
-  data: IApplicationRecord[] | undefined;
+  data: IApplicationTableItem[] | undefined;
 }
 
 const ThirdRoundTable: React.FC<ThirdRoundTableProps> = ({ data }) => {
+  const history = useHistory();
+  const { sumByApplicationId } = useAssessments();
+
   if (!data) {
     return <PageLoading></PageLoading>;
   }
 
   const cleanData = data.filter((data) => data.statePre === "accepted");
-  const history = useHistory();
-
-  const { sumByApplicationId } = useAssessments();
 
   const withSum = cleanData.map((item) => {
     return {

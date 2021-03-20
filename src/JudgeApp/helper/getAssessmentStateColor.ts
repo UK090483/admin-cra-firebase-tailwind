@@ -20,17 +20,13 @@ const getApplicationStateColor = (application: any) => {
     : "bg-yellow-300 text-white";
 };
 
-const getApplicationState = (application: IApplicationRecord) => {
-  if (application.assessments) {
-    return AssessmentHelper.getAssessmentState(
-      Object.values(application.assessments)[0]
-    );
-  }
-  return "";
-};
+// const getApplicationState = (application: IApplicationRecord) => {
+//   if (application.assessments) {
+//     return AssessmentHelper.getAssessmentState(
+//       Object.values(application.assessments)[0]
+//     );
+//   }
+//   return "";
+// };
 
-export {
-  getAssessmentStateColor,
-  getApplicationStateColor,
-  getApplicationState,
-};
+export { getAssessmentStateColor, getApplicationStateColor };

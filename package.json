@@ -73,7 +73,7 @@
     "firebase-emulate": "firebase emulators:start --import seedData ",
     "build": "run-s build:css react-scripts:build",
     "test": "react-scripts test --env=node --coverage=true --verbose",
-    "test-dev": "react-scripts test --env=node --verbose -o",
+    "testDev": "react-scripts test --env=node --coverage=true --verbose -o",
     "eject": "react-scripts eject",
     "build:css": "cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
     "watch:css": "cross-env NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch",

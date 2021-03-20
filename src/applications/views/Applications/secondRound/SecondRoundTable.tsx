@@ -9,10 +9,12 @@ import TextPreview from "../TextPreview";
 import SecondRoundBulk from "./secondRoundBulk";
 
 interface SecondRoundTableProps {
-  data: IApplicationRecord[] | undefined;
+  data: any[] | undefined;
 }
 
 const SecondRoundTable: React.FC<SecondRoundTableProps> = ({ data }) => {
+  const history = useHistory();
+
   if (!data) {
     return <PageLoading></PageLoading>;
   }
@@ -23,7 +25,6 @@ const SecondRoundTable: React.FC<SecondRoundTableProps> = ({ data }) => {
       ...item,
       judgeCount: item.assessments ? Object.keys(item.assessments).length : 0,
     }));
-  const history = useHistory();
 
   return (
     <div className="animate-fadeIn">

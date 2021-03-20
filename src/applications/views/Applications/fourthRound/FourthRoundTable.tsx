@@ -1,20 +1,14 @@
+import { IApplicationTableItem } from "applications/ApplicationTypes";
+import useAssessments from "assessments/hooks/useAssessments";
+import PageLoading from "components/Spinner/PageLoading";
+import Table from "components/Table/Table";
 import { IColumn } from "components/Table/types";
 import React from "react";
+import useUi from "../../../../hooks/useUi";
 import JudgeChips from "../JudgeChips";
 import Sum from "../Sum";
-import { IApplicationRecord } from "applications/ApplicationTypes";
-
-import Table from "components/Table/Table";
-import useJudges from "judges/hooks/useJudges";
-import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
-
-import { useSelector } from "react-redux";
-import { RootState } from "redux/Reducers/RootReducer";
-import { Chart } from "./Chart";
-import useUi from "../../../../hooks/useUi";
-import useAssessments from "assessments/hooks/useAssessments";
 import TableExport from "../TableExport/tableExport";
-import PageLoading from "components/Spinner/PageLoading";
+import { Chart } from "./Chart";
 
 const fourthRoundColumns: IColumn[] = [
   {
@@ -70,7 +64,7 @@ const fourthRoundColumns: IColumn[] = [
 ];
 
 interface FourthRoundTableProps {
-  data: IApplicationRecord[] | undefined;
+  data: IApplicationTableItem[] | undefined;
 }
 
 const FourthRoundTable: React.FC<FourthRoundTableProps> = ({ data }) => {

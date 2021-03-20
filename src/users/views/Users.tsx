@@ -6,6 +6,7 @@ import { IRow } from "components/Table/types";
 import { useSelector } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { RootState } from "../../redux/Reducers/RootReducer";
+import NoDataPanel from "components/NoDataPanel";
 
 const Users: React.FC = () => {
   useFirestoreConnect([{ collection: "users" }]);
@@ -13,8 +14,8 @@ const Users: React.FC = () => {
     (state: RootState) => state.firestore.ordered.users
   );
 
-  if (!users) {
-    return <div>loading</div>;
+  if (!users || users.length < 1) {
+    return <NoDataPanel text={"No Users yet"} createPath="/users/create" />;
   }
 
   return (
