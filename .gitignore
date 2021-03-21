@@ -32,3 +32,6 @@ index.css
 firebase-debug.log
 firestore-debug.log
 database-debug.log
+
+
+.eslintcache
