@@ -1,31 +1,64 @@
-import useJudges from "judges/hooks/useJudges";
-import { update } from "lodash";
+import { useActions } from "hooks/useActions";
 import * as React from "react";
-import { useHistory, useParams } from "react-router";
-import Form from "../../components/Form/Form";
+import { useParams } from "react-router";
+import { RouteComponentProps } from "react-router-dom";
+import Form, { FormField } from "../../components/Form/Form";
+import { AssessmentHelper } from "../helper/AssessmentHelper";
+import useAssessments from "../hooks/useAssessments";
 
-import useApplications from "applications/hooks/useApplications";
-
-interface IAssessmentUpdateProps {}
+interface IAssessmentUpdateProps extends RouteComponentProps {}
 
 interface ParamTypes {
-  id: string;
+  judge_id: string;
+  application_id: string;
 }
 
-const AssessmentUpdate: React.FunctionComponent<IAssessmentUpdateProps> = () => {
-  let { id } = useParams<ParamTypes>();
-  const { judges } = useJudges();
+const AssessmentUpdate: React.FunctionComponent<IAssessmentUpdateProps> = (
+  props
+) => {
+  const { updateAssessment } = useActions();
+
+  const { goBack } = props.history;
+
+  let { judge_id, application_id } = useParams<ParamTypes>();
+  const { AssessmentsByApplicationId } = useAssessments();
+
+  const assessment =
+    AssessmentsByApplicationId &&
+    AssessmentsByApplicationId[application_id] &&
+    AssessmentsByApplicationId[application_id][judge_id];
+
+  const fields: FormField[] = AssessmentHelper.getQuestions().map((field) => ({
+    type: "points",
+    label: field.label,
+    name: field.source,
+  }));
+
+  if (!assessment) return <div></div>;
+
+  const updateAbles = AssessmentHelper.getQuestions().reduce(
+    (acc, q) => ({
+      ...acc, // @ts-ignore
+      ...(assessment[q.source] && { [q.source]: assessment[q.source] }),
+    }),
+    {}
+  );
 
   return (
-    <div>AssessmentUpdate</div>
-    // <Form
-    //   formFields={}
-    //   submitLabel="Update"
-    //   onSubmit={(res) => {
-
-    //     history.push("/judges");
-    //   }}
-    // ></Form>
+    <div>
+      <div>AssessmentUpdate</div>
+      <Form
+        formFields={fields}
+        submitLabel="Update"
+        initialValues={updateAbles}
+        onSubmit={(v, helpers) => {
+          updateAssessment({ application_id, judge_id, data: v }).then(() => {
+            goBack();
+          });
+          helpers.resetForm({ values: v });
+        }}
+      ></Form>
+    </div>
   );
 };
 

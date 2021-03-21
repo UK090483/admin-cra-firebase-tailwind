@@ -69,7 +69,7 @@ const FirstRoundTable: React.FC<FirstRoundTableProps> = () => {
     ordered.filter((element) => {
       return judgeType === "pre"
         ? element.assessments && element.assessments.includes(id)
-        : (element.stateTree = "accepted");
+        : element.stateTree === "accepted";
     });
 
   const withSum =

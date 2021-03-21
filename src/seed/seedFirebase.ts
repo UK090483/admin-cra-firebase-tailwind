@@ -175,6 +175,9 @@ class Seed {
         stage: application.stage,
         foundingDate: application.foundingDate,
         headquarters: application.headquarters,
+        howIsCompanyFunded: application.howIsCompanyFunded,
+        salesStrategy: application.salesStrategy,
+        productReadiness: application.productReadiness,
       };
     });
 

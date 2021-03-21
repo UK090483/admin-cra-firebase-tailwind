@@ -5,14 +5,14 @@ import Button from "components/Buttons/Button";
 import Form, { FormValues } from "components/Form/Form";
 import { Spinner } from "components/Spinner/Spinner";
 import { FormikProps } from "formik";
+import { useActions } from "hooks/useActions";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { RoutingParam } from "types";
-import useApplicationActions from "../../hooks/useApplicationActions";
 
 const ApplicationUpdate: React.FC = () => {
   let { id } = useParams<RoutingParam>();
-  const { updateApplication } = useApplicationActions();
+  const { updateApplication } = useActions();
   const { application } = useApplication(id);
 
   if (!application) {

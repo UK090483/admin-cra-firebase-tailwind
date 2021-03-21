@@ -16,6 +16,7 @@ import Dashboard from "../../dashbord/view/Dashbord";
 import JudgeCreate from "../../judges/views/JudgeCreate";
 
 import AdminNavbar from "./AdminNavbar";
+import AssessmentUpdate from "../../assessments/views/assessmentUpdate";
 
 const Admin: React.FC = () => {
   const { sidebarOpen } = useUi();
@@ -58,6 +59,12 @@ const Admin: React.FC = () => {
             <Route path="/judges/create" exact component={JudgeCreate} />
             <Route path="/judges/:id" exact component={Judge} />
             <Route path="/judges/:id/update" exact component={JudgeUpdate} />
+
+            <Route
+              path="/assessment/:application_id/:judge_id/update"
+              exact
+              component={AssessmentUpdate}
+            />
           </Switch>
         </div>
       </div>

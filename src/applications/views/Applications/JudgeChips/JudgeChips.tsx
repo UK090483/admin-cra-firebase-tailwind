@@ -62,7 +62,7 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
 
       const ChipInner = () => {
         return (
-          <div>
+          <div key={index}>
             <Chip
               status={judgeAssessment && judgeAssessment.status}
               state={

@@ -1,69 +1,106 @@
-import * as React from "react";
-import * as ExcelJS from "exceljs";
-import { ApplicationHelper } from "applications/helper/ApplicationHelper";
+import useApplications from "applications/hooks/useApplications";
 import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
-import useJudges from "judges/hooks/useJudges";
+import useAssessments from "assessments/hooks/useAssessments";
+import Loading from "components/Spinner/Loading";
+import * as ExcelJS from "exceljs";
 import { getCssfromColorClass } from "helper/getColorFromclass";
-import useAssessments from "../../../../assessments/hooks/useAssessments";
-import { JudgeData, RootState } from "../../../../redux/Reducers/RootReducer";
-import { useSelector } from "react-redux";
-import { Key } from "heroicons-react";
+import useJudges from "judges/hooks/useJudges";
+import * as React from "react";
+import { JudgeData } from "redux/Reducers/RootReducer";
+import { round } from "../../../../helper/round";
+import { Spinner } from "../../../../components/Spinner/Spinner";
 
 interface ITableExportProps {}
 
 const TableExport: React.FunctionComponent<ITableExportProps> = () => {
   const [url, setUrl] = React.useState("");
+  const [building, setBuilding] = React.useState(false);
 
   const { judges } = useJudges();
   const { AssessmentsByApplicationId } = useAssessments();
 
-  const applications = useSelector(
-    (state: RootState) => state.firestore.data.tableDoc?.first
-  );
+  const { ordered: applications } = useApplications();
+  const { sumByApplicationId } = useAssessments();
 
-  React.useEffect(() => {
+  const createTable = () => {
     if (!judges) return;
+    setBuilding(true);
     const workbook = new ExcelJS.Workbook();
     const worksheetApplications = workbook.addWorksheet("Applications");
 
     worksheetApplications.columns = buildColumns(judges);
 
     if (applications) {
-      Object.entries(applications).forEach((element: any) => {
-        const [id, application] = element;
+      Object.values(applications).forEach((application) => {
+        const { id } = application;
+
         if (application.stateTree !== "accepted") return;
 
         worksheetApplications.addRow({
           ...application,
           id,
           ...judgeToTableData(judges, id),
+          sum: sumByApplicationId[id]
+            ? round(sumByApplicationId[id].main)
+            : "---",
         });
       });
+
+      worksheetApplications.eachRow((row) => {
+        row.border = { bottom: { style: "thin" }, left: { style: "thin" } };
+      });
+
       getJudgeNames(judges, worksheetApplications);
       workbook.xlsx.writeBuffer().then((data) => {
-        console.log("doc ready");
         const blob = new Blob([data], {
           type:
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
         const url = window.URL.createObjectURL(blob);
+
         setUrl(url);
+        setBuilding(false);
       });
     }
-  }, [AssessmentsByApplicationId, judges]);
+  };
 
-  return (
-    <a href={url} download>
-      Export
-    </a>
-  );
+  if (building) {
+    return (
+      <div className="w-20">
+        <Spinner size="2/3" />
+      </div>
+    );
+  }
+
+  if (url) {
+    return (
+      <a
+        href={url}
+        download
+        onClick={() => {
+          setTimeout(() => setUrl(""), 20);
+        }}
+      >
+        Download
+      </a>
+    );
+  }
+
+  return <a onClick={createTable}>Export</a>;
 };
 
 const getJudgeNames = (judges: JudgeData, ws: ExcelJS.Worksheet) => {
   ws.insertRow(0, {});
-  Object.values(judges).forEach((judge, index) => {
-    ws.getCell(1, 6 + index * 11).value = judge.name;
-  });
+
+  Object.values(judges)
+    .filter((judge) => judge.judgeType === "main")
+    .forEach((judge, index) => {
+      ws.getCell(1, 6 + index * 11).value = judge.name + " " + judge.judgeType;
+      ws.getCell(1, 6 + index * 11).alignment = {
+        vertical: "middle",
+        horizontal: "left",
+      };
+    });
 };
 
 const judgeToTableData = (judges: JudgeData, applicationId: string) => {
@@ -114,16 +151,21 @@ const buildColumns = (judges: JudgeData) => {
   res.push({
     header: "Sum",
     key: "sum",
-    width: 20,
+    width: 4,
+    style: {
+      alignment: { vertical: "middle", horizontal: "center" },
+    },
   });
 
   Object.values(judges).forEach((judge) => {
+    if (judge.judgeType === "pre") return;
     Object.entries(assessmentFields).forEach(([key, value]) => {
       res.push({
         header: value.shortLabel,
         key: value.source + judge.id,
         width: 4,
         style: {
+          alignment: { vertical: "middle", horizontal: "center" },
           fill: {
             type: "pattern",
             pattern: "darkVertical",

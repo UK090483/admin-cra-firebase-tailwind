@@ -49,11 +49,15 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
           .update(
             { collection: "judges", doc: judge_id },
             {
-              [`assessments.${application.id}`]: {
-                ...res,
-                judge_id,
-                application_id: application.id,
-              },
+              ...Object.entries(res).reduce(
+                (acc, [key, value]) => ({
+                  ...acc,
+                  [`assessments.${application.id}.${key}`]: value,
+                }),
+                {}
+              ),
+              [`assessments.${application.id}.judge_id`]: judge_id,
+              [`assessments.${application.id}.application_id`]: application.id,
             }
           )
           .then(() => {});

@@ -5,11 +5,12 @@ import PageLoading from "components/Spinner/PageLoading";
 import Table from "components/Table/Table";
 import { IRow } from "components/Table/types";
 import { useFirestoreConnect } from "react-redux-firebase";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { AssessmentHelper } from "../../assessments/helper/AssessmentHelper";
 import useAssessments from "../../assessments/hooks/useAssessments";
 import { IAssessmentRecord } from "../../assessments/types";
 import useJudges from "../hooks/useJudges";
+import { Pencil } from "heroicons-react";
 
 interface ParamTypes {
   id: string;
@@ -53,7 +54,7 @@ export default function Application() {
     })),
 
     {
-      field: "---",
+      field: "id",
       use: "Status",
       render: (row: any) => {
         return (
@@ -63,6 +64,21 @@ export default function Application() {
               application_id={row.application_id}
               judge_id={row.judge_id}
             />
+          </div>
+        );
+      },
+      width: "w-14",
+    },
+
+    {
+      field: "judge_id",
+      use: "",
+      render: (row: any) => {
+        return (
+          <div onClick={(e) => e.stopPropagation()}>
+            <Link to={`/assessment/${row.id}/${row.judge_id}/update`}>
+              <Pencil className="text-actionColor-300 hover:text-actionColor-700" />
+            </Link>
           </div>
         );
       },

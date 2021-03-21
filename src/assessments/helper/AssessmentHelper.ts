@@ -170,6 +170,7 @@ export class AssessmentC {
   sumAssessmentPoints(assessment: IAssessmentRecord) {
     let res = 0;
     let isOk = true;
+    if (assessment.status === "hidden") return undefined;
     for (let p of this.getQuestions()) {
       const value = assessment[p.source as keyof IAssessmentRecord];
       if (value && typeof value === "number") {
@@ -268,6 +269,8 @@ export class AssessmentC {
       console.error("equal Function needs objects ");
       return false;
     }
+
+    if (first["status"] !== second["status"]) return false;
 
     for (let q of this.getQuestions()) {
       if (first[q.source] !== second[q.source]) return false;

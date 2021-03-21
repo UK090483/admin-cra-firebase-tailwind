@@ -4,15 +4,14 @@
 
 import "@testing-library/jest-dom/extend-expect";
 import { fireEvent, render } from "@testing-library/react";
-import React from "react";
+import * as useActions from "hooks/useActions";
 import { act } from "react-dom/test-utils";
 import { TestWrap } from "tests/testPrepare";
-import useApplicationActions from "../../hooks/useApplicationActions";
 import ApplicationSelectAction from "./ApplicationSelectAction";
 
-jest.mock("../../hooks/useApplicationActions");
+jest.mock("hooks/useActions");
 
-const mockedUseApplicationActions = useApplicationActions as jest.Mock;
+const mockedUseApplicationActions = useActions.useActions as jest.Mock;
 
 describe("ApplicationSelectAction", () => {
   const updateApplicationAssessments = jest.fn();

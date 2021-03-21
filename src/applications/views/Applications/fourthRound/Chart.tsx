@@ -1,16 +1,14 @@
-import { IApplicationRecord } from "applications/ApplicationTypes";
 import useJudges from "judges/hooks/useJudges";
-import { useSelector } from "react-redux";
-import { RootState } from "redux/Reducers/RootReducer";
 import useUi from "hooks/useUi";
 import Switch from "components/Buttons/Switch/Switch";
-import { round, getSumIn100 } from "../../../../helper/round";
+import { round, getSumIn100 } from "helper/round";
+import { judgeType } from "judges/JudgeTypes";
 
-export interface IChartProps {
-  rows: IApplicationRecord[];
-}
-export function Chart(props: IChartProps) {
-  const { rows } = props;
+type ChartProps = {
+  judgeType: judgeType;
+};
+export function Chart(props: ChartProps) {
+  const { judgeType } = props;
   const { judges, judgeAverages } = useJudges();
 
   const {
@@ -20,18 +18,23 @@ export function Chart(props: IChartProps) {
     toggleIntegrateJudgeAverages,
   } = useUi();
 
+  if (!judges) {
+    return <div>...</div>;
+  }
+
   return (
     <div className=" bg-white rounded-xl shadow-2xl my-6 p-4">
       <div className="flex flex-wrap mb-2">
         {judgeAverages &&
           judges &&
           Object.entries(judgeAverages).map(([judgeId, average]) => {
-            return judges[judgeId] ? (
+            return judges[judgeId] &&
+              judges[judgeId].judgeType === judgeType ? (
               <div
                 key={judgeId}
                 className={`${
                   judges[judgeId] ? judges[judgeId].color : ""
-                } w-50 p-3`}
+                } flex flex-col justify-center items-center p-3 m-1 text-white `}
               >
                 <h5>{judges[judgeId].name}</h5>
                 {average &&

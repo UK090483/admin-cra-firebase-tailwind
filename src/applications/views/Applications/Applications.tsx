@@ -33,10 +33,6 @@ const Applications: React.FC = () => {
     return <PageLoading />;
   }
 
-  if (!ordered) {
-    return <NoDataPanel text={"No Applications yet"} />;
-  }
-
   return (
     <div className="animate-fadeIn ">
       {<StageButton />}

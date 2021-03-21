@@ -6,11 +6,13 @@ export default function useAssessments() {
     AssessmentsByApplicationId,
     sumByApplicationId,
     judgeAverages,
+    sumWithJudgeAverages,
   } = useSelector(
     (state: RootState) => ({
       AssessmentsByApplicationId: state.assessments.data,
       sumByApplicationId: state.assessments.sumByApplicationId,
       judgeAverages: state.assessments.judgeAverages,
+      sumWithJudgeAverages: state.assessments.withJudgeAvr || {},
     }),
     shallowEqual
   );
@@ -19,5 +21,6 @@ export default function useAssessments() {
     judgeAverages,
     AssessmentsByApplicationId,
     sumByApplicationId,
+    sumWithJudgeAverages,
   };
 }

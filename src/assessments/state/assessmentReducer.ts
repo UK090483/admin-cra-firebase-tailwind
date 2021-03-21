@@ -4,20 +4,21 @@ import { difference, isEqual } from "underscore";
 import { IJudgeRecord, judgeType } from "../../judges/JudgeTypes";
 import { AssessmentHelper } from "../helper/AssessmentHelper";
 import { IAssessmentRecord } from "../types";
+import Judge from "../../layouts/judge/Judge";
 
 export interface IAssessmentState {
-  data: { [k: string]: { [A: string]: IAssessmentRecord } } | null;
+  data: {
+    [applicationId: string]: { [judgeId: string]: IAssessmentRecord };
+  } | null;
   ordered: any[];
   assessmentCount: number;
-  judgeAverages: { [A: string]: number | undefined };
+  judgeAverages: { [judgeId: string]: number | undefined };
   sumByApplicationId: {
-    [A: string]: { main: number; pre: number; all: number };
+    [applicationId: string]: { main: number; pre: number; all: number };
   };
   judgeTypes: { [k: string]: judgeType };
   withJudgeAvr?: {
-    [applicationId: string]: {
-      [judgeId: string]: number;
-    };
+    [applicationId: string]: { main: number; pre: number; all: number };
   };
 }
 
@@ -42,6 +43,7 @@ const initialState: IAssessmentState = {
   judgeAverages: {},
   sumByApplicationId: {},
   judgeTypes: {},
+  withJudgeAvr: {},
 };
 
 const AssessmentSlice = createSlice({
@@ -82,8 +84,11 @@ const AssessmentSlice = createSlice({
             state.sumByApplicationId = collectSum.getResult();
           });
         }
+
+        handleJudgeAvr(state);
       })
       .addMatcher(isModifiedJudge, (state, action) => {
+        console.log("isModifiedJudge");
         const currentData = current(state).data;
         const currentJudeTypes = current(state).judgeTypes;
 
@@ -153,9 +158,34 @@ const updateSumNeeded = (
       }
 
       const sum = AssessmentHelper.sumAssessmentPoints(_a);
+
       collectSum.add(_a.application_id, sum, currentJudeTypes[_a.judge_id]);
     }
   }
 
   return collectSum.getResult();
+};
+
+const handleJudgeAvr = (state: IAssessmentState) => {
+  const collectSum = AssessmentHelper.sumMultiple();
+  for (let applicationEntry of Object.entries(state.sumByApplicationId)) {
+    const [applicationId, sum] = applicationEntry;
+    const assessments = state.data && state.data[applicationId];
+    if (!assessments) return;
+
+    for (let assessmentEntry of Object.entries(assessments)) {
+      const [judgeId, assessment] = assessmentEntry;
+      const JudgeAvr = state.judgeAverages[judgeId];
+      const JudgeType = state.judgeTypes[judgeId];
+
+      if (JudgeAvr && JudgeType) {
+        const SumWithAvr = (1 - JudgeAvr / 32 + 1) * sum[JudgeType];
+        collectSum.add(applicationId, SumWithAvr, JudgeType);
+      } else {
+        console.error("unable to find judgeAvr or JudgeType");
+      }
+    }
+  }
+  console.log("handleJudgeAvr");
+  state.withJudgeAvr = collectSum.getResult();
 };

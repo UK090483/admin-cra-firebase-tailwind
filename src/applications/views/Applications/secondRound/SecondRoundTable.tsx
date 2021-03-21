@@ -1,4 +1,5 @@
 import { IApplicationRecord } from "applications/ApplicationTypes";
+import NoDataPanel from "components/NoDataPanel";
 import PageLoading from "components/Spinner/PageLoading";
 import Table from "components/Table/Table";
 import { IColumn, ITableOptions } from "components/Table/types";
@@ -25,6 +26,10 @@ const SecondRoundTable: React.FC<SecondRoundTableProps> = ({ data }) => {
       ...item,
       judgeCount: item.assessments ? Object.keys(item.assessments).length : 0,
     }));
+
+  if (cleanData.length < 1) {
+    return <NoDataPanel text={"No Applications Accepted yet"} />;
+  }
 
   return (
     <div className="animate-fadeIn">

@@ -1,8 +1,9 @@
 import { ApplicationStatePre } from "applications/ApplicationTypes";
-import useApplicationActions from "applications/hooks/useApplicationActions";
+
 import ButtonGroupe from "components/Buttons/ButtonGroupe";
 import { Spinner } from "components/Spinner/Spinner";
 import { IRow } from "components/Table/types";
+import { useActions } from "hooks/useActions";
 import React from "react";
 
 interface IActionProps {
@@ -13,7 +14,7 @@ interface IActionProps {
 const ApplicationSelectAction: React.FC<IActionProps> = ({ row, name }) => {
   const [updating, setUpdating] = React.useState(false);
 
-  const { updateApplicationAssessments } = useApplicationActions();
+  const { updateApplicationAssessments } = useActions();
 
   const handleUpdate = (state: ApplicationStatePre) => {
     if (state === row[name]) return;

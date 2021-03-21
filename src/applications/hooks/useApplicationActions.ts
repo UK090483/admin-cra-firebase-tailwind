@@ -6,14 +6,13 @@ import {
 import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
 import { useFirestore } from "react-redux-firebase";
 
-interface IUpdateApplicationProps {
-  data: IApplicationUpdateAbles;
-  id: string;
-}
-
 export default function useApplicationActions() {
   const firestore = useFirestore();
 
+  interface IUpdateApplicationProps {
+    data: IApplicationUpdateAbles;
+    id: string;
+  }
   const updateApplication = async (props: IUpdateApplicationProps) => {
     const { id, data } = props;
     await firestore.update({ collection: "applications", doc: id }, data);
@@ -35,5 +34,5 @@ export default function useApplicationActions() {
     );
   };
 
-  return { updateApplication, updateApplicationAssessments };
+  return {};
 }

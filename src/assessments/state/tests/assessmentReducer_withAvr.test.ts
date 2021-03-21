@@ -54,5 +54,18 @@ const testAssessment2 = testAssessment(2, 2);
 const testAssessment3 = testAssessment(3, 3, false);
 
 describe("AssessmentReducer should return Data", () => {
-  it("dfg", () => {});
+  it("dfg", () => {
+    getReducer({
+      ordered: [
+        {
+          id: "testJudge1",
+          judgeType: "pre",
+          assessments: {
+            testApplication1: testAssessment1,
+            testApplication2: testAssessment2,
+          },
+        },
+      ],
+    }).data;
+  });
 });

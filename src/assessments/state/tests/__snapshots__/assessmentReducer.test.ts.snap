@@ -8,6 +8,7 @@ Object {
   "judgeTypes": Object {},
   "ordered": Array [],
   "sumByApplicationId": Object {},
+  "withJudgeAvr": Object {},
 }
 `;
 
@@ -19,5 +20,6 @@ Object {
   "judgeTypes": Object {},
   "ordered": Array [],
   "sumByApplicationId": Object {},
+  "withJudgeAvr": Object {},
 }
 `;
