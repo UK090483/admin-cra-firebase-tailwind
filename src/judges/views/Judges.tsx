@@ -8,6 +8,7 @@ import { useFirebaseConnect } from "react-redux-firebase";
 import { useHistory } from "react-router-dom";
 import { RootState } from "redux/Reducers/RootReducer";
 import NoDataPanel from "../../components/NoDataPanel";
+import ManageJudgeStatus from "./ManageJudgeStatus";
 
 function Judges() {
   const { judgesOrdered } = useJudges();
@@ -80,5 +81,15 @@ const columns = [
     use: "Active",
     use_in_search: true,
     render: (row: IRow) => <div>{row.active ? "ja" : "nein"}</div>,
+  },
+  {
+    field: "state",
+    use: "Done",
+    render: (row: IRow) => (
+      <div onClick={(e) => e.stopPropagation()}>
+        <ManageJudgeStatus status={row.state} judge_id={row.id} />
+      </div>
+    ),
+    width: "w-14",
   },
 ];

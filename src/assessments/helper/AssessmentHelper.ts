@@ -96,29 +96,6 @@ export class AssessmentC {
     return res;
   }
 
-  sumMultipleOld = (): {
-    add: (id: string, num: number | undefined) => void;
-    getResult: () => { [K: string]: number };
-  } => {
-    const collectors: { [k: string]: number[] } = {};
-    return {
-      add: (id: string, num: number | undefined) => {
-        if (!collectors[id]) collectors[id] = [];
-        if (num) collectors[id].push(num);
-      },
-      getResult: () => {
-        return Object.entries(collectors).reduce(
-          (acc, [key, values]) => ({
-            ...acc,
-            [key]:
-              values.reduce((acc2, v) => (v ? v + acc2 : acc2)) / values.length,
-          }),
-          {}
-        );
-      },
-    };
-  };
-
   sumMultiple = (): {
     add: (id: string, num: number | undefined, judgeType: judgeType) => void;
     getResult: () => {
@@ -182,40 +159,15 @@ export class AssessmentC {
     }
     return isOk ? res : undefined;
   }
-  sumAssessmentPointsB(assessment: IAssessmentRecord) {
-    let res = 0;
-    let isOk = true;
-    for (let p of this.getQuestions()) {
-      const value = assessment[p.source as keyof IAssessmentRecord];
-      if (value && typeof value === "number") {
-        res = res + value * (p.weight || 1);
-      } else {
-        isOk = false;
-        break;
-      }
-    }
-    return isOk ? res : 0;
-  }
 
   sumAssessmentPointsForJudgeApp(assessment: IAssessmentRecord) {
     let res = 0;
-
+    for (let p of this.getQuestions()) {
+      const value = assessment[p.source as keyof IAssessmentRecord];
+      if (value && typeof value === "number") res += value;
+    }
     return res;
   }
-
-  // getAvarage(assessment: IAssessmentRecord) {
-  //   let res = 0;
-  //   let count = 0;
-  //   for (let p of this.getQuestions()) {
-  //     const value = assessment[p.source as keyof IAssessmentRecord];
-  //     if (value && typeof value === "number") {
-  //       res = res + value;
-  //       count++;
-  //     }
-  //   }
-
-  //   return count === 11 ? res / count : undefined;
-  // }
 
   getAssessmentState(assessment: IAssessmentRecord) {
     let hasValues = false;
@@ -295,53 +247,6 @@ export class AssessmentC {
       },
     };
   };
-
-  // getSumApplication = (
-  //   application: IApplicationRecord,
-  //   judges: JudgeData,
-  //   sumIn100: boolean,
-  //   integrateJudgeAverages: boolean,
-  //   judgeAverages: IJudgeAverages
-  // ) => {
-  //   const main = this.getAverage();
-  //   const pre = this.getAverage();
-  //   const acc = this.getAverage();
-
-  //   if (!judges) {
-  //     return {
-  //       sum: undefined,
-  //       pre: undefined,
-  //       main: undefined,
-  //     };
-  //   }
-
-  //   if (application.assessments) {
-  //     Object.values(application.assessments).forEach((_assessment) => {
-  //       if (_assessment.status === "hidden") {
-  //         return;
-  //       }
-
-  //       const assessment = this.evaluateAssessment(
-  //         _assessment,
-  //         sumIn100,
-  //         integrateJudgeAverages,
-  //         judgeAverages
-  //       );
-  //       assessment.sum && acc.add(assessment.sum);
-  //       if (judges[assessment.judge_id].judgeType === "main") {
-  //         assessment.sum && main.add(assessment.sum);
-  //       } else {
-  //         assessment.sum && pre.add(assessment.sum);
-  //       }
-  //     });
-  //   }
-
-  //   return {
-  //     sum: acc.getResult(),
-  //     pre: pre.getResult(),
-  //     main: main.getResult(),
-  //   };
-  // };
 }
 
 const AssessmentHelper = new AssessmentC(Fields);

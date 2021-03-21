@@ -39,7 +39,7 @@ export interface IApplicationRecord extends RecordBase {
   startupName: string;
   tagLine: string;
   website: string;
-  foundingDate: FirebaseTimestamp;
+  foundingDate: string;
   stage: string;
   industry: string;
   segmentFocus: string;
@@ -77,7 +77,7 @@ export interface IApplicationRecord extends RecordBase {
   companyLogo: (IMediaItemImage | IMediaItemPdf)[];
   companyDeck: (IMediaItemImage | IMediaItemPdf)[];
 
-  state: string;
+  // state: string;
   // statePre?: ApplicationStatePre;
   // stateTree?: ApplicationStatePre;
   // sum?: number | undefined;

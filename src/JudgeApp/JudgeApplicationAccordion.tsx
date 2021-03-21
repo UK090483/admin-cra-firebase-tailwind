@@ -16,6 +16,8 @@ import MediaArrayField from "components/Fields/MediaArrayField";
 import { useFirestore } from "react-redux-firebase";
 import { useSelector } from "react-redux";
 import { RootState } from "redux/store";
+import { useJudgeApp } from "./hooks/useJudgeApp";
+import { useJudgeActions } from "./hooks/useJudgeActions";
 
 interface IApplicationAccordion {
   application: IApplicationRecord;
@@ -24,6 +26,8 @@ interface IApplicationAccordion {
 const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
   const { application } = props;
   const firestore = useFirestore();
+
+  const { updateAssessment } = useJudgeActions();
 
   const { judge_id, assessment } = useSelector((state: RootState) => ({
     judge_id: state.fb.auth.uid,
@@ -44,36 +48,21 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
 
   return (
     <Form
-      onSubmit={(res) => {
-        firestore
-          .update(
-            { collection: "judges", doc: judge_id },
-            {
-              ...Object.entries(res).reduce(
-                (acc, [key, value]) => ({
-                  ...acc,
-                  [`assessments.${application.id}.${key}`]: value,
-                }),
-                {}
-              ),
-              [`assessments.${application.id}.judge_id`]: judge_id,
-              [`assessments.${application.id}.application_id`]: application.id,
-            }
-          )
-          .then(() => {});
+      onSubmit={(data) => {
+        updateAssessment({ data, application_id: application.id });
       }}
       formFields={[]}
       initialValues={assessment}
       submitButton={(props) => <SubmitButton {...props} />}
     >
-      <div className="shadow-2xl">
+      <div className="shadow-2xl ">
         {ApplicationHelper.getTopics().map((topic, index) => {
           const topicAssessments = ApplicationHelper.getAssessments(topic);
 
           const topicState = topicAssessments
             ? topicAssessments.reduce((acc, item) => {
-                return assessment ? !!assessment[item] : false;
-              }, false)
+                return assessment ? !!assessment[item] && acc : false;
+              }, true)
             : false;
 
           return (
@@ -97,7 +86,7 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
             >
               <div key={index} className="md:flex">
                 <div
-                  className={`${topicAssessments ? "md:w-1/2 pr-1" : "w-full"}`}
+                  className={`${topicAssessments ? "md:w-2/3 pr-1" : "w-full"}`}
                 >
                   {ApplicationHelper.getFields(topic).map((field, index) => {
                     if (field.field.type === "text") {
@@ -134,7 +123,7 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
                     }
                   })}
                 </div>
-                <div className={`${!!topicAssessments && "md:w-1/2 md:pl-1"}`}>
+                <div className={`${!!topicAssessments && "md:w-1/3 md:pl-1"}`}>
                   {!!topicAssessments &&
                     topicAssessments.map((topicAssessment, index) => {
                       const details = assessmentDetails[topicAssessment];
@@ -171,6 +160,7 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
 export default ApplicationAccordion;
 
 const SubmitButton: React.FC<FormikProps<FormValues>> = (props) => {
+  const { allDone } = useJudgeApp();
   const assessment = props.values;
 
   const [state, setState] = React.useState<null | IAssessmentRecord>(null);
@@ -191,6 +181,8 @@ const SubmitButton: React.FC<FormikProps<FormValues>> = (props) => {
 
     setState(props.values as IAssessmentRecord);
   }, [props.values]);
+
+  if (allDone) return null;
 
   return (
     <div

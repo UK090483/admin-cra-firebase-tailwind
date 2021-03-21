@@ -5,7 +5,6 @@ import {
   IMediaItemPdf,
 } from "applications/ApplicationTypes";
 import { base } from "./helper";
-import { firebase } from "misc/firebase";
 
 export const FakeApplication: () => IApplicationRecord = () => {
   const application: IApplicationRecord = {
@@ -13,7 +12,10 @@ export const FakeApplication: () => IApplicationRecord = () => {
     startupName: faker.company.companyName(),
     tagLine: faker.company.catchPhrase(),
     website: faker.internet.url(),
-    foundingDate: firebase.firestore.Timestamp.fromDate(faker.date.past()),
+    foundingDate:
+      faker.random.number({ min: 1899, max: 2021 }) +
+      "/" +
+      faker.random.number({ min: 1, max: 12 }),
     stage: faker.random.arrayElement(["pre_seed", "seed", "series A", "other"]),
     industry: faker.company.bsAdjective(),
     segmentFocus: faker.random.arrayElement(["B2B", "B2C"]),
@@ -63,8 +65,6 @@ export const FakeApplication: () => IApplicationRecord = () => {
       .map(() => getMediaElement("image")),
 
     companyDeck: [getMediaElement("pdf")],
-
-    state: "created",
   };
 
   return application;

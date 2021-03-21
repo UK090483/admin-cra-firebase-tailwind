@@ -3,6 +3,7 @@ import {
   IApplicationUpdateAbles,
   ApplicationStatePre,
 } from "applications/ApplicationTypes";
+import { judgeState } from "judges/JudgeTypes";
 import { useFirestore } from "react-redux-firebase";
 import useApplicationActions from "../applications/hooks/useApplicationActions";
 
@@ -60,7 +61,28 @@ const useActions = () => {
     );
   };
 
-  return { updateAssessment, updateApplication, updateApplicationAssessments };
+  type UpdateJudgeStatusProps = {
+    judge_id: string;
+
+    status: judgeState;
+  };
+
+  const updateJudgeStatus = async (props: UpdateJudgeStatusProps) => {
+    const { judge_id, status } = props;
+
+    firestore.update(
+      { collection: "judges", doc: judge_id },
+      { state: status }
+    );
+    return true;
+  };
+
+  return {
+    updateAssessment,
+    updateApplication,
+    updateApplicationAssessments,
+    updateJudgeStatus,
+  };
 };
 
 export { useActions };

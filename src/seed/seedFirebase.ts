@@ -27,8 +27,8 @@ class Seed {
     return getArray(amount).map((item, index) => FakeApplication());
   };
 
-  numApplications = 500;
-  numJudges = 20;
+  numApplications = 200;
+  numJudges = 10;
   assessmentsPerJudge = 3;
 
   judges = this.makeJudges(this.numJudges);

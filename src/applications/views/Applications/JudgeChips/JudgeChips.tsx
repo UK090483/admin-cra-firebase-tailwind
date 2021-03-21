@@ -69,6 +69,7 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
                 judgeAssessment &&
                 AssessmentHelper.getAssessmentState(judgeAssessment)
               }
+              judgeStatus={judge.state}
               name={judge.name}
               color={judge.color}
               className="-ml-2 "

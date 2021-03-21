@@ -7,31 +7,29 @@ import { RootState } from "redux/store";
 import { RoutingParam } from "types";
 import { AssessmentHelper } from "../assessments/helper/AssessmentHelper";
 import ApplicationAccordion from "./JudgeApplicationAccordion";
+import { useJudgeApp } from "./hooks/useJudgeApp";
+import PageLoading from "../components/Spinner/PageLoading";
 
 const AssessmentView: React.FC = () => {
+  const history = useHistory();
   let { id } = useParams<RoutingParam>();
+  const { getAssessment } = useJudgeApp();
 
   useFirestoreConnect({ collection: "applications", doc: id });
 
-  const history = useHistory();
-  const applications = useSelector(
-    (state: RootState) => state.firestore.data.applications
-  );
-
-  // const assessment = getAssessment(application);
-
-  const { assessment } = useSelector((state: RootState) => ({
-    assessment:
-      state.fb.profile.assessments && state.fb.profile.assessments[id],
+  const { application, isLoading } = useSelector((state: RootState) => ({
+    application:
+      state.firestore.data.applications && state.firestore.data.applications[id]
+        ? { ...state.firestore.data.applications[id], id }
+        : null,
+    isLoading: state.firestore.status.requesting[`applications/${id}`],
   }));
 
-  if (!isLoaded(applications)) {
-    return <div>Loading...</div>;
-  }
+  const assessment = getAssessment(id);
 
-  const application = applications[id]
-    ? { ...applications[id], id, foundingDate: "bla" }
-    : null;
+  if (isLoading) {
+    return <PageLoading />;
+  }
 
   return (
     <div className="animate-fadeIn ">

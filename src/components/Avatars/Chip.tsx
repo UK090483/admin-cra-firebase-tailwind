@@ -1,4 +1,5 @@
 import { AssessmentStatus } from "assessments/types";
+import { judgeState } from "judges/JudgeTypes";
 import * as React from "react";
 
 interface IChipProps {
@@ -7,10 +8,20 @@ interface IChipProps {
   className?: string;
   state?: "assigned" | "processed" | "completed";
   status?: AssessmentStatus;
+  judgeStatus?: judgeState;
 }
 
 const Chip: React.FC<IChipProps> = (props) => {
-  const { name, color, className, state = "assigned", status } = props;
+  const {
+    name,
+    color,
+    className,
+    state = "assigned",
+    status,
+    judgeStatus,
+  } = props;
+
+  console.log(judgeStatus);
 
   return (
     <div
@@ -24,7 +35,15 @@ const Chip: React.FC<IChipProps> = (props) => {
         status === "hidden" ? "opacity-40 text-red-400" : "text-white"
       } text-xs border-solid border-2  p-0 w-8 h-8 flex justify-center items-center font-extrabold m-0 hover:z-10 ${className}`}
     >
-      {name && getInitials(name)}
+      <span
+        className={`flex justify-center items-center p-0.5 ${
+          judgeStatus === "done"
+            ? "bg-green-300 text-gray-800 rounded-full w-4 h-4 "
+            : ""
+        }`}
+      >
+        {name && getInitials(name)}
+      </span>
     </div>
   );
 };

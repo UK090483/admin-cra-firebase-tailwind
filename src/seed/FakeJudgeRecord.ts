@@ -14,4 +14,5 @@ export const FakeJudgeRecord: (id: string) => IJudgeRecord = (id) => ({
   name: id,
   active: true,
   judgeType: faker.random.arrayElement(["pre", "main"]),
+  state: "active",
 });

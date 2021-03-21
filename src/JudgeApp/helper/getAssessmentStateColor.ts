@@ -8,16 +8,16 @@ const getAssessmentStateColor = (assessment: IAssessmentRecord) => {
   return stage === "assigned"
     ? ""
     : stage === "completed"
-    ? "bg-green-300 text-white"
-    : "bg-yellow-300 text-white";
+    ? "bg-green-500 text-white"
+    : "bg-yellow-500 text-white";
 };
 
 const getApplicationStateColor = (application: any) => {
   return application.applicationState === "assigned"
     ? ""
     : application.applicationState === "completed"
-    ? "bg-green-300 text-white"
-    : "bg-yellow-300 text-white";
+    ? "bg-green-500 text-white"
+    : "bg-yellow-500 text-white";
 };
 
 // const getApplicationState = (application: IApplicationRecord) => {

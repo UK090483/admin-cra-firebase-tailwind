@@ -19,9 +19,7 @@ export interface IAssessmentPoints {
 
 export interface IAssessmentRecord extends RecordBase, IAssessmentPoints {
   application_id: Identifier;
-  application_name: string;
   judge_id: Identifier;
-  judge_name: string;
   isInnovativeReason?: string;
   isClearUSPReason?: string;
   isTherePotentialReason?: string;
