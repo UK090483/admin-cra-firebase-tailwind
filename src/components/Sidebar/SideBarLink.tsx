@@ -11,7 +11,7 @@ export interface IAppProps {
 export default function SidebarLink(props: IAppProps) {
   const { route, label, Icon } = props;
   return (
-    <li className="items-center">
+    <li data-testid={label} className="items-center">
       <Link
         className={
           "text-xs uppercase py-3 font-bold h-20  flex items-center    " +

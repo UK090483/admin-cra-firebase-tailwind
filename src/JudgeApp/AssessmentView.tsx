@@ -9,6 +9,7 @@ import { AssessmentHelper } from "../assessments/helper/AssessmentHelper";
 import ApplicationAccordion from "./JudgeApplicationAccordion";
 import { useJudgeApp } from "./hooks/useJudgeApp";
 import PageLoading from "../components/Spinner/PageLoading";
+import { filter } from "lodash";
 
 const AssessmentView: React.FC = () => {
   const history = useHistory();
@@ -17,7 +18,8 @@ const AssessmentView: React.FC = () => {
 
   useFirestoreConnect({ collection: "applications", doc: id });
 
-  const { application, isLoading } = useSelector((state: RootState) => ({
+  const { application, isLoading, a } = useSelector((state: RootState) => ({
+    a: filter(state.judgeApp.assessments, (i) => i),
     application:
       state.firestore.data.applications && state.firestore.data.applications[id]
         ? { ...state.firestore.data.applications[id], id }

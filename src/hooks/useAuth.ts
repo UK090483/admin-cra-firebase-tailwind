@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useFirebase } from "react-redux-firebase";
 import { RootState } from "redux/store";
-
+import React from "react";
 function useAuth() {
   const firebase = useFirebase();
   const { displayName, email, uid, isEmpty, isAdmin, authLoaded } = useSelector(
@@ -16,7 +16,8 @@ function useAuth() {
   );
 
   const signIn = (email: string, password: string) => {
-    firebase.auth().signInWithEmailAndPassword(email, password);
+    firebase.login({ email, password });
+    // firebase.auth().signInWithEmailAndPassword(email, password);
   };
 
   const handleSignOutWithPresence = () => {

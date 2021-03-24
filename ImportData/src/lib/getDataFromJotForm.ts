@@ -4,7 +4,7 @@ import * as fs from "fs";
 const dir = "DATA";
 const LIVE = true;
 
-const getData = () => {
+const getDataAll = () => {
   return new Promise((resolve, reject) => {
     https
       .get(
@@ -28,12 +28,12 @@ const getData = () => {
   });
 };
 
-const getDataFromJotform = async () => {
+const getDataFromJotForm = async (live: boolean) => {
   let data: any;
 
-  if (LIVE) {
+  if (live) {
     console.log("Fetching JotFormAPI");
-    data = await getData();
+    data = await getDataAll();
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
@@ -42,13 +42,13 @@ const getDataFromJotform = async () => {
     return data;
   }
 
-  const JSONdata = await fs.readFileSync("DATA/ApiResponse.json");
+  const JSONData = await fs.readFileSync("DATA/ApiResponse.json");
   // @ts-ignore
-  data = JSON.parse(JSONdata);
+  data = JSON.parse(JSONData);
 
   console.log("Using Old JotFormAPI Data");
 
   return data;
 };
 
-export { getDataFromJotform };
+export { getDataFromJotForm };

@@ -2,7 +2,6 @@ import * as React from "react";
 import NavBar from "components/NavBar";
 import UserDropdown from "components/Dropdowns/UserDropdown";
 import { Link } from "react-router-dom";
-import AllDonePanel from "JudgeApp/AllDonePannel";
 
 const JudgeNavBar: React.FC = () => {
   return (
@@ -10,9 +9,9 @@ const JudgeNavBar: React.FC = () => {
       <NavBar>
         <Link
           to="/"
-          className=" text-sm uppercase hidden lg:inline-block font-semibold"
+          className=" text-sm uppercase text-white lg:inline-block font-semibold"
         >
-          SWAN JUDGENATOR
+          Future Hamburg Award Jury Tool
         </Link>
 
         <ul className="flex-col md:flex-row list-none items-center hidden md:flex">

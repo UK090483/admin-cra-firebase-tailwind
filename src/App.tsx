@@ -6,31 +6,36 @@ import Judge from "./layouts/judge/Judge";
 import { Spinner } from "./components/Spinner/Spinner";
 import "styles.css";
 import { useAuth } from "hooks/useAuth";
+import Alert from "components/Alert/Alert";
 
 function App() {
-  const { authLoaded, isEmpty, isAdmin } = useAuth();
+  const { isAdmin, authLoaded, isEmpty } = useAuth();
 
   return (
-    <Switch>
-      <AuthIsLoaded isLoaded={authLoaded}>
-        {isEmpty ? (
-          <>
-            <Route path="/" component={Auth} />
-            {/* <Redirect to="/auth"></Redirect> */}
-          </>
-        ) : isAdmin ? (
-          <>
-            <Route path="/" component={Admin} />
-            {/* <Redirect to="/"></Redirect> */}
-          </>
-        ) : (
-          <>
-            <Route path="/" component={Judge} />
-            {/* <Redirect to="/"></Redirect> */}
-          </>
-        )}
-      </AuthIsLoaded>
-    </Switch>
+    <>
+      <Switch>
+        <AuthIsLoaded isLoaded={authLoaded}>
+          {isEmpty ? (
+            <>
+              <Route path="/" component={Auth} />
+              {/* <Redirect to="/auth"></Redirect> */}
+            </>
+          ) : isAdmin ? (
+            <>
+              <Route path="/" component={Admin} />
+              {/* <Redirect to="/"></Redirect> */}
+            </>
+          ) : (
+            <>
+              <Route path="/" component={Judge} />
+              {/* <Redirect to="/"></Redirect> */}
+            </>
+          )}
+        </AuthIsLoaded>
+      </Switch>
+
+      <Alert />
+    </>
   );
 }
 

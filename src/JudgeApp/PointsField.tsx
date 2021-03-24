@@ -20,7 +20,7 @@ const PointsField: React.FunctionComponent<IPointsProps> = (props) => {
 
   return (
     <label className="block">
-      <div className="flex">
+      <div data-testid={`pointInput-${props.name}`} className="flex">
         <Star
           size={40}
           onClick={() => {

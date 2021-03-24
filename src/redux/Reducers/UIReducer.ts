@@ -1,7 +1,6 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 import { ITableFilterState, ITableSortState } from "components/Table/types";
 import { stage } from "types";
-import { object, values } from "underscore";
 
 const openSideBar = createAction("ui/openSideBar");
 const closeSideBar = createAction("ui/closeSideBar");

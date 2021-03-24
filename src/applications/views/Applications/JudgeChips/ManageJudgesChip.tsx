@@ -31,16 +31,19 @@ const ManageJudgesChip: React.FunctionComponent<IManageJudgesChipProps> = ({
 
     return res;
   };
-  const handleJudges = (nextAssessments: string[]) => {
+
+  const handleJudges = async (nextAssessments: string[]) => {
     setUpdating(true);
-    firestore
-      .update(
+
+    try {
+      firestore.update(
         { collection: "tableDoc", doc: "first" },
         { [`${row.id}.assessments`]: nextAssessments }
-      )
-      .then(() => {
-        setUpdating(false);
-      });
+      );
+      setUpdating(false);
+    } catch (error) {
+      setUpdating(false);
+    }
   };
   return (
     <Popup

@@ -170,7 +170,7 @@ const Fields: AssessmentType = {
   },
 
   isTeamExperienced: {
-    label: "is Team Experienced",
+    label: "Is Team Experienced",
     shortLabel: "Exp",
     type: "number",
     source: "isTeamExperienced",

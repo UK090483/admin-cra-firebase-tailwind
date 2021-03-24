@@ -72,6 +72,8 @@ class Seed {
     await Batch.commit();
   };
 
+  createFromJSON = async () => {};
+
   createFakeJudges = async () => {
     const array = getArray(this.numJudges);
     const _createUser = firebase.functions().httpsCallable("createUser");
@@ -128,6 +130,8 @@ class Seed {
   clear = async () => {
     await this.batchErase("applications");
     await this.eraseFakeJudges();
+    await db.collection("tableDoc").doc("first").delete();
+    console.log("clear done");
   };
 
   start = async () => {
@@ -153,7 +157,7 @@ class Seed {
       (acc, [key, value], index) => ({
         ...acc,
         [key]: {
-          ...(index < 200 ? { ...value, statePre: "accepted" } : { ...value }),
+          ...(index < 60 ? { ...value, statePre: "accepted" } : { ...value }),
         },
       }),
       {}

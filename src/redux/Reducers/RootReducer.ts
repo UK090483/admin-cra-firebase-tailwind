@@ -16,6 +16,9 @@ import assessmentReducer, {
 } from "assessments/state/assessmentReducer";
 import { IApplicationTableItem } from "applications/ApplicationTypes";
 
+import ErrorReducer from "../Reducers/errorReducer";
+import { IErrorsState } from "./errorReducer";
+
 interface FirebaseState {
   auth: any;
 }
@@ -59,6 +62,7 @@ export interface RootState {
   firestore: FireStoreReducer;
   judgeApp: IJudgeAppState;
   assessments: IAssessmentState;
+  errors: IErrorsState;
   // applications: IApplicationState;
   // judges: IJudgeState;
   // users: IUserState;
@@ -70,6 +74,7 @@ const rootReducer = combineReducers({
   firestore: firestoreReducer,
   judgeApp: JudgeAppReducer,
   assessments: assessmentReducer,
+  errors: ErrorReducer,
   // applications: applicationsReducer,
   // judges: judgeReducer,
   // users: usersReducer,

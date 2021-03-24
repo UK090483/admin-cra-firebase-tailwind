@@ -11,6 +11,7 @@ import useApplications from "applications/hooks/useApplications";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/Reducers/RootReducer";
 import PageLoading from "components/Spinner/PageLoading";
+import { filter, map } from "underscore";
 
 const columnsFirstRound: IColumn[] = [
   {
@@ -54,8 +55,9 @@ interface FirstRoundTableProps {}
 const FirstRoundTable: React.FC<FirstRoundTableProps> = () => {
   const history = useHistory();
   const { ordered } = useApplications();
-  const { id, assessments, judgeType } = useSelector((state: RootState) => ({
+  const { id, assessments, judgeType, a } = useSelector((state: RootState) => ({
     id: state.fb.auth.uid,
+    a: filter(state.judgeApp.assessments, (i) => i),
     assessments: state.fb.profile.assessments,
     judgeType: state.fb.profile.judgeType,
   }));

@@ -15,20 +15,20 @@ const useUi = () => {
 
   const firstRender = React.useRef(true);
 
-  React.useEffect(() => {
-    const presistedState = window.localStorage.getItem("stage");
-    if (presistedState) {
-      dispatch(setStage(JSON.parse(presistedState)));
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   const presistedState = window.localStorage.getItem("stage");
+  //   if (presistedState) {
+  //     dispatch(setStage(JSON.parse(presistedState)));
+  //   }
+  // }, []);
 
-  React.useEffect(() => {
-    if (!firstRender.current) {
-      return window.localStorage.setItem("stage", JSON.stringify(stage));
-    }
+  // React.useEffect(() => {
+  //   if (!firstRender.current) {
+  //     return window.localStorage.setItem("stage", JSON.stringify(stage));
+  //   }
 
-    firstRender.current = false;
-  }, [stage]);
+  //   firstRender.current = false;
+  // }, [stage]);
 
   return {
     stage,

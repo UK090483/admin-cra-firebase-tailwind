@@ -14,6 +14,8 @@ interface IJudgeProps {}
 const Judge: React.FunctionComponent<IJudgeProps> = (props) => {
   useFirestoreConnect({ collection: "tableDoc", doc: "first" });
   const { allDone, checkedOut } = useJudgeApp();
+
+  console.log(allDone);
   return (
     <div>
       <JudgeNavBar></JudgeNavBar>

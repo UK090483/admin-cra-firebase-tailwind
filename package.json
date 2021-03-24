@@ -17,6 +17,7 @@
     "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.22",
     "@types/react": "^17.0.0",
+    "@types/react-alert": "^5.2.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-image-gallery": "^1.0.2",
     "@types/react-pdf": "^5.0.1",
@@ -26,7 +27,7 @@
     "@types/underscore": "^1.10.24",
     "autoprefixer": "10.x",
     "chart.js": "^2.9.4",
-    "cross-env": "7.x",
+    "cross-env": "^7.0.3",
     "eslint-config-react-app": "^6.0.0",
     "exceljs": "^4.2.1",
     "faker": "^5.3.1",
@@ -45,6 +46,8 @@
     "postcss-cli": "8.x",
     "postcss-preset-env": "6.x",
     "react": "^17.0.1",
+    "react-alert": "^7.0.2",
+    "react-alert-template-basic": "^1.0.0",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.3.1",
     "react-dropzone-uploader": "^2.11.0",
@@ -62,6 +65,7 @@
     "redux-firestore": "^0.14.0",
     "redux-persist": "^6.0.0",
     "reselect": "^4.0.0",
+    "source-map-explorer": "^2.5.2",
     "tailwindcss": "2.x",
     "typescript": "4.x",
     "underscore": "^1.12.0",
@@ -69,8 +73,9 @@
     "uuidv4": "^6.2.6"
   },
   "scripts": {
-    "start": "run-p watch:css firebase-emulate  react-scripts:start",
-    "firebase-emulate": "firebase emulators:start --import seedData ",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "start": "run-p watch:css firebase-emulate react-scripts:start",
+    "firebase-emulate": "firebase emulators:start --import EmulatorTestSets/testSet",
     "build": "run-s build:css react-scripts:build",
     "test": "react-scripts test --env=node --coverage=true --verbose",
     "testDev": "react-scripts test --env=node --coverage=true --verbose -o",
@@ -78,7 +83,9 @@
     "build:css": "cross-env NODE_ENV=production postcss src/styles/tailwind.css -o src/styles/index.css",
     "watch:css": "cross-env NODE_ENV=development postcss src/styles/tailwind.css -o src/styles/index.css --watch",
     "react-scripts:start": "sleep 5 && react-scripts start",
-    "react-scripts:build": "react-scripts build"
+    "react-scripts:build": "react-scripts build",
+    "test:open": "cypress open",
+    "test:emulate": "cross-env CYPRESS_TEST_UID=csmIRvRrm8cyT8sBsIWSl9IAc61z FIREBASE_AUTH_EMULATOR_HOST=\"localhost:$(cat firebase.json | jq .emulators.auth.port)\" FIREBASE_DATABASE_EMULATOR_HOST=\"localhost:$(cat firebase.json | jq .emulators.database.port)\" FIRESTORE_EMULATOR_HOST=\"localhost:$(cat firebase.json | jq .emulators.firestore.port)\" yarn test:open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -99,6 +106,8 @@
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "babel-eslint": "^10.1.0",
+    "cypress": "^6.8.0",
+    "cypress-firebase": "^1.8.0",
     "eslint": "^7.2.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",
@@ -109,6 +118,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "firebase-admin": "^9.5.0",
     "http-proxy-middleware": "^1.0.6",
     "prettier": "^2.2.1",
     "react-app-rewire-alias": "^0.2.0",

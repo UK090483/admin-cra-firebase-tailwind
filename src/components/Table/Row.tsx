@@ -28,6 +28,7 @@ const Row: React.FC<IRowProps> = ({
 }) => {
   return (
     <tr
+      data-testid={`tableRow-${data.id}`}
       onClick={(e) => {
         onRowClick && onRowClick(data);
       }}

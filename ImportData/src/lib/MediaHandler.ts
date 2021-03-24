@@ -6,11 +6,15 @@ import * as fs from "fs";
 import sharp from "sharp";
 import slugify from "slugify";
 
-type mediaType = "png" | "pdf" | "jpg" | undefined;
+type mediaType = "image" | "pdf" | undefined;
 
 interface MediaItem {
   type: mediaType;
 }
+
+export type IMediaItemImage = { type: "image"; src: string };
+
+export type IMediaItemPdf = { type: "pdf"; pdfAsImages: string[]; src: string };
 
 class MediaHandler {
   rootFolder = `DATA/media`;
@@ -20,8 +24,11 @@ class MediaHandler {
   id: string;
   type: mediaType;
   localUrl: string[] | undefined;
-  result: any[] = [];
+  // result: any[] = [];
   original: string = "";
+  downloadResult: string | false = false;
+
+  result: IMediaItemImage | IMediaItemPdf | undefined = undefined;
 
   constructor(url: string, id: string, folder: string) {
     this.url = url;
@@ -29,40 +36,34 @@ class MediaHandler {
     this.folder = `${folder}/${slugify(
       basename(this.url).replace(extname(basename(this.url)), "")
     )}`;
-    this.fileName = basename(this.url);
+    this.fileName = basename(this.url).endsWith(".zip")
+      ? basename(this.url).replace(".zip", "")
+      : basename(this.url);
     this.type = this.getMediaType(url);
   }
 
   getMediaType = (url: string): mediaType => {
-    if (url.endsWith("png")) return "png";
+    if (url.endsWith("png")) return "image";
     if (url.endsWith("pdf")) return "pdf";
-    if (url.endsWith("jpg")) return "jpg";
+    if (url.endsWith("jpg")) return "image";
+    if (url.endsWith("zip")) return this.getMediaType(url.replace(".zip", ""));
     return undefined;
   };
 
   download = async () => {
-    console.log(`start Download ${this.fileName}`);
-
     this.makeFolder();
 
-    await downloadFile(
+    const downloadSuccess = await downloadFile(
       this.url,
       `${this.rootFolder}/${this.id}/${this.folder}/`,
       this.fileName
     );
 
-    this.localUrl =
-      this.type !== "pdf"
-        ? [`${this.rootFolder}/${this.id}/${this.folder}/${this.fileName}`]
-        : undefined;
-
-    if (this.type === "pdf") {
-      this.original = `${this.rootFolder}/${this.id}/${this.folder}/${this.fileName}`;
+    if (!downloadSuccess) {
+      console.log("error in Application width id: " + this.id);
+      return false;
     }
-
-    console.log(`Download ${this.fileName} Done`);
-
-    return `${this.rootFolder}/${this.id}/${this.folder}/${this.fileName}`;
+    return downloadSuccess;
   };
 
   private makeFolder = () => {
@@ -79,70 +80,76 @@ class MediaHandler {
     }
   };
 
-  optimize = async (file?: string) => {
-    const files = file ? [file] : this.localUrl;
-    if (!files) {
-      console.log("no files To Optimize");
-      return;
-    }
+  optimize = async (file: string) => {
+    const output = file.replace(basename(file), `optimized_${basename(file)}`);
 
-    const result: any[] = [];
-    for (let file of files) {
-      const output = file.replace(
-        basename(file),
-        `optimized_${basename(file)}`
-      );
-
+    try {
       await sharp(file)
         .resize(1500, undefined, { withoutEnlargement: true })
         .toFile(output, function (err: any) {
           err && console.log(err);
-
           try {
             fs.unlinkSync(file);
           } catch (err) {
             console.error(err);
           }
         });
-
-      result.push(output);
+      return output;
+    } catch (error) {
+      console.error("error in MediaHandler.optimize");
+      return false;
     }
-    this.result = result;
   };
 
-  handlePDF = async () => {
+  convertPDF = async (file: string) => {
     try {
-      var pdfImage = new PDFImage(
-        `${this.rootFolder}/${this.id}/${this.folder}/${this.fileName}`,
-        {
-          convertOptions: {
-            "-background": "white",
-            "-alpha": "remove",
-            "-flatten": "",
-          },
-        }
-      );
+      const pdfImage = new PDFImage(file, {
+        convertOptions: {
+          "-background": "white",
+          "-alpha": "remove",
+          "-flatten": "",
+        },
+      });
 
-      this.localUrl = await pdfImage.convertFile();
+      console.log(pdfImage);
+      const res = await pdfImage.convertFile();
+      return res;
     } catch (error) {
-      console.log(error);
+      console.log("error in Pdf to Image", error);
+      return false;
     }
+  };
+
+  handlePdf = async () => {
+    const downloadSuccess = await this.download();
+    if (!downloadSuccess) return;
+    const convertSuccess = await this.convertPDF(downloadSuccess);
+    if (!convertSuccess) return;
+    const optimizeSuccess = await Promise.all(
+      convertSuccess.map((file) => this.optimize(file))
+    );
+  };
+
+  handleImage = async () => {
+    const downloadSuccess = await this.download();
+    if (!downloadSuccess) return;
+    const optimizeSuccess = await this.optimize(downloadSuccess);
+    if (!optimizeSuccess) return;
+    this.result = { type: "image", src: optimizeSuccess };
   };
 
   prepare = async () => {
-    await this.download();
+    // if (this.type === "image") {
+    //   await this.handleImage();
+    // }
 
     if (this.type === "pdf") {
-      await this.handlePDF();
+      await this.handlePdf();
     }
 
-    await this.optimize();
+    console.log(this.type);
 
-    if (this.type === "pdf") {
-      return { type: this.type, src: this.result, original: this.original };
-    }
-
-    return { type: this.type, src: this.result[0] };
+    return this.result;
   };
 }
 

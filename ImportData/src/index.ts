@@ -1,34 +1,10 @@
 import * as fs from "fs";
 import { config } from "dotenv";
+import DataImporter from "./lib/DataImporter";
 config();
 
-import { getDataFromJotform } from "./lib/getDataFromJotForm";
-import { handleMedia } from "./lib/handleMedia";
-import { parseJotFormData } from "./lib/jotFormDataMaper";
+const Importer = new DataImporter(false);
 
-const run = async () => {
-  const res: any = await getDataFromJotform();
+Importer.getOne("4880855753772560590", true);
 
-  if (!fs.existsSync("DATA/Documents")) {
-    fs.mkdirSync("DATA/Documents");
-  }
-
-  if (res && res.content) {
-    for (let application of res.content) {
-      try {
-        if (fs.existsSync(`DATA/Documents/${application.id}.json`)) {
-        } else {
-          const clear = await handleMedia(parseJotFormData(application));
-          fs.writeFileSync(
-            `DATA/Documents/${clear.id}.json`,
-            JSON.stringify(clear)
-          );
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  }
-};
-
-run();
+// Importer.getAll(true);

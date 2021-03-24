@@ -24,18 +24,23 @@ const Intro: React.FC<IntroProps> = ({ applications }) => {
     <div>
       {!showIntro && (
         <div
+          data-testid="introShow"
           onClick={() => {
             dispatch(toggleInfoAction());
           }}
-          className="bg-actionColor-500 rounded-full w-10 h-10 flex justify-center items-center text-xl text-white cursor-pointer ml-auto"
+          className="bg-customer-lightBlue rounded-full w-10 h-10 flex justify-center items-center text-xl text-white cursor-pointer ml-auto"
         >
           i
         </div>
       )}
 
       {showIntro && (
-        <div className=" bg-actionColor-400  shadow-xl rounded-2xl p-28 mb-6 relative">
+        <div
+          data-testid="intro"
+          className="bg-customer-lightBlue text-white  shadow-xl rounded-2xl p-6 mb-6 relative"
+        >
           <div
+            data-testid="introClickAway"
             onClick={() => {
               dispatch(toggleInfoAction());
             }}
@@ -44,33 +49,33 @@ const Intro: React.FC<IntroProps> = ({ applications }) => {
             <XCircle />
           </div>
 
-          <div className=" text-xl align-middle w-full flex flex-col justify-center items-center p-12 px-48">
-            <p className="text-3xl pb-6">Hey !!!</p>
+          <div className=" text-xl align-middle  flex flex-col justify-center items-center    w-full  md:w-4/6 mx-auto p-6 py-16 text-center">
+            <p className="py-8 font-extrabold">
+              Thank you for participating in the Future Hamburg Award jury!
+            </p>
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
+              To make the assessment as straightforward and accessible as
+              possible, you can submit all evaluations via this jury tool. You
+              can find a video tutorial on how to use the tool here{" "}
+              <a className="font-extrabold ">link</a>. To get started with
+              scoring, simply click on a startup in the list below. If you have
+              any questions or technical problems, please feel free to contact
+              us at award@future.hamburg Many interesting and innovative
+              startups are waiting for you – the decision will not be easy!
+              <p>Thank you for your support!</p>
             </p>
           </div>
 
-          <div className="flex justify-center">
-            <div className="bg-white w-1/3 p-8 shadow-xl rounded-2xl mr-6 flex flex-col justify-center items-center">
+          <div className="flex justify-center flex-wrap">
+            <div className="bg-white w-full md:w-1/3  p-8 shadow-xl rounded-2xl mb-6 md:mr-6 flex flex-col justify-center items-center">
               <ThumbUp className="text-green-300 mb-10" size={75} />
-              <p>You allready rated {done} Applications </p>
+              <p className="text-black">You already rated {done} startups </p>
             </div>
 
-            <div className="bg-white w-1/3 p-8 shadow-xl rounded-2xl  ml-6 flex flex-col justify-center items-center">
+            <div className="bg-white w-full md:w-1/3 p-8 shadow-xl rounded-2xl mb-6  md:ml-6 flex flex-col justify-center items-center">
               <Heart className="text-red-500 mb-10" size={75} />
-              <p>
-                But there are still {actionNeeded} Applications that need Your
-                Love
+              <p className="text-black">
+                There are {actionNeeded} startups left that need your attention
               </p>
             </div>
           </div>

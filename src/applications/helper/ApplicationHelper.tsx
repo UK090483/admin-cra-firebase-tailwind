@@ -68,6 +68,16 @@ class ApplicationC {
     return res;
   }
 
+  getTopicLabel(topic: keyof ApplicationType): string {
+    const difference = {
+      BasicInformation: "Basic information",
+      StartupOverview: "Startup overview",
+    };
+
+    // @ts-ignore
+    return difference[topic] ? difference[topic] : topic;
+  }
+
   getAssessments(
     topic: keyof ApplicationType
   ): AssessmentTypeKey[] | undefined {
@@ -142,7 +152,7 @@ const ApplicationObject: ApplicationType = {
   StartupOverview: {
     fields: {
       startupOverview: {
-        label: "startup Overview",
+        label: "Startup overview",
         type: "text",
         input: (
           <TextInput
@@ -301,7 +311,7 @@ const ApplicationObject: ApplicationType = {
         ),
       },
       traction: {
-        label: "traction",
+        label: "Traction",
         type: "text",
         input: <TextInput label={"traction"} name={"traction"} textarea />,
       },
@@ -475,7 +485,7 @@ const ApplicationObject: ApplicationType = {
   Media: {
     fields: {
       website: {
-        label: "WebSite",
+        label: "Website",
         type: "text",
         input: <TextInput label={"Website"} name={"website"} />,
       },

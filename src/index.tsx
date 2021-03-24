@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { createFirestoreInstance } from "redux-firestore";
 import ReduxProvider from "redux/Provider";
 import { store } from "redux/store";
+
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "./styles/index.css";

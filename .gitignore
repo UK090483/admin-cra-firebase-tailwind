@@ -27,11 +27,13 @@ index.css
 
 
 
-# firebase debug log
+# firebase
 
 firebase-debug.log
 firestore-debug.log
 database-debug.log
+
+serviceAccount.json
 
 
 .eslintcache

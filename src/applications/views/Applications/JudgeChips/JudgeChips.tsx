@@ -6,8 +6,10 @@ import useJudges from "judges/hooks/useJudges";
 import { AssessmentHelper } from "assessments/helper/AssessmentHelper";
 import ManageJudgesChip from "./ManageJudgesChip";
 import { IAssessmentRecord } from "assessments/types";
-import useUi from "../../../../hooks/useUi";
-import { getSumIn100 } from "../../../../helper/round";
+import useUi from "hooks/useUi";
+import { getSumIn100 } from "helper/round";
+import useAssessments from "assessments/hooks/useAssessments";
+import { IJudgeRecord } from "judges/JudgeTypes";
 
 export interface IJudgeChipsProps {
   row: IRow;
@@ -21,10 +23,11 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
   type = "pre",
 }) => {
   const { judges } = useJudges();
-
+  const { AssessmentsByApplicationId } = useAssessments();
   const { sumIn100 } = useUi();
 
   let assessments = row.assessments ? (row.assessments as string[]) : [];
+
   if (type === "main" && judges) {
     const res: string[] = [];
     Object.values(judges).forEach((judge) => {
@@ -40,7 +43,7 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
 
   if (!judges) return <div>Load...</div>;
 
-  const getChip = () => {
+  const getChips = () => {
     return assessments.map((assessment, index) => {
       const judge = judges[assessment];
       if (!judge) {
@@ -52,31 +55,13 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
         ? (judge.assessments[row.id] as IAssessmentRecord)
         : undefined;
 
-      if (judge.judgeType !== type) return null;
-
       const sum =
-        judgeAssessment &&
-        AssessmentHelper.sumAssessmentPoints(judgeAssessment);
+        AssessmentsByApplicationId &&
+        AssessmentsByApplicationId[row.id] &&
+        AssessmentsByApplicationId[row.id][judge.id] &&
+        AssessmentsByApplicationId[row.id][judge.id].sum;
 
       const sumPrepared = sum && (sumIn100 ? getSumIn100(sum) : sum);
-
-      const ChipInner = () => {
-        return (
-          <div key={index}>
-            <Chip
-              status={judgeAssessment && judgeAssessment.status}
-              state={
-                judgeAssessment &&
-                AssessmentHelper.getAssessmentState(judgeAssessment)
-              }
-              judgeStatus={judge.state}
-              name={judge.name}
-              color={judge.color}
-              className="-ml-2 "
-            />
-          </div>
-        );
-      };
 
       if (sumPrepared) {
         return (
@@ -90,16 +75,20 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
               backgroundColor: "black",
               color: "white",
             }}
-            trigger={ChipInner()}
+            trigger={
+              <div>
+                <ChipInner judge={judge} assessment={judgeAssessment} />
+              </div>
+            }
             on="hover"
             position="top center"
           >
-            {sumPrepared && sumPrepared}
+            {sumPrepared}
           </Popup>
         );
       }
 
-      return ChipInner();
+      return <ChipInner judge={judge} assessment={judgeAssessment} />;
     });
   };
 
@@ -110,9 +99,30 @@ const JudgeChips: React.FC<IJudgeChipsProps> = ({
         e.stopPropagation();
       }}
     >
-      {getChip()}
+      {getChips()}
       {withManage && <ManageJudgesChip row={row} />}
     </div>
   );
 };
 export default JudgeChips;
+
+type ChipInnerProps = {
+  assessment?: IAssessmentRecord;
+  judge: IJudgeRecord;
+};
+const ChipInner: React.FC<ChipInnerProps> = (props) => {
+  const { assessment, judge } = props;
+
+  return (
+    <div>
+      <Chip
+        status={assessment && assessment.status}
+        state={assessment && AssessmentHelper.getAssessmentState(assessment)}
+        judgeStatus={judge.state}
+        name={judge.name}
+        color={judge.color}
+        className="-ml-2 "
+      />
+    </div>
+  );
+};

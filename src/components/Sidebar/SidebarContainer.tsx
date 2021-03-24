@@ -19,7 +19,7 @@ const SidebarContainer: React.FC<ISidebarContainer> = (props) => {
         type="button"
         onClick={toggleSideBar}
       >
-        <ArrowRight />
+        <ArrowRight className="text-white" />
       </button>
       <nav
         className={`transition-all md:left-0 md:block md:fixed md:top-0 dark:bg-gray-900  md:bottom-0 md:overflow-y-auto md:flex-row md:flex-no-wrap md:overflow-hidden shadow-2xl bg-white flex flex-wrap items-center justify-between relative ${

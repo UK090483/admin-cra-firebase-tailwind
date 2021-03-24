@@ -19,7 +19,11 @@ const Seed: React.FunctionComponent<ISeedProps> = (props) => {
         on="click"
         position="left top"
       >
-        {/* <SeedButton label="clear" seedFunction={SeedFirebase.clear} /> */}
+        <SeedButton label="clear" seedFunction={SeedFirebase.clear} />
+        {/* <SeedButton
+          label="from JSON"
+          seedFunction={SeedFirebase.createFromJSON}
+        /> */}
 
         {/* <SeedButton
           label="make TableDoc"
@@ -31,7 +35,7 @@ const Seed: React.FunctionComponent<ISeedProps> = (props) => {
         /> */}
         <SeedButton label="start" seedFunction={SeedFirebase.start} />
 
-        <SeedButton label="Accept 100" seedFunction={SeedFirebase.accept} />
+        <SeedButton label="Accept 60" seedFunction={SeedFirebase.accept} />
         <SeedButton label="add Judges" seedFunction={SeedFirebase.addJudges} />
 
         <SeedButton

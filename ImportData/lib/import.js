@@ -57,22 +57,130 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = __importStar(require("fs"));
 var admin = __importStar(require("firebase-admin"));
-admin.initializeApp({ projectId: "schwan-bewerbung" });
-var run = function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        try {
-            // const users = await admin.firestore().collection("applications").get();
-            console.log(admin.firestore().collection("applications").get());
-        }
-        catch (error) {
-            console.log(error);
-        }
-        fs.readdir("DATA/Documents", function (err, files) {
-            files.forEach(function (file) {
-                console.log(file);
+// @ts-ignore
+var serviceAccount = __importStar(require("../../serviceAccount.json"));
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://schwan-bewerbung-default-rtdb.firebaseio.com",
+    storageBucket: "schwan-bewerbung.appspot.com",
+    projectId: "schwan-bewerbung",
+});
+var Exporter = /** @class */ (function () {
+    function Exporter() {
+        var _this = this;
+        this.uploadFile = function (src, destination) { return __awaiter(_this, void 0, void 0, function () {
+            var res, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, admin
+                                .storage()
+                                .bucket()
+                                .upload(src, {
+                                destination: destination,
+                                gzip: true,
+                                metadata: {
+                                    cacheControl: "public, max-age=31536000",
+                                },
+                            })];
+                    case 1:
+                        res = _a.sent();
+                        console.log(res);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.log(error_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
             });
-        });
-        return [2 /*return*/];
+        }); };
+        this.getFile = function (id) { return __awaiter(_this, void 0, void 0, function () {
+            var rawData, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, fs.readFileSync("DATA/Documents/" + id + ".json")];
+                    case 1:
+                        rawData = _a.sent();
+                        if (!rawData)
+                            return [2 /*return*/];
+                        // @ts-ignore
+                        return [2 /*return*/, JSON.parse(rawData)];
+                    case 2:
+                        error_2 = _a.sent();
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        }); };
+        this.exportOne = function (id) { return __awaiter(_this, void 0, void 0, function () {
+            var application;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getFile(id)];
+                    case 1:
+                        application = _a.sent();
+                        console.log(application);
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        this.files = fs.readdirSync("DATA/Documents");
+    }
+    return Exporter;
+}());
+var exporter = new Exporter();
+exporter.exportOne("4880855753772560590");
+var run = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var files, rawData, data, image, id, res, error_3, users, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                files = fs.readdirSync("DATA/Documents");
+                rawData = fs.readFileSync("DATA/Documents/" + files[13]);
+                data = JSON.parse(rawData);
+                image = data.companyLogo[0];
+                id = data.id;
+                console.log(image);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, admin
+                        .storage()
+                        .bucket()
+                        .upload(image.src, {
+                        destination: id + "/test.jpg",
+                        gzip: true,
+                        metadata: {
+                            cacheControl: "public, max-age=31536000",
+                        },
+                    })];
+            case 2:
+                res = _a.sent();
+                console.log(res);
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                return [3 /*break*/, 4];
+            case 4:
+                _a.trys.push([4, 6, , 7]);
+                return [4 /*yield*/, admin
+                        .firestore()
+                        .collection("test")
+                        .add({ bla: "tttttttt" })];
+            case 5:
+                users = _a.sent();
+                console.log(users);
+                return [3 /*break*/, 7];
+            case 6:
+                error_4 = _a.sent();
+                console.log(error_4);
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
+        }
     });
 }); };
-run();

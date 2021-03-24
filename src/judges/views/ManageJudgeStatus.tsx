@@ -13,10 +13,9 @@ interface IManageJudgeStatusProps {
 const ManageJudgeStatus: React.FunctionComponent<IManageJudgeStatusProps> = (
   props
 ) => {
+  console.log("manageJudgeStatus");
   const { status, judge_id } = props;
   const [updating, setUpdating] = React.useState(false);
-
-  console.log(status);
 
   const { updateJudgeStatus } = useActions();
 

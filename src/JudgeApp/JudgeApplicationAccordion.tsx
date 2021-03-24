@@ -31,6 +31,7 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
 
   const { judge_id, assessment } = useSelector((state: RootState) => ({
     judge_id: state.fb.auth.uid,
+
     assessment:
       state.fb.profile.assessments &&
       state.fb.profile.assessments[application.id]
@@ -68,16 +69,17 @@ const ApplicationAccordion: React.FC<IApplicationAccordion> = (props) => {
           return (
             <Accordion
               key={index}
+              testid={ApplicationHelper.getTopicLabel(topic)}
               label={
                 <div className="flex w-full justify-between">
-                  {topic}
+                  {ApplicationHelper.getTopicLabel(topic)}
 
                   {topicAssessments && (
                     <div>
                       {topicState ? (
-                        <CheckCircle color="green"></CheckCircle>
+                        <CheckCircle className="text-green-600"></CheckCircle>
                       ) : (
-                        <Pencil color="red"></Pencil>
+                        <Pencil className="text-red-400"></Pencil>
                       )}
                     </div>
                   )}

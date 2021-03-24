@@ -19,7 +19,11 @@ module.exports = {
         blue: colors.lightBlue,
         red: colors.rose,
         pink: colors.fuchsia,
-        actionColor: colors.indigo,
+        actionColor: { ...colors.indigo, 400: "#005ca9", 700: "#003063" },
+        "customer-red": "#e10019",
+        "customer-blue": "#003063",
+        "customer-lightBlue": "#005ca9",
+        "customer-white": "#e1e3e3",
       },
       animation: {
         fadeIn: "fadeIn 0.8s ease-out ",

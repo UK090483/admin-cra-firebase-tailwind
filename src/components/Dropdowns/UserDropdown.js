@@ -29,7 +29,7 @@ const UserDropdown = () => {
           dropdownPopoverShow ? closeDropdownPopover() : openDropdownPopover();
         }}
       >
-        <div className="items-center flex">
+        <div className="items-center flex text-white">
           <span>{email}</span>
         </div>
       </a>

@@ -3,6 +3,7 @@ import * as React from "react";
 interface IAccordionProps {
   label: string | JSX.Element;
   bgColor?: string;
+  testid?: string;
 }
 
 const Accordion: React.FunctionComponent<IAccordionProps> = (props) => {
@@ -39,13 +40,13 @@ const Accordion: React.FunctionComponent<IAccordionProps> = (props) => {
     }
   };
 
-  const { label, bgColor } = props;
+  const { label, bgColor, testid } = props;
   return (
-    <div className="group flex align-center flex-col ">
+    <div data-testid={testid} className="group flex align-center flex-col ">
       <div
         onMouseDown={() => handleClick()}
         className={`w-full px-5 py-3 ${
-          bgColor ? bgColor : "bg-indigo-300"
+          bgColor ? bgColor : "bg-customer-lightBlue"
         } text-white group-focus:text-yellow-300   inline-block hover:opacity-75 hover:shadow hover:-mb-3 rounded-t`}
       >
         {label}

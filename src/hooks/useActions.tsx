@@ -29,10 +29,16 @@ const useActions = () => {
     props: IUpdateApplicationAssessmentsProps
   ) => {
     const { state, id, name } = props;
-    await firestore.update(
-      { collection: "tableDoc", doc: "first" },
-      { [`${id}.${name}`]: state }
-    );
+
+    try {
+      await firestore.update(
+        { collection: "tableDoc", doc: "first" },
+        { [`${id}.${name}`]: state }
+      );
+      return;
+    } catch (error) {
+      return;
+    }
   };
 
   type UpdateAssessmentProps = {
@@ -40,6 +46,7 @@ const useActions = () => {
     application_id: string;
     data: { [key: string]: number | string };
   };
+
   const updateAssessment = async (props: UpdateAssessmentProps) => {
     const { application_id, judge_id, data } = props;
 
@@ -51,14 +58,19 @@ const useActions = () => {
       {}
     );
 
-    await firestore.update(
-      { collection: "judges", doc: judge_id },
-      {
-        [`assessments.${application_id}.application_id`]: application_id,
-        [`assessments.${application_id}.judge_id`]: judge_id,
-        ...updateData,
-      }
-    );
+    try {
+      await firestore.update(
+        { collection: "judges", doc: judge_id },
+        {
+          [`assessments.${application_id}.application_id`]: application_id,
+          [`assessments.${application_id}.judge_id`]: judge_id,
+          ...updateData,
+        }
+      );
+      return;
+    } catch (error) {
+      return;
+    }
   };
 
   type UpdateJudgeStatusProps = {
@@ -70,11 +82,15 @@ const useActions = () => {
   const updateJudgeStatus = async (props: UpdateJudgeStatusProps) => {
     const { judge_id, status } = props;
 
-    firestore.update(
-      { collection: "judges", doc: judge_id },
-      { state: status }
-    );
-    return true;
+    try {
+      await firestore.update(
+        { collection: "judges", doc: judge_id },
+        { state: status }
+      );
+      return true;
+    } catch (error) {
+      return true;
+    }
   };
 
   return {

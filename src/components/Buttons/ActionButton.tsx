@@ -7,13 +7,14 @@ export interface IActionButtonProps {
   path: string;
   type: "create" | "update";
   size?: "s" | "m";
+  testid?: string;
 }
 
 const ActionButton: React.FC<IActionButtonProps> = (props) => {
-  const { path, type, size = "m" } = props;
+  const { path, type, size = "m", testid = "actionButton" } = props;
   const history = useHistory();
   return (
-    <div className="flex justify-end -mt-6 -mb-6 ">
+    <div data-testid={testid} className="flex justify-end -mt-6 -mb-6 ">
       <Button
         className={` ${
           size === "s" ? "w-10 h-10" : "w-12 h-12"

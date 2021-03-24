@@ -21,8 +21,6 @@ const Chip: React.FC<IChipProps> = (props) => {
     judgeStatus,
   } = props;
 
-  console.log(judgeStatus);
-
   return (
     <div
       className={`${color}   rounded-full ring-2  ${

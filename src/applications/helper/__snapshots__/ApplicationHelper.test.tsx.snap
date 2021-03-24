@@ -268,7 +268,7 @@ Object {
       name="startupOverview"
       textarea={true}
     />,
-    "label": "startup Overview",
+    "label": "Startup overview",
     "type": "text",
   },
   "strengthAgainstCompetitors": Object {
@@ -302,7 +302,7 @@ Object {
       name="traction"
       textarea={true}
     />,
-    "label": "traction",
+    "label": "Traction",
     "type": "text",
   },
   "website": Object {
@@ -310,7 +310,7 @@ Object {
       label="Website"
       name="website"
     />,
-    "label": "WebSite",
+    "label": "Website",
     "type": "text",
   },
   "whatDegreeSustainability": Object {
@@ -500,7 +500,7 @@ Array [
         name="startupOverview"
         textarea={true}
       />,
-      "label": "startup Overview",
+      "label": "Startup overview",
       "type": "text",
     },
     "key": "startupOverview",
@@ -687,7 +687,7 @@ Array [
         name="traction"
         textarea={true}
       />,
-      "label": "traction",
+      "label": "Traction",
       "type": "text",
     },
     "key": "traction",
@@ -884,7 +884,7 @@ Array [
         label="Website"
         name="website"
       />,
-      "label": "WebSite",
+      "label": "Website",
       "type": "text",
     },
     "key": "website",

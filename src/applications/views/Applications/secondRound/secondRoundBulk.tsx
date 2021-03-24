@@ -17,7 +17,7 @@ const SecondRoundBulk: React.FC<IBulkActionsProps> = (props) => {
 
   const { AssessmentsByApplicationId } = useAssessments();
 
-  const handleClick = (res: string[]) => {
+  const handleClick = async (res: string[]) => {
     interface Obj {
       [k: string]: any;
     }
@@ -43,12 +43,18 @@ const SecondRoundBulk: React.FC<IBulkActionsProps> = (props) => {
       const nextAssessment = union(res, saveItems);
       batch[`${dataItem.id}.assessments`] = nextAssessment;
     });
-    firestore
-      .update({ collection: "tableDoc", doc: "first" }, batch)
-      .then(() => {
-        setUpdating(false);
-        setBulkItems({});
-      });
+
+    try {
+      await firestore.update({ collection: "tableDoc", doc: "first" }, batch);
+
+      setUpdating(false);
+      setBulkItems({});
+      return;
+    } catch (error) {
+      setUpdating(false);
+      setBulkItems({});
+      return;
+    }
   };
 
   return (

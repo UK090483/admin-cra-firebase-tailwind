@@ -11,6 +11,7 @@ import useAssessments from "../../assessments/hooks/useAssessments";
 import { IAssessmentRecord } from "../../assessments/types";
 import useJudges from "../hooks/useJudges";
 import { Pencil } from "heroicons-react";
+import PasswordReset from "./passwordReset";
 
 interface ParamTypes {
   id: string;
